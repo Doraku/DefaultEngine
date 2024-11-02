@@ -1,0 +1,23 @@
+<DockPanel
+    x:Class="DefaultEngine.Views.ShellView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Menu DockPanel.Dock="Top">
+        <Menu.Items>
+
+            <MenuItem Header="_File">
+                <MenuItem Header="E_xit" />
+            </MenuItem>
+
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Undo" />
+                <MenuItem Header="_Redo" />
+            </MenuItem>
+
+        </Menu.Items>
+    </Menu>
+
+    <TextBlock Text="Welcome to Avalonia!" />
+
+</DockPanel>

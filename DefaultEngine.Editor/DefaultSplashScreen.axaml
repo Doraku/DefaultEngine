@@ -1,0 +1,25 @@
+<Window
+    x:Class="DefaultEngine.DefaultSplashScreen"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Default Engine"
+    Icon="avares://DefaultEngine/Resources/Images/DefaultLogo.png"
+    PointerPressed="OnClicked"
+    SizeToContent="WidthAndHeight"
+    SystemDecorations="None"
+    Topmost="True"
+    WindowStartupLocation="CenterScreen">
+
+    <DockPanel>
+
+        <TextBlock
+            Name="InformationsTextBlock"
+            HorizontalAlignment="Center"
+            DockPanel.Dock="Bottom"
+            Text="starting..." />
+
+        <Image Width="400" Source="avares://DefaultEngine/Resources/Images/DefaultEngineLogo.png" />
+
+    </DockPanel>
+
+</Window>

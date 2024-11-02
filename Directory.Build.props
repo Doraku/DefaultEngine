@@ -1,0 +1,11 @@
+<Project>
+  
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DefaultCSharp" Version="1.0.0-test07" PrivateAssets="all" />
+  </ItemGroup>
+  
+</Project>

@@ -1,0 +1,19 @@
+<Application
+    x:Class="DefaultEngine.DefaultApplication"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ViewModels="using:DefaultEngine.ViewModels"
+    xmlns:Views="using:DefaultEngine.Views"
+    RequestedThemeVariant="Light">
+
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+
+    <Application.DataTemplates>
+        <DataTemplate DataType="{x:Type ViewModels:ShellViewModel}">
+            <Views:ShellView />
+        </DataTemplate>
+    </Application.DataTemplates>
+
+</Application>
