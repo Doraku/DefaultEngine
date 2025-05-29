@@ -7,6 +7,5 @@ public static class Class1
     [EditorMenu("kikoo")]
     public static void OnTest()
     {
-
     }
 }

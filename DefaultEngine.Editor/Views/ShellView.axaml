@@ -1,5 +1,5 @@
 <DockPanel
-    x:Class="DefaultEngine.Views.ShellView"
+    x:Class="DefaultEngine.Editor.Views.ShellView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 

@@ -1,9 +1,9 @@
 <Application
-    x:Class="DefaultEngine.DefaultApplication"
+    x:Class="DefaultEngine.Editor.DefaultEditor"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ViewModels="using:DefaultEngine.ViewModels"
-    xmlns:Views="using:DefaultEngine.Views"
+    xmlns:ViewModels="using:DefaultEngine.Editor.ViewModels"
+    xmlns:Views="using:DefaultEngine.Editor.Views"
     RequestedThemeVariant="Light">
 
     <Application.Styles>

@@ -1,5 +1,3 @@
-﻿namespace DefaultEngine.ViewModels;
+﻿namespace DefaultEngine.Editor.ViewModels;
 
-internal sealed class ShellViewModel
-{
-}
+internal sealed class ShellViewModel;

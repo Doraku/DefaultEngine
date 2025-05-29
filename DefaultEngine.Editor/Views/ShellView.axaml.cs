@@ -1,8 +1,8 @@
 using Avalonia.Controls;
 
-namespace DefaultEngine.Views;
+namespace DefaultEngine.Editor.Views;
 
-public partial class ShellView : DockPanel
+internal sealed partial class ShellView : DockPanel
 {
     public ShellView()
     {

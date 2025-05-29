@@ -4,37 +4,23 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
-using DefaultEngine.ViewModels;
-using DefaultUnDo;
-using Microsoft.Extensions.DependencyInjection;
+using Avalonia.Threading;
+using DefaultEngine.Editor.ViewModels;
 
-namespace DefaultEngine;
+namespace DefaultEngine.Editor;
 
-public partial class DefaultSplashScreen : Window
+internal sealed partial class DefaultSplashScreen : Window
 {
     private readonly IClassicDesktopStyleApplicationLifetime _applicationLifetime;
+    private readonly Func<Action<string>, Task<ShellViewModel>> _contentCreator;
 
-    public DefaultSplashScreen(IClassicDesktopStyleApplicationLifetime applicationLifetime)
+    public DefaultSplashScreen(IClassicDesktopStyleApplicationLifetime applicationLifetime, Func<Action<string>, Task<ShellViewModel>> contentCreator)
     {
         _applicationLifetime = applicationLifetime;
+        _contentCreator = contentCreator;
 
         InitializeComponent();
     }
-
-    private static void Register(IServiceCollection services)
-    {
-        services.AddSingleton<ShellViewModel>();
-        services.AddSingleton<IUnDoManager, UnDoManager>();
-    }
-
-    private static Task<ShellViewModel> CreateContentAsync() => Task.Run(() =>
-    {
-        ServiceCollection services = new();
-
-        Register(services);
-
-        return services.BuildServiceProvider().GetRequiredService<ShellViewModel>();
-    });
 
     protected override async void OnInitialized()
     {
@@ -47,7 +33,7 @@ public partial class DefaultSplashScreen : Window
             Title = "Default Engine",
             WindowState = WindowState.Maximized,
             Icon = Icon,
-            Content = await CreateContentAsync().ConfigureAwait(true)
+            Content = await _contentCreator(text => Dispatcher.UIThread.Invoke(() => InformationsTextBlock.Text = text)).ConfigureAwait(true)
         };
 
         _applicationLifetime.MainWindow.Show();
@@ -56,7 +42,7 @@ public partial class DefaultSplashScreen : Window
         _applicationLifetime.MainWindow.AttachDevTools();
 #endif
 
-        InformationsTextBlock.Text = "wellcome";
+        InformationsTextBlock.Text = "welcome";
 
         await Task.Delay(TimeSpan.FromSeconds(5)).ConfigureAwait(true);
 

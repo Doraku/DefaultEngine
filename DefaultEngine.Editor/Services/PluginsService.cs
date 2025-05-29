@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Loader;
 using Microsoft.CodeAnalysis.MSBuild;
 
-namespace DefaultEngine.Services;
+namespace DefaultEngine.Editor.Services;
 
 internal sealed class PluginsService : IDisposable
 {
@@ -13,7 +13,7 @@ internal sealed class PluginsService : IDisposable
     public PluginsService()
     {
         _context = new AssemblyLoadContext("Plugins", true);
-        _buildPath = Path.Combine(Path.GetTempPath(), "DefaultEngine");
+        _buildPath = Path.Combine(Path.GetTempPath(), "DefaultEngine.Editor");
 
         MSBuildWorkspace workspace = MSBuildWorkspace.Create();
     }
