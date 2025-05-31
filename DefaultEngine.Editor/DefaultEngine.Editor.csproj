@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  
   <PropertyGroup>
-    
-    <OutputType>WinExe</OutputType>
+
     <TargetFramework>net9.0</TargetFramework>
     
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,20 +19,17 @@
   <ItemGroup>
     <PackageReference Include="Avalonia.Desktop" Version="11.3.0" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="DefaultUnDo" Version="2.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.14.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.1" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DefaultEngine.Editor.Api\DefaultEngine.Editor.Api.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="DefaultEditor.axaml.cs">
-      <DependentUpon>DefaultEditor.axaml</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>

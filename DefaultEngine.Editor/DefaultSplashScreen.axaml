@@ -16,7 +16,7 @@
             Name="InformationsTextBlock"
             HorizontalAlignment="Center"
             DockPanel.Dock="Bottom"
-            Text="starting..." />
+            Text="starting" />
 
         <Image Width="400" Source="/Resources/Images/DefaultEngineLogo.png" />
 

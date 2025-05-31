@@ -14,6 +14,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DefaultEngine.Editor", "DefaultEngine.Editor\DefaultEngine.Editor.csproj", "{2A31FF43-A473-45A5-BEC0-F6AD231F3A04}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyGame.Editor", "DummyGame.Editor\DummyGame.Editor.csproj", "{E2767782-6BF8-4CCA-9997-74D803B88208}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,9 +36,17 @@ Global
 		{2A31FF43-A473-45A5-BEC0-F6AD231F3A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A31FF43-A473-45A5-BEC0-F6AD231F3A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A31FF43-A473-45A5-BEC0-F6AD231F3A04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2767782-6BF8-4CCA-9997-74D803B88208}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2767782-6BF8-4CCA-9997-74D803B88208}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2767782-6BF8-4CCA-9997-74D803B88208}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2767782-6BF8-4CCA-9997-74D803B88208}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FF932575-1FD1-4306-8AD2-7CF117622B57} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{E2767782-6BF8-4CCA-9997-74D803B88208} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB9C8A4D-0B27-4A42-92AB-E8C6BF303EB9}

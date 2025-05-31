@@ -4,7 +4,7 @@ namespace Test;
 
 public static class Class1
 {
-    [EditorMenu("kikoo")]
+    [EditorMenu("c'est reloueuh")]
     public static void OnTest()
     {
     }
