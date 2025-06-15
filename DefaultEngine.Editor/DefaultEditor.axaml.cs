@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using DefaultEngine.Editor.Services;
-using DefaultEngine.Editor.ViewModels;
-using DefaultUnDo;
+using DefaultEngine.Editor.Api.Plugins;
+using DefaultEngine.Editor.Internal;
+using DefaultEngine.Editor.Internal.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Extensions.Logging;
@@ -37,6 +40,9 @@ public class DefaultEditor : Application, IDisposable
 
         _logger = new SerilogLoggerProvider().CreateLogger("DefaultEditor");
 
+        AppDomain.CurrentDomain.UnhandledException += (_, args) => _logger.LogError(args.ExceptionObject as Exception, "Unhandled exception");
+        TaskScheduler.UnobservedTaskException += (_, args) => _logger.LogError(args.Exception, "Unobserved task exception");
+
         _logger.LogInformation("starting");
     }
 
@@ -47,59 +53,91 @@ public class DefaultEditor : Application, IDisposable
         AvaloniaXamlLoader.Load(this);
     }
 
-    private static void Main(string[] args) => Run<DefaultEditor>(args);
-
-    private async Task<ServiceProvider> CreateServicesAsync()
+    private async Task<IServiceProvider> CreateServicesAsync()
     {
         await Task.CompletedTask.ConfigureAwait(ConfigureAwaitOptions.ForceYielding);
 
-        ServiceCollection services = new();
+        PluginsHelper plugins = new(new FileInfo(Assembly.GetEntryAssembly()!.Location).Directory!);
 
-        RegisterServices(services);
+        ServiceProviderOptions options = new()
+        {
+            ValidateOnBuild = true,
+            ValidateScopes = true
+        };
 
-        return services.BuildServiceProvider(true);
+        ServiceCollection pluginsServices = [];
+
+        pluginsServices.AddLogging(builder => builder.AddSerilog(dispose: true));
+        pluginsServices.AddSingleton(plugins);
+        pluginsServices.AddSingleton<Application>(this);
+
+        foreach (Type type in plugins.GetPluginsTypes().GetInstanciableImplementation<IServicesRegisterer>())
+        {
+            pluginsServices.TryAddSingleton(type);
+            pluginsServices.AddSingleton(typeof(IServicesRegisterer), provider => provider.GetRequiredService(type));
+        }
+
+        ServiceProvider pluginsProvider = pluginsServices.BuildServiceProvider(options);
+
+        _disposables.Add(pluginsProvider);
+
+        ServiceCollection services = [];
+
+        services.AddLogging(builder => builder.AddSerilog(dispose: true));
+        services.AddSingleton<Application>(this);
+
+        foreach (IServicesRegisterer servicesRegisterer in pluginsProvider.GetRequiredService<IEnumerable<IServicesRegisterer>>())
+        {
+            servicesRegisterer.Register(services);
+        }
+
+        ServiceProvider provider = services.BuildServiceProvider(options);
+
+        _disposables.Add(provider);
+
+        provider.GetService<IEnumerable<IPlugin>>();
+
+        return provider;
     }
 
     private async Task InitializeAsync(CancellationTokenSource shutdownTokenSource)
     {
-        DefaultSplashScreen splashScreen = new();
+        try
+        {
+            DefaultSplashScreen splashScreen = new(_logger);
 
-        splashScreen.Show();
+            splashScreen.Show();
 
-        await splashScreen.SetInformations("registering services").ConfigureAwait(true);
+            await splashScreen.SetInformations("registering services").ConfigureAwait(true);
 
-        ServiceProvider services = await CreateServicesAsync().ConfigureAwait(true);
+            IServiceProvider services = await CreateServicesAsync().ConfigureAwait(true);
 
-        _disposables.Add(services);
+            await splashScreen.SetInformations("building content").ConfigureAwait(true);
 
-        await splashScreen.SetInformations("building content").ConfigureAwait(true);
+            object content = await CreateContentAsync(services).ConfigureAwait(true);
 
-        object content = await CreateContentAsync(services).ConfigureAwait(true);
+            await splashScreen.SetInformations("creating main window").ConfigureAwait(true);
 
-        await splashScreen.SetInformations("creating main window").ConfigureAwait(true);
+            Window mainWindow = CreateMainWindow();
 
-        Window mainWindow = CreateMainWindow();
+            mainWindow.Icon ??= splashScreen.Icon;
+            mainWindow.Content = content;
 
-        mainWindow.Icon ??= splashScreen.Icon;
-        mainWindow.Content = content;
+            mainWindow.Closed += (_, _) => shutdownTokenSource.Cancel();
+            mainWindow.Show();
 
-        mainWindow.Closed += (_, _) => shutdownTokenSource.Cancel();
-        mainWindow.Show();
+            await splashScreen.SetInformations("welcome").ConfigureAwait(true);
 
-        await splashScreen.SetInformations("welcome").ConfigureAwait(true);
+            splashScreen.Close();
+        }
+        catch (Exception exception)
+        {
+            _logger.LogCritical(exception, "Error during initialization");
 
-        splashScreen.Close();
-    }
+            await shutdownTokenSource.CancelAsync().ConfigureAwait(true);
 
-    protected virtual void RegisterServices(IServiceCollection services)
-    {
-        services.AddLogging(builder => builder.AddSerilog(dispose: true));
-
-        services.AddSingleton<IUnDoManager, UnDoManager>();
-
-        services.AddSingleton<PluginsService>();
-
-        services.AddSingleton<ShellViewModel>();
+            throw;
+        }
     }
 
     protected virtual async Task<object> CreateContentAsync(IServiceProvider services)
@@ -126,6 +164,8 @@ public class DefaultEditor : Application, IDisposable
                 throw new InvalidOperationException();
             }
 
+            editor._logger.LogInformation($"args {args}");
+
             using CancellationTokenSource shutdownTokenSource = new();
 
             using (editor)
@@ -138,7 +178,9 @@ public class DefaultEditor : Application, IDisposable
 
         AppBuilder
             .Configure<T>()
-            .UsePlatformDetect().Start(Run, args);
+            .UsePlatformDetect()
+            .LogToTrace()
+            .Start(Run, args);
     }
 
     protected virtual void Dispose(bool disposing)

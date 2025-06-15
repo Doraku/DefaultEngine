@@ -2,18 +2,12 @@
     x:Class="DefaultEngine.Editor.DefaultEditor"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ViewModels="using:DefaultEngine.Editor.ViewModels"
-    xmlns:Views="using:DefaultEngine.Editor.Views"
+    xmlns:ViewModels="using:DefaultEngine.Editor.Internal.ViewModels"
+    xmlns:Views="using:DefaultEngine.Editor.Internal.Views"
     RequestedThemeVariant="Light">
 
     <Application.Styles>
         <FluentTheme />
     </Application.Styles>
-
-    <Application.DataTemplates>
-        <DataTemplate DataType="{x:Type ViewModels:ShellViewModel}">
-            <Views:ShellView />
-        </DataTemplate>
-    </Application.DataTemplates>
 
 </Application>

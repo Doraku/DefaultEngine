@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.0" />
     <ProjectReference Include="..\DefaultEngine.Editor\DefaultEngine.Editor.csproj" />
+    <ProjectReference Include="..\Test\Test.csproj" />
   </ItemGroup>
 
 </Project>

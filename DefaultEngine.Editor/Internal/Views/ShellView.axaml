@@ -1,0 +1,34 @@
+<DockPanel
+    x:Class="DefaultEngine.Editor.Internal.Views.ShellView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:DefaultEngine.Editor.Internal.ViewModels"
+    x:DataType="vm:ShellViewModel">
+
+    <Menu
+        DockPanel.Dock="Top"
+        ItemsSource="{Binding Menus}">
+
+        <Menu.Styles>
+
+            <Style x:DataType="vm:ShellViewModel+MenuViewModel" Selector="Menu MenuItem">
+
+                <Setter Property="Header" Value="{Binding Name}" />
+                <Setter Property="Command" Value="{Binding Command}" />
+                <Setter Property="ItemsSource" Value="{Binding SubMenus}" />
+
+            </Style>
+
+        </Menu.Styles>
+
+    </Menu>
+
+    <StackPanel>
+
+        <TextBlock Text="Welcome to Avalonia!" />
+
+        <TextBox />
+
+    </StackPanel>
+
+</DockPanel>

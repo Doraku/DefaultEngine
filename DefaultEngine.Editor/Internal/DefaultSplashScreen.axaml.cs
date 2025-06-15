@@ -3,14 +3,19 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
+using Microsoft.Extensions.Logging;
 
-namespace DefaultEngine.Editor;
+namespace DefaultEngine.Editor.Internal;
 
 internal sealed partial class DefaultSplashScreen : Window
 {
-    public DefaultSplashScreen()
+    private readonly ILogger _logger;
+
+    public DefaultSplashScreen(ILogger logger)
     {
         InitializeComponent();
+
+        _logger = logger;
     }
 
     private void OnClicked(object? sender, PointerPressedEventArgs e)
@@ -24,6 +29,7 @@ internal sealed partial class DefaultSplashScreen : Window
 
     public async Task SetInformations(string value)
     {
+        _logger.LogInformation(value);
         await Dispatcher.UIThread.InvokeAsync(() => InformationsTextBlock.Text = value);
     }
 }
