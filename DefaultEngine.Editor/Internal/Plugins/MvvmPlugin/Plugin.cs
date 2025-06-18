@@ -9,9 +9,9 @@ using DefaultEngine.Editor.Api.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace DefaultEngine.Editor.Internal.Plugins;
+namespace DefaultEngine.Editor.Internal.Plugins.MvvmPlugin;
 
-internal sealed class MvvmPlugin : IPlugin
+internal sealed class Plugin : IPlugin
 {
     internal sealed class DataTemplates : List<(Type, DataTemplateAttribute)>;
 
@@ -38,7 +38,7 @@ internal sealed class MvvmPlugin : IPlugin
         }
     }
 
-    public MvvmPlugin(IServiceProvider provider, Application application, DataTemplates dataTemplates)
+    public Plugin(IServiceProvider provider, Application application, DataTemplates dataTemplates)
     {
         foreach ((Type type, DataTemplateAttribute attribute) in dataTemplates)
         {

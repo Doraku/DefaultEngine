@@ -1,13 +1,12 @@
 <Border
-    x:Class="DefaultEngine.Editor.Internal.Views.ShellView"
-    x:DataType="vm:ShellViewModel"
+    x:Class="DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Views.ShellView"
+    x:DataType="viewmodels:ShellViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="using:DefaultEngine.Editor.Internal.Converters"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:converters="using:DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Converters"
     xmlns:system="using:System"
-    xmlns:v="using:DefaultEngine.Editor.Internal.Views"
-    xmlns:vm="using:DefaultEngine.Editor.Internal.ViewModels"
+    xmlns:viewmodels="using:DefaultEngine.Editor.Internal.Plugins.ShellPlugin.ViewModels"
+    xmlns:views="using:DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Views"
     Margin="{Binding $parent[Window].OffScreenMargin}"
     BorderBrush="{DynamicResource SystemAccentColor}"
     BorderThickness="1">
@@ -41,9 +40,9 @@
 
                     <Menu.Styles>
 
-                        <Style x:DataType="vm:ShellViewModel+MenuViewModel" Selector="Menu MenuItem">
+                        <Style x:DataType="viewmodels:MenuViewModel" Selector="Menu MenuItem">
 
-                            <Setter Property="Icon" Value="{Binding Icon}" />
+                            <Setter Property="Icon" Value="{Binding Icon, Converter={x:Static converters:ObjectConverters.ToKnownIconType}}" />
                             <Setter Property="Header" Value="{Binding Header}" />
                             <Setter Property="Command" Value="{Binding Command}" />
                             <Setter Property="InputGesture" Value="{Binding HotKey}" />
@@ -55,23 +54,34 @@
 
                     <Menu.DataTemplates>
 
-                        <DataTemplate DataType="vm:ShellViewModel+MenuViewModel">
+                        <DataTemplate DataType="Bitmap">
 
-                            <MenuItem
-                                Command="{Binding Command}"
-                                Header="{Binding Header}"
-                                Icon="{Binding Icon}"
-                                InputGesture="{Binding HotKey}"
-                                ItemsSource="{Binding SubMenus}" />
+                            <Image Source="{Binding}" />
 
-                        </DataTemplate>
-
-                        <DataTemplate DataType="system:Uri">
-                            <Image Source="{Binding Converter={x:Static converters:StaticConverters.UriToBitmap}}" />
                         </DataTemplate>
 
                         <DataTemplate DataType="PathGeometry">
-                            <Path Data="{Binding}" />
+
+                            <Path Data="{Binding}">
+
+                                <Path.Styles>
+
+                                    <Style Selector="Path">
+
+                                        <Setter Property="Fill" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+
+                                        <Style Selector="^:disabled">
+
+                                            <Setter Property="Fill" Value="{DynamicResource SystemControlDisabledBaseMediumLowBrush}" />
+
+                                        </Style>
+
+                                    </Style>
+
+                                </Path.Styles>
+
+                            </Path>
+
                         </DataTemplate>
 
                     </Menu.DataTemplates>

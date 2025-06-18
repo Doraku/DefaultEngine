@@ -10,7 +10,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using DefaultEngine.Editor.Api.Plugins;
 using DefaultEngine.Editor.Internal;
-using DefaultEngine.Editor.Internal.ViewModels;
+using DefaultEngine.Editor.Internal.Plugins.ShellPlugin.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;

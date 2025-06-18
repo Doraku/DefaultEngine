@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Reflection;
+using DefaultEngine.Editor.Api;
 using DefaultEngine.Editor.Api.Plugins;
-using DefaultEngine.Editor.Internal.ViewModels;
+using DefaultEngine.Editor.Internal.Plugins.ShellPlugin.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace DefaultEngine.Editor.Internal.Plugins;
+namespace DefaultEngine.Editor.Internal.Plugins.ShellPlugin;
 
-internal sealed class ShellPlugin : IServicesRegisterer
+internal sealed class Plugin : IServicesRegisterer
 {
     private readonly PluginsHelper _plugins;
 
-    public ShellPlugin(PluginsHelper pluginsHelper)
+    public Plugin(PluginsHelper pluginsHelper)
     {
         _plugins = pluginsHelper;
     }
@@ -20,10 +21,10 @@ internal sealed class ShellPlugin : IServicesRegisterer
     {
         services.TryAddSingleton<ShellViewModel>();
 
-        foreach (Type type in _plugins.GetPluginsTypes().GetInstanciableImplementation<ICommonMenuItem>())
+        foreach (Type type in _plugins.GetPluginsTypes().GetInstanciableImplementation<IMenu>())
         {
             services.TryAddSingleton(type);
-            services.AddSingleton(typeof(ICommonMenuItem), provider => provider.GetRequiredService(type));
+            services.AddSingleton(typeof(IMenu), provider => provider.GetRequiredService(type));
         }
     }
 }

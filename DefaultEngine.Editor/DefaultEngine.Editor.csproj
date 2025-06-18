@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="Resources/Images/**/*" />
+    <AvaloniaResource Include="**/Resources/Images/**/*" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
