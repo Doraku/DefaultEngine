@@ -148,11 +148,20 @@ public class DefaultEditor : Application, IDisposable
     }
 
     protected virtual Window CreateMainWindow()
-        => new()
+    {
+        Window window = new()
         {
             Title = "Default Engine",
-            WindowState = WindowState.Maximized
+            WindowState = WindowState.Maximized,
+            ExtendClientAreaToDecorationsHint = true
         };
+
+#if DEBUG
+        window.AttachDevTools();
+#endif
+
+        return window;
+    }
 
     public static void Run<T>(string[] args)
         where T : DefaultEditor, new()

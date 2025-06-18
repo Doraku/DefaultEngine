@@ -1,34 +1,95 @@
-<DockPanel
+<Border
     x:Class="DefaultEngine.Editor.Internal.Views.ShellView"
+    x:DataType="vm:ShellViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:DefaultEngine.Editor.Internal.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:system="using:System"
+    xmlns:v="using:DefaultEngine.Editor.Internal.Views"
     xmlns:vm="using:DefaultEngine.Editor.Internal.ViewModels"
-    x:DataType="vm:ShellViewModel">
+    Margin="{Binding $parent[Window].OffScreenMargin}"
+    BorderBrush="{DynamicResource SystemAccentColor}"
+    BorderThickness="1">
 
-    <Menu
-        DockPanel.Dock="Top"
-        ItemsSource="{Binding Menus}">
+    <DockPanel>
 
-        <Menu.Styles>
+        <Grid DockPanel.Dock="Top">
 
-            <Style x:DataType="vm:ShellViewModel+MenuViewModel" Selector="Menu MenuItem">
+            <Rectangle Fill="{DynamicResource SystemAccentColorLight3}" IsHitTestVisible="False" />
 
-                <Setter Property="Header" Value="{Binding Name}" />
-                <Setter Property="Command" Value="{Binding Command}" />
-                <Setter Property="ItemsSource" Value="{Binding SubMenus}" />
+            <DockPanel Margin="0,0,200,0" HorizontalAlignment="Left">
 
-            </Style>
+                <Image
+                    Width="32"
+                    Height="32"
+                    VerticalAlignment="Top"
+                    DockPanel.Dock="Left"
+                    Source="/Resources/Images/DefaultLogo.png" />
 
-        </Menu.Styles>
+                <Menu Height="NaN" ItemsSource="{Binding Menus}">
 
-    </Menu>
+                    <Menu.ItemsPanel>
 
-    <StackPanel>
+                        <ItemsPanelTemplate>
 
-        <TextBlock Text="Welcome to Avalonia!" />
+                            <WrapPanel VerticalAlignment="Center" />
 
-        <TextBox />
+                        </ItemsPanelTemplate>
 
-    </StackPanel>
+                    </Menu.ItemsPanel>
 
-</DockPanel>
+                    <Menu.Styles>
+
+                        <Style x:DataType="vm:ShellViewModel+MenuViewModel" Selector="Menu MenuItem">
+
+                            <Setter Property="Icon" Value="{Binding Icon}" />
+                            <Setter Property="Header" Value="{Binding Header}" />
+                            <Setter Property="Command" Value="{Binding Command}" />
+                            <Setter Property="InputGesture" Value="{Binding HotKey}" />
+                            <Setter Property="ItemsSource" Value="{Binding SubMenus}" />
+
+                        </Style>
+
+                    </Menu.Styles>
+
+                    <Menu.DataTemplates>
+
+                        <DataTemplate DataType="vm:ShellViewModel+MenuViewModel">
+
+                            <MenuItem
+                                Command="{Binding Command}"
+                                Header="{Binding Header}"
+                                Icon="{Binding Icon}"
+                                InputGesture="{Binding HotKey}"
+                                ItemsSource="{Binding SubMenus}" />
+
+                        </DataTemplate>
+
+                        <DataTemplate DataType="system:Uri">
+                            <Image Source="{Binding Converter={x:Static converters:StaticConverters.UriToBitmap}}" />
+                        </DataTemplate>
+
+                        <DataTemplate DataType="PathGeometry">
+                            <Path Data="{Binding}" />
+                        </DataTemplate>
+
+                    </Menu.DataTemplates>
+
+                </Menu>
+
+            </DockPanel>
+
+        </Grid>
+
+        <StackPanel Orientation="Vertical">
+
+            <TextBlock Text="Welcome to Avalonia!" />
+
+            <TextBox />
+
+        </StackPanel>
+
+    </DockPanel>
+
+</Border>

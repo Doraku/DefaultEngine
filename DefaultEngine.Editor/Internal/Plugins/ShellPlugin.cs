@@ -20,10 +20,10 @@ internal sealed class ShellPlugin : IServicesRegisterer
     {
         services.TryAddSingleton<ShellViewModel>();
 
-        foreach (Type type in _plugins.GetPluginsTypes().GetInstanciableImplementation<IMenuItem>())
+        foreach (Type type in _plugins.GetPluginsTypes().GetInstanciableImplementation<ICommonMenuItem>())
         {
             services.TryAddSingleton(type);
-            services.AddSingleton(typeof(IMenuItem), provider => provider.GetRequiredService(type));
+            services.AddSingleton(typeof(ICommonMenuItem), provider => provider.GetRequiredService(type));
         }
     }
 }

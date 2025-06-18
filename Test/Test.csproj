@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DefaultUnDo" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DefaultEngine.Editor.Api\DefaultEngine.Editor.Api.csproj" />
   </ItemGroup>
 
