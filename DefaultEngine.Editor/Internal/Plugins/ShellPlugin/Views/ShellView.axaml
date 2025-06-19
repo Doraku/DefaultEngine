@@ -13,7 +13,7 @@
 
     <DockPanel>
 
-        <Grid DockPanel.Dock="Top">
+        <Grid DockPanel.Dock="Top" IsEnabled="{Binding !#ContentDialogHost.IsVisible}">
 
             <Rectangle Fill="{DynamicResource SystemAccentColorLight3}" IsHitTestVisible="False" />
 
@@ -26,7 +26,10 @@
                     DockPanel.Dock="Left"
                     Source="/Resources/Images/DefaultLogo.png" />
 
-                <Menu Height="NaN" ItemsSource="{Binding Menus}">
+                <Menu
+                    x:Name="TopMenu"
+                    Height="NaN"
+                    ItemsSource="{Binding Menus}">
 
                     <Menu.ItemsPanel>
 
@@ -92,13 +95,23 @@
 
         </Grid>
 
-        <StackPanel Orientation="Vertical">
+        <Grid>
 
-            <TextBlock Text="Welcome to Avalonia!" />
+            <StackPanel Margin="5" Orientation="Vertical">
 
-            <TextBox />
+                <TextBlock Text="Welcome to Avalonia!" />
 
-        </StackPanel>
+                <TextBox />
+
+            </StackPanel>
+
+            <Grid x:Name="ContentDialogHost" IsVisible="False">
+                <Grid.Background>
+                    <SolidColorBrush Opacity="0.3" Color="{DynamicResource SystemAccentColor}" />
+                </Grid.Background>
+            </Grid>
+
+        </Grid>
 
     </DockPanel>
 

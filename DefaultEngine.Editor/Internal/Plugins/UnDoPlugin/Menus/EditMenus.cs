@@ -3,6 +3,7 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using DefaultEngine.Editor.Api;
 using DefaultUnDo;
+using Microsoft.Extensions.Logging;
 
 namespace DefaultEngine.Editor.Internal.Plugins.UnDoPlugin.Menus;
 
@@ -25,9 +26,10 @@ internal sealed class Undo : ICommandMenu
 
     public KeyGesture HotKey { get; } = new(Key.Z, KeyModifiers.Control);
 
-    public Undo(IUnDoManager manager)
+    public Undo(IUnDoManager manager, ILogger<Undo> logger)
     {
         _manager = manager;
+        manager.Do(() => logger.LogInformation("do"), () => logger.LogInformation("undo"));
     }
 
     public bool CanExecute() => _manager.CanUndo;

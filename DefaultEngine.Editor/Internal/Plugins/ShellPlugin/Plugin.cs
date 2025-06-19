@@ -23,8 +23,7 @@ internal sealed class Plugin : IServicesRegisterer
 
         foreach (Type type in _plugins.GetPluginsTypes().GetInstanciableImplementation<IMenu>())
         {
-            services.TryAddSingleton(type);
-            services.AddSingleton(typeof(IMenu), provider => provider.GetRequiredService(type));
+            services.AddAsSingletonImplementation<IMenu>(type);
         }
     }
 }

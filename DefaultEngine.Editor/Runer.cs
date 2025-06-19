@@ -8,26 +8,24 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Themes.Fluent;
 using DefaultEngine.Editor.Api.Plugins;
 using DefaultEngine.Editor.Internal;
 using DefaultEngine.Editor.Internal.Plugins.ShellPlugin.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Extensions.Logging;
 
 namespace DefaultEngine.Editor;
 
-public class DefaultEditor : Application, IDisposable
+public class Runer : IDisposable
 {
     private readonly List<IDisposable> _disposables;
 
     protected readonly Microsoft.Extensions.Logging.ILogger _logger;
 
-    private bool _disposedValue;
-
-    public DefaultEditor()
+    public Runer()
     {
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
@@ -46,14 +44,7 @@ public class DefaultEditor : Application, IDisposable
         _logger.LogInformation("starting");
     }
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        AvaloniaXamlLoader.Load(this);
-    }
-
-    private async Task<IServiceProvider> CreateServicesAsync()
+    private async Task<IServiceProvider> CreateServicesAsync(Application application)
     {
         await Task.CompletedTask.ConfigureAwait(ConfigureAwaitOptions.ForceYielding);
 
@@ -67,14 +58,14 @@ public class DefaultEditor : Application, IDisposable
 
         ServiceCollection pluginsServices = [];
 
-        pluginsServices.AddLogging(builder => builder.AddSerilog(dispose: true));
-        pluginsServices.AddSingleton(plugins);
-        pluginsServices.AddSingleton<Application>(this);
+        pluginsServices
+            .AddLogging(builder => builder.AddSerilog(dispose: true))
+            .AddSingleton(plugins)
+            .AddSingleton(application);
 
         foreach (Type type in plugins.GetPluginsTypes().GetInstanciableImplementation<IServicesRegisterer>())
         {
-            pluginsServices.TryAddSingleton(type);
-            pluginsServices.AddSingleton(typeof(IServicesRegisterer), provider => provider.GetRequiredService(type));
+            pluginsServices.AddAsSingletonImplementation<IServicesRegisterer>(type);
         }
 
         ServiceProvider pluginsProvider = pluginsServices.BuildServiceProvider(options);
@@ -83,11 +74,14 @@ public class DefaultEditor : Application, IDisposable
 
         ServiceCollection services = [];
 
-        services.AddLogging(builder => builder.AddSerilog(dispose: true));
-        services.AddSingleton<Application>(this);
+        services
+            .AddLogging(builder => builder.AddSerilog(dispose: true))
+            .AddSingleton(application);
 
         foreach (IServicesRegisterer servicesRegisterer in pluginsProvider.GetRequiredService<IEnumerable<IServicesRegisterer>>())
         {
+            services.AddAsSingletonImplementation(servicesRegisterer);
+
             servicesRegisterer.Register(services);
         }
 
@@ -100,7 +94,7 @@ public class DefaultEditor : Application, IDisposable
         return provider;
     }
 
-    private async Task InitializeAsync(CancellationTokenSource shutdownTokenSource)
+    private async Task InitializeAsync(Application application, CancellationTokenSource shutdownTokenSource)
     {
         try
         {
@@ -110,9 +104,9 @@ public class DefaultEditor : Application, IDisposable
 
             await splashScreen.SetInformations("registering services").ConfigureAwait(true);
 
-            IServiceProvider services = await CreateServicesAsync().ConfigureAwait(true);
+            IServiceProvider services = await CreateServicesAsync(application).ConfigureAwait(true);
 
-            await splashScreen.SetInformations("building content").ConfigureAwait(true);
+            await splashScreen.SetInformations("creating content").ConfigureAwait(true);
 
             object content = await CreateContentAsync(services).ConfigureAwait(true);
 
@@ -140,6 +134,15 @@ public class DefaultEditor : Application, IDisposable
         }
     }
 
+    protected virtual Application CreateApplication()
+    {
+        Application application = new();
+
+        application.Styles.Add(new FluentTheme());
+
+        return application;
+    }
+
     protected virtual async Task<object> CreateContentAsync(IServiceProvider services)
     {
         await Task.CompletedTask.ConfigureAwait(ConfigureAwaitOptions.ForceYielding);
@@ -163,34 +166,29 @@ public class DefaultEditor : Application, IDisposable
         return window;
     }
 
-    public static void Run<T>(string[] args)
-        where T : DefaultEditor, new()
+    public void Run(string[] args)
     {
-        static void Run(Application app, string[] args)
+        void Run(Application app, string[] args)
         {
-            if (app is not T editor)
-            {
-                throw new InvalidOperationException();
-            }
-
-            editor._logger.LogInformation($"args {args}");
+            _logger.LogInformation($"args {args}");
 
             using CancellationTokenSource shutdownTokenSource = new();
 
-            using (editor)
-            {
-                _ = editor.InitializeAsync(shutdownTokenSource);
+            _ = InitializeAsync(app, shutdownTokenSource);
 
-                editor.Run(shutdownTokenSource.Token);
-            }
+            app.Run(shutdownTokenSource.Token);
         }
 
         AppBuilder
-            .Configure<T>()
+            .Configure(CreateApplication)
             .UsePlatformDetect()
             .LogToTrace()
             .Start(Run, args);
     }
+
+    #region IDisposable
+
+    private bool _disposedValue;
 
     protected virtual void Dispose(bool disposing)
     {
@@ -215,4 +213,6 @@ public class DefaultEditor : Application, IDisposable
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
+
+    #endregion
 }

@@ -7,8 +7,13 @@ internal sealed class Program
 {
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder
-            .Configure<DefaultEditor>()
+            .Configure<Application>()
             .UsePlatformDetect();
 
-    private static void Main(string[] args) => DefaultEditor.Run<DefaultEditor>(args);
+    private static void Main(string[] args)
+    {
+        using Runer runner = new();
+
+        runner.Run(args);
+    }
 }
