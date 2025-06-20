@@ -1,0 +1,33 @@
+<DataTemplates xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DataTemplate DataType="Bitmap">
+
+        <Image Source="{Binding}" />
+
+    </DataTemplate>
+
+    <DataTemplate DataType="PathGeometry">
+
+        <Path Data="{Binding}">
+
+            <Path.Styles>
+
+                <Style Selector="Path">
+
+                    <Setter Property="Fill" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+
+                    <Style Selector="^:disabled">
+
+                        <Setter Property="Fill" Value="{DynamicResource SystemControlDisabledBaseMediumLowBrush}" />
+
+                    </Style>
+
+                </Style>
+
+            </Path.Styles>
+
+        </Path>
+
+    </DataTemplate>
+
+</DataTemplates>

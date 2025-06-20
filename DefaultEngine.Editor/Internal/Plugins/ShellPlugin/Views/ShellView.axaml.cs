@@ -1,21 +1,46 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
-using DefaultEngine.Editor.Api.Mvvm;
+using DefaultEngine.Editor.Api.Controls.Metadata;
+using DefaultEngine.Editor.Api.Services;
 using DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Menus;
 using DefaultEngine.Editor.Internal.Plugins.ShellPlugin.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Views;
 
-[DataTemplate<ShellViewModel>]
-internal sealed partial class ShellView : Border, IRecipient<ExitMenu.Message>
+[DataTemplate<ShellViewModel>(ServiceLifetime.Singleton)]
+internal sealed partial class ShellView : Border, IRecipient<ExitMenu.Message>, IContentDialogService
 {
-    public ShellView()
+    private sealed class HotKeyCommand : ICommand
     {
-        InitializeComponent();
+        private readonly ICommand _command;
+        private readonly InputElement _parent;
+
+        public HotKeyCommand(ICommand command, InputElement parent)
+        {
+            _command = command;
+            _parent = parent;
+        }
+
+        public event EventHandler? CanExecuteChanged
+        {
+            add => _command.CanExecuteChanged += value;
+            remove => _command.CanExecuteChanged -= value;
+        }
+
+        public bool CanExecute(object? parameter) => _parent.IsEnabled && _command.CanExecute(parameter);
+
+        public void Execute(object? parameter) => _command.Execute(parameter);
     }
 
     public ShellView(IMessenger messenger)
@@ -37,15 +62,18 @@ internal sealed partial class ShellView : Border, IRecipient<ExitMenu.Message>
             }
         }
 
-        Window window = (Window)TopLevel.GetTopLevel(this)!;
+        TopLevel? topLevel = TopLevel.GetTopLevel(this);
 
-        foreach (MenuViewModel menu in menus.SelectMany(GetAllMenus).Where(menu => menu.Command is { } && menu.HotKey is { }))
+        if (topLevel is { })
         {
-            window.KeyBindings.Add(new KeyBinding
+            foreach (MenuViewModel menu in menus.SelectMany(GetAllMenus).Where(menu => menu.Command is { } && menu.HotKey is { }))
             {
-                Gesture = menu.HotKey!,
-                Command = menu.Command!
-            });
+                topLevel.KeyBindings.Add(new KeyBinding
+                {
+                    Gesture = menu.HotKey!,
+                    Command = new HotKeyCommand(menu.Command!, TopMenu)
+                });
+            }
         }
     }
 
@@ -61,5 +89,82 @@ internal sealed partial class ShellView : Border, IRecipient<ExitMenu.Message>
         RegisterMenusHotKey(viewModel.Menus);
     }
 
+    #region IRecipient
+
     public void Receive(ExitMenu.Message message) => ((Window)TopLevel.GetTopLevel(this)!).Close();
+
+    #endregion
+
+    #region IContentDialogService
+
+    private TaskCompletionSource<IContentDialogService.DialogResult>? _contentDialogResult;
+
+    private void OnContentDialogKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key is Key.Escape)
+        {
+            _contentDialogResult?.SetResult(IContentDialogService.DialogResult.None);
+        }
+        else if (e.Key is Key.Enter
+            && ContentDialogPresenter.Content is IContentDialogService.IPrimary primary
+            && primary.CanReturnPrimary)
+        {
+            _contentDialogResult?.SetResult(IContentDialogService.DialogResult.Primary);
+        }
+    }
+
+    private void OnContentDialogHostPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == IsVisibleProperty
+            && !e.GetNewValue<bool>())
+        {
+            ContentDialogPresenter.Content = null;
+            ContentDialogHost.Classes.Remove("FullScreen");
+        }
+    }
+
+    public async Task<IContentDialogService.DialogResult> ShowAsync(object content, bool isFullScreen, CancellationToken cancellationToken)
+    {
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            return await Dispatcher.UIThread.InvokeAsync(() => ShowAsync(content, isFullScreen, cancellationToken)).ConfigureAwait(false);
+        }
+
+        TopLevel? topLevel = TopLevel.GetTopLevel(this);
+
+        if (topLevel is null)
+        {
+            return IContentDialogService.DialogResult.None;
+        }
+
+        _contentDialogResult = new TaskCompletionSource<IContentDialogService.DialogResult>();
+
+        if (isFullScreen)
+        {
+            ContentDialogHost.Classes.Add("FullScreen");
+        }
+
+        using (cancellationToken.Register(() => _contentDialogResult.TrySetResult(IContentDialogService.DialogResult.None)))
+        {
+            topLevel.KeyDown += OnContentDialogKeyDown;
+            ContentDialogPresenter.Content = content;
+            ContentDialogHost.Opacity = 1;
+
+            IContentDialogService.DialogResult result;
+
+            try
+            {
+                result = await _contentDialogResult.Task.ConfigureAwait(true);
+            }
+            finally
+            {
+                ContentDialogHost.Opacity = 0;
+                topLevel.KeyDown -= OnContentDialogKeyDown;
+            }
+
+            return result;
+        }
+    }
+
+    #endregion
 }

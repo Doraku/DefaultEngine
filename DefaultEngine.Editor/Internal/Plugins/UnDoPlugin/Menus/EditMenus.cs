@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using DefaultEngine.Editor.Api;
+using DefaultEngine.Editor.Api.Services;
 using DefaultUnDo;
 using Microsoft.Extensions.Logging;
 
@@ -14,7 +16,7 @@ internal sealed class EditMenus : IMenu
     public IReadOnlyList<string> Path { get; } = ["Edit"];
 }
 
-internal sealed class Undo : ICommandMenu
+internal sealed class UndoMenu : ICommandMenu
 {
     private readonly IUnDoManager _manager;
 
@@ -26,7 +28,7 @@ internal sealed class Undo : ICommandMenu
 
     public KeyGesture HotKey { get; } = new(Key.Z, KeyModifiers.Control);
 
-    public Undo(IUnDoManager manager, ILogger<Undo> logger)
+    public UndoMenu(IUnDoManager manager, ILogger<UndoMenu> logger)
     {
         _manager = manager;
         manager.Do(() => logger.LogInformation("do"), () => logger.LogInformation("undo"));
@@ -37,7 +39,7 @@ internal sealed class Undo : ICommandMenu
     public void Execute() => _manager.Undo();
 }
 
-internal sealed class Redo : ICommandMenu
+internal sealed class RedoMenu : ICommandMenu
 {
     private readonly IUnDoManager _manager;
 
@@ -49,7 +51,7 @@ internal sealed class Redo : ICommandMenu
 
     public KeyGesture HotKey { get; } = new(Key.Y, KeyModifiers.Control);
 
-    public Redo(IUnDoManager manager)
+    public RedoMenu(IUnDoManager manager)
     {
         _manager = manager;
     }
@@ -57,4 +59,18 @@ internal sealed class Redo : ICommandMenu
     public bool CanExecute() => _manager.CanRedo;
 
     public void Execute() => _manager.Redo();
+}
+
+internal sealed class TestMenu : IAsyncCommandMenu
+{
+    private readonly IContentDialogService _service;
+
+    public IReadOnlyList<string> Path { get; } = ["test"];
+
+    public TestMenu(IContentDialogService service)
+    {
+        _service = service;
+    }
+
+    public Task ExecuteAsync() => _service.ShowAsync("kikoo", true);
 }

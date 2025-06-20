@@ -44,17 +44,11 @@ public class Runer : IDisposable
         _logger.LogInformation("starting");
     }
 
-    private async Task<IServiceProvider> CreateServicesAsync(Application application)
+    private async Task<IServiceProvider> CreatePluginsProviderAsync(Application application)
     {
         await Task.CompletedTask.ConfigureAwait(ConfigureAwaitOptions.ForceYielding);
 
         PluginsHelper plugins = new(new FileInfo(Assembly.GetEntryAssembly()!.Location).Directory!);
-
-        ServiceProviderOptions options = new()
-        {
-            ValidateOnBuild = true,
-            ValidateScopes = true
-        };
 
         ServiceCollection pluginsServices = [];
 
@@ -68,9 +62,21 @@ public class Runer : IDisposable
             pluginsServices.AddAsSingletonImplementation<IServicesRegisterer>(type);
         }
 
-        ServiceProvider pluginsProvider = pluginsServices.BuildServiceProvider(options);
+        ServiceProvider pluginsProvider = pluginsServices.BuildServiceProvider(
+            new ServiceProviderOptions()
+            {
+                ValidateOnBuild = true,
+                ValidateScopes = true
+            });
 
         _disposables.Add(pluginsProvider);
+
+        return pluginsProvider;
+    }
+
+    private async Task<IServiceProvider> CreateServicesAsync(Application application, IServiceProvider pluginsProvider)
+    {
+        await Task.CompletedTask.ConfigureAwait(ConfigureAwaitOptions.ForceYielding);
 
         ServiceCollection services = [];
 
@@ -85,7 +91,12 @@ public class Runer : IDisposable
             servicesRegisterer.Register(services);
         }
 
-        ServiceProvider provider = services.BuildServiceProvider(options);
+        ServiceProvider provider = services.BuildServiceProvider(
+            new ServiceProviderOptions()
+            {
+                ValidateOnBuild = true,
+                ValidateScopes = true
+            });
 
         _disposables.Add(provider);
 
@@ -102,9 +113,13 @@ public class Runer : IDisposable
 
             splashScreen.Show();
 
+            await splashScreen.SetInformations("registering plugins").ConfigureAwait(true);
+
+            IServiceProvider plugins = await CreatePluginsProviderAsync(application).ConfigureAwait(true);
+
             await splashScreen.SetInformations("registering services").ConfigureAwait(true);
 
-            IServiceProvider services = await CreateServicesAsync(application).ConfigureAwait(true);
+            IServiceProvider services = await CreateServicesAsync(application, plugins).ConfigureAwait(true);
 
             await splashScreen.SetInformations("creating content").ConfigureAwait(true);
 

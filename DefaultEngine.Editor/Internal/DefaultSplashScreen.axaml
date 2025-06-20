@@ -13,10 +13,16 @@
     <DockPanel>
 
         <TextBlock
-            Name="InformationsTextBlock"
+            x:Name="InformationsTextBlock"
             HorizontalAlignment="Center"
             DockPanel.Dock="Bottom"
             Text="starting" />
+
+        <ProgressBar
+            x:Name="InformationsProgress"
+            Margin="5"
+            DockPanel.Dock="Bottom"
+            IsIndeterminate="True" />
 
         <Image Width="400" Source="/Resources/Images/DefaultEngineLogo.png" />
 

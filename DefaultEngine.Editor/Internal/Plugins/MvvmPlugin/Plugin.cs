@@ -4,7 +4,7 @@ using System.Reflection;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using DefaultEngine.Editor.Api.Mvvm;
+using DefaultEngine.Editor.Api.Controls.Metadata;
 using DefaultEngine.Editor.Api.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -30,7 +30,21 @@ internal sealed class Plugin : IPlugin
 
             foreach ((Type type, DataTemplateAttribute attribute) in _plugins.GetPluginsTypes().GetInstanciableImplementation<Control>().GetTypesWithAttribute<DataTemplateAttribute>())
             {
-                services.TryAddTransient(type);
+                switch (attribute.Lifetime)
+                {
+                    case ServiceLifetime.Transient:
+                        services.TryAddTransient(type);
+                        break;
+
+                    case ServiceLifetime.Scoped:
+                        services.TryAddScoped(type);
+                        break;
+
+                    case ServiceLifetime.Singleton:
+                        services.TryAddSingleton(type);
+                        break;
+                }
+
                 dataTemplates.Add((type, attribute));
             }
 

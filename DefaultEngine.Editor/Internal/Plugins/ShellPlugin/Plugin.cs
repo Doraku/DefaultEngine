@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Reflection;
+using Avalonia.Threading;
 using DefaultEngine.Editor.Api;
 using DefaultEngine.Editor.Api.Plugins;
+using DefaultEngine.Editor.Api.Services;
 using DefaultEngine.Editor.Internal.Plugins.ShellPlugin.ViewModels;
+using DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -19,7 +22,9 @@ internal sealed class Plugin : IServicesRegisterer
 
     public void Register(IServiceCollection services)
     {
+        services.TryAddSingleton<AboutViewModel>();
         services.TryAddSingleton<ShellViewModel>();
+        services.TryAddSingleton<IContentDialogService>(provider => Dispatcher.UIThread.Invoke(provider.GetRequiredService<ShellView>));
 
         foreach (Type type in _plugins.GetPluginsTypes().GetInstanciableImplementation<IMenu>())
         {

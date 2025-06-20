@@ -5,15 +5,52 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="using:DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Converters"
     xmlns:system="using:System"
+    xmlns:templates="using:DefaultEngine.Editor.Api.Controls.Templates"
     xmlns:viewmodels="using:DefaultEngine.Editor.Internal.Plugins.ShellPlugin.ViewModels"
     xmlns:views="using:DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Views"
     Margin="{Binding $parent[Window].OffScreenMargin}"
     BorderBrush="{DynamicResource SystemAccentColor}"
     BorderThickness="1">
 
+    <Border.Styles>
+
+        <Style Selector=":is(InputElement).Blurable[IsEnabled=True]">
+
+            <Style.Animations>
+
+                <Animation FillMode="Forward" Duration="0:0:0.3">
+
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Effect" Value="blur(0)" />
+                    </KeyFrame>
+
+                </Animation>
+
+            </Style.Animations>
+
+        </Style>
+
+        <Style Selector=":is(InputElement).Blurable[IsEnabled=False]">
+
+            <Style.Animations>
+
+                <Animation FillMode="Forward" Duration="0:0:0.3">
+
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Effect" Value="blur(1)" />
+                    </KeyFrame>
+
+                </Animation>
+
+            </Style.Animations>
+
+        </Style>
+
+    </Border.Styles>
+
     <DockPanel>
 
-        <Grid DockPanel.Dock="Top" IsEnabled="{Binding !#ContentDialogHost.IsVisible}">
+        <Grid DockPanel.Dock="Top">
 
             <Rectangle Fill="{DynamicResource SystemAccentColorLight3}" IsHitTestVisible="False" />
 
@@ -29,6 +66,8 @@
                 <Menu
                     x:Name="TopMenu"
                     Height="NaN"
+                    Classes="Blurable"
+                    IsEnabled="{Binding !#ContentDialogHost.IsVisible}"
                     ItemsSource="{Binding Menus}">
 
                     <Menu.ItemsPanel>
@@ -57,35 +96,7 @@
 
                     <Menu.DataTemplates>
 
-                        <DataTemplate DataType="Bitmap">
-
-                            <Image Source="{Binding}" />
-
-                        </DataTemplate>
-
-                        <DataTemplate DataType="PathGeometry">
-
-                            <Path Data="{Binding}">
-
-                                <Path.Styles>
-
-                                    <Style Selector="Path">
-
-                                        <Setter Property="Fill" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-
-                                        <Style Selector="^:disabled">
-
-                                            <Setter Property="Fill" Value="{DynamicResource SystemControlDisabledBaseMediumLowBrush}" />
-
-                                        </Style>
-
-                                    </Style>
-
-                                </Path.Styles>
-
-                            </Path>
-
-                        </DataTemplate>
+                        <templates:DataTemplateInclude Source="avares://DefaultEngine.Editor/Internal/Plugins/ShellPlugin/Resources/KnownIconTypeDataTemplates.axaml" />
 
                     </Menu.DataTemplates>
 
@@ -96,20 +107,72 @@
         </Grid>
 
         <Grid>
+            <Grid
+                x:Name="MainContentHost"
+                Margin="10"
+                Classes="Blurable"
+                IsEnabled="{Binding !#ContentDialogHost.IsVisible}">
 
-            <StackPanel Margin="5" Orientation="Vertical">
+                <StackPanel Orientation="Vertical">
 
-                <TextBlock Text="Welcome to Avalonia!" />
+                    <TextBlock Text="Welcome to Avalonia!" />
 
-                <TextBox />
+                    <TextBox />
 
-            </StackPanel>
+                </StackPanel>
 
-            <Grid x:Name="ContentDialogHost" IsVisible="False">
-                <Grid.Background>
-                    <SolidColorBrush Opacity="0.3" Color="{DynamicResource SystemAccentColor}" />
-                </Grid.Background>
             </Grid>
+
+            <Border
+                x:Name="ContentDialogHost"
+                MaxWidth="{Binding #MainContentHost.Bounds.Width}"
+                MaxHeight="{Binding #MainContentHost.Bounds.Height}"
+                Margin="10"
+                Padding="5"
+                Background="White"
+                BorderBrush="{DynamicResource SystemAccentColor}"
+                BorderThickness="1"
+                BoxShadow="0 0 10 5 DarkGray"
+                CornerRadius="5"
+                IsVisible="{Binding !!$self.Opacity}"
+                Opacity="0"
+                PropertyChanged="OnContentDialogHostPropertyChanged">
+
+                <Border.Styles>
+
+                    <Style Selector="Border#ContentDialogHost">
+
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+
+                        <Setter Property="Transitions">
+                            <Transitions>
+                                <DoubleTransition
+                                    Easing="SineEaseIn"
+                                    Property="Opacity"
+                                    Duration="0:0:0.3" />
+                            </Transitions>
+                        </Setter>
+
+                        <Style Selector="^.FullScreen">
+
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="VerticalAlignment" Value="Stretch" />
+
+                        </Style>
+
+                    </Style>
+
+
+                </Border.Styles>
+
+                <ScrollViewer HorizontalScrollBarVisibility="Auto">
+
+                    <ContentPresenter x:Name="ContentDialogPresenter" />
+
+                </ScrollViewer>
+
+            </Border>
 
         </Grid>
 

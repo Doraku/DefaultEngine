@@ -1,0 +1,12 @@
+<StackPanel
+    x:Class="DefaultEngine.Editor.AboutView"
+    x:DataType="viewmodels:AboutViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewmodels="using:DefaultEngine.Editor.Internal.Plugins.ShellPlugin.ViewModels">
+
+    <Image Width="400" Source="/Resources/Images/DefaultEngineLogo.png" />
+
+    <TextBlock Text="{Binding Version, StringFormat=Version: {0}}" />
+
+</StackPanel>
