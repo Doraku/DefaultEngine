@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Input;
 
@@ -29,9 +28,4 @@ public interface ICommandMenu : IBaseCommandMenu
 public interface IAsyncCommandMenu : IBaseCommandMenu
 {
     Task ExecuteAsync();
-}
-
-public interface ICancellableAsyncCommandMenu : IBaseCommandMenu
-{
-    Task ExecuteAsync(CancellationToken cancellationToken);
 }

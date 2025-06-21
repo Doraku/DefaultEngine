@@ -11,7 +11,7 @@ using DefaultEngine.Editor.Api.Services;
 
 namespace DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Controls;
 
-public partial class ContentDialogControl : Border
+internal partial class ContentDialogControl : Border
 {
     private readonly Stack<(object, TaskCompletionSource<IContentDialogService.DialogResult>)> _operations;
 

@@ -42,7 +42,6 @@ internal sealed class MenuViewModel
             {
                 ICommandMenu sync => new RelayCommand(sync.Execute, commandMenu.CanExecute),
                 IAsyncCommandMenu async => new AsyncRelayCommand(async.ExecuteAsync, commandMenu.CanExecute, AsyncRelayCommandOptions.FlowExceptionsToTaskScheduler),
-                ICancellableAsyncCommandMenu cancellableAsync => new AsyncRelayCommand(cancellableAsync.ExecuteAsync, commandMenu.CanExecute, AsyncRelayCommandOptions.FlowExceptionsToTaskScheduler),
                 _ => null
             };
         }
