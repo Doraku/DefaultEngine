@@ -1,0 +1,90 @@
+<Border
+    x:Class="DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Controls.ContentDialogControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="using:DefaultEngine.Editor.Api.Controls.Behaviors"
+    xmlns:controls="using:DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Controls"
+    xmlns:services="using:DefaultEngine.Editor.Api.Services"
+    behaviors:ContentDialog.IsFullScreen="{Binding #ContentDialogPresenter.Child.(behaviors:ContentDialog.IsFullScreen)}"
+    Background="White"
+    BorderBrush="{DynamicResource SystemAccentColor}"
+    IsVisible="{Binding !!$self.Opacity}"
+    Opacity="0"
+    PropertyChanged="OnPropertyChanged">
+
+    <Border.Styles>
+
+        <Style Selector="controls|ContentDialogControl">
+
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BoxShadow" Value="0 0 10 5 DarkGray" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Padding" Value="5" />
+
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition
+                        Easing="SineEaseIn"
+                        Property="Opacity"
+                        Duration="0:0:0.3" />
+                </Transitions>
+            </Setter>
+
+            <Style Selector="^[(behaviors|ContentDialog.IsFullScreen)=True]">
+
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Stretch" />
+                <Setter Property="CornerRadius" Value="0" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="BoxShadow" Value="0 0 0 0 DarkGray" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Padding" Value="0" />
+
+            </Style>
+
+        </Style>
+
+    </Border.Styles>
+
+    <DockPanel>
+
+        <UniformGrid
+            Margin="0,5,0,0"
+            HorizontalAlignment="Right"
+            ColumnSpacing="5"
+            DockPanel.Dock="Bottom"
+            Rows="1">
+
+            <Button
+                HorizontalAlignment="Stretch"
+                Command="{Binding $parent[controls:ContentDialogControl].OnContentDialogReturn}"
+                CommandParameter="{x:Static services:IContentDialogService+DialogResult.Primary}"
+                Content="{Binding #ContentDialogPresenter.Child.(behaviors:ContentDialog.PrimaryContent)}"
+                IsEnabled="{Binding #ContentDialogPresenter.Child.(behaviors:ContentDialog.CanReturnPrimary)}"
+                IsVisible="{Binding $self.Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+            <Button
+                HorizontalAlignment="Stretch"
+                Command="{Binding $parent[controls:ContentDialogControl].OnContentDialogReturn}"
+                CommandParameter="{x:Static services:IContentDialogService+DialogResult.Secondary}"
+                Content="{Binding #ContentDialogPresenter.Child.(behaviors:ContentDialog.SecondaryContent)}"
+                IsEnabled="{Binding #ContentDialogPresenter.Child.(behaviors:ContentDialog.CanReturnSecondary)}"
+                IsVisible="{Binding $self.Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+            <Button
+                HorizontalAlignment="Stretch"
+                Command="{Binding $parent[controls:ContentDialogControl].OnContentDialogReturn}"
+                CommandParameter="{x:Static services:IContentDialogService+DialogResult.None}"
+                Content="{Binding #ContentDialogPresenter.Child.(behaviors:ContentDialog.NoneContent)}"
+                IsVisible="{Binding $self.Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+        </UniformGrid>
+
+        <ContentPresenter x:Name="ContentDialogPresenter" Content="{Binding $parent[controls:ContentDialogControl].Tag}" />
+
+    </DockPanel>
+
+</Border>
