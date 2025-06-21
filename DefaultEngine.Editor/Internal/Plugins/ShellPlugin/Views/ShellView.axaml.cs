@@ -9,7 +9,9 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using DefaultEngine.Editor.Api.Controls.Behaviors;
 using DefaultEngine.Editor.Api.Controls.Metadata;
 using DefaultEngine.Editor.Api.Services;
 using DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Menus;
@@ -99,35 +101,38 @@ internal sealed partial class ShellView : Border, IRecipient<ExitMenu.Message>, 
 
     private TaskCompletionSource<IContentDialogService.DialogResult>? _contentDialogResult;
 
+    [RelayCommand]
+    public void OnContentDialogReturn(IContentDialogService.DialogResult result) => _contentDialogResult?.TrySetResult(result);
+
     private void OnContentDialogKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.Key is Key.Escape)
+        if (e.Key is Key.Escape
+            && ContentDialog.GetNoneContent(ContentDialogPresenter.Child) is { })
         {
-            _contentDialogResult?.SetResult(IContentDialogService.DialogResult.None);
+            _contentDialogResult?.TrySetResult(IContentDialogService.DialogResult.None);
         }
         else if (e.Key is Key.Enter
-            && ContentDialogPresenter.Content is IContentDialogService.IPrimary primary
-            && primary.CanReturnPrimary)
+            && ContentDialog.GetPrimaryContent(ContentDialogPresenter.Child) is { }
+            && ContentDialog.GetCanReturnPrimary(ContentDialogPresenter.Child))
         {
-            _contentDialogResult?.SetResult(IContentDialogService.DialogResult.Primary);
+            _contentDialogResult?.TrySetResult(IContentDialogService.DialogResult.Primary);
         }
     }
 
-    private void OnContentDialogHostPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    private void OnContentDialogPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (e.Property == IsVisibleProperty
             && !e.GetNewValue<bool>())
         {
-            ContentDialogPresenter.Content = null;
-            ContentDialogHost.Classes.Remove("FullScreen");
+            ContentDialogHost.Tag = null;
         }
     }
 
-    public async Task<IContentDialogService.DialogResult> ShowAsync(object content, bool isFullScreen, CancellationToken cancellationToken)
+    public async Task<IContentDialogService.DialogResult> ShowAsync(object content, CancellationToken cancellationToken)
     {
         if (!Dispatcher.UIThread.CheckAccess())
         {
-            return await Dispatcher.UIThread.InvokeAsync(() => ShowAsync(content, isFullScreen, cancellationToken)).ConfigureAwait(false);
+            return await Dispatcher.UIThread.InvokeAsync(() => ShowAsync(content, cancellationToken)).ConfigureAwait(false);
         }
 
         TopLevel? topLevel = TopLevel.GetTopLevel(this);
@@ -139,15 +144,10 @@ internal sealed partial class ShellView : Border, IRecipient<ExitMenu.Message>, 
 
         _contentDialogResult = new TaskCompletionSource<IContentDialogService.DialogResult>();
 
-        if (isFullScreen)
-        {
-            ContentDialogHost.Classes.Add("FullScreen");
-        }
-
         using (cancellationToken.Register(() => _contentDialogResult.TrySetResult(IContentDialogService.DialogResult.None)))
         {
             topLevel.KeyDown += OnContentDialogKeyDown;
-            ContentDialogPresenter.Content = content;
+            ContentDialogHost.Tag = content;
             ContentDialogHost.Opacity = 1;
 
             IContentDialogService.DialogResult result;

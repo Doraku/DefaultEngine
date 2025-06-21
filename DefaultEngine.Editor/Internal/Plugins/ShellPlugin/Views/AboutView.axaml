@@ -1,12 +1,45 @@
-<StackPanel
+<DockPanel
     x:Class="DefaultEngine.Editor.AboutView"
     x:DataType="viewmodels:AboutViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:viewmodels="using:DefaultEngine.Editor.Internal.Plugins.ShellPlugin.ViewModels">
+    xmlns:behaviors="using:DefaultEngine.Editor.Api.Controls.Behaviors"
+    xmlns:viewmodels="using:DefaultEngine.Editor.Internal.Plugins.ShellPlugin.ViewModels"
+    behaviors:ContentDialog.NoneContent="Close">
 
-    <Image Width="400" Source="/Resources/Images/DefaultEngineLogo.png" />
+    <Image
+        Width="400"
+        DockPanel.Dock="Top"
+        Source="/Resources/Images/DefaultEngineLogo.png" />
 
-    <TextBlock Text="{Binding Version, StringFormat=Version: {0}}" />
+    <TextBlock
+        Margin="0,5"
+        DockPanel.Dock="Top"
+        Text="{Binding MainVersion, StringFormat=Main version: {0}}" />
 
-</StackPanel>
+    <ScrollViewer MaxHeight="300">
+        <ItemsControl ItemsSource="{Binding Items}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Expander
+                        Padding="0"
+                        HorizontalAlignment="Stretch"
+                        IsExpanded="False">
+
+                        <Expander.Header>
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Right" Text="{Binding Key.Version}" />
+                                <TextBlock Text="{Binding Key.Name}" />
+                            </DockPanel>
+                        </Expander.Header>
+
+                        <ListBox ItemsSource="{Binding}" />
+
+                    </Expander>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+        </ItemsControl>
+    </ScrollViewer>
+
+</DockPanel>

@@ -5,7 +5,7 @@ using DefaultEngine.Editor.Internal.Plugins.ShellPlugin.ViewModels;
 namespace DefaultEngine.Editor;
 
 [DataTemplate<AboutViewModel>]
-internal sealed partial class AboutView : StackPanel
+internal sealed partial class AboutView : DockPanel
 {
     public AboutView()
     {

@@ -12,24 +12,5 @@ public interface IContentDialogService
         Secondary
     }
 
-    interface INone
-    {
-        object? NoneContent { get; }
-    }
-
-    interface IPrimary
-    {
-        object? PrimaryContent { get; }
-
-        bool CanReturnPrimary => true;
-    }
-
-    interface ISecondary
-    {
-        object? SecondaryContent { get; }
-
-        bool CanReturnSecondary => true;
-    }
-
-    Task<DialogResult> ShowAsync(object content, bool isFullScreen = false, CancellationToken cancellationToken = default);
+    Task<DialogResult> ShowAsync(object content, CancellationToken cancellationToken = default);
 }

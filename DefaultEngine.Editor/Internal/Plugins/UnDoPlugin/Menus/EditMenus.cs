@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using DefaultEngine.Editor.Api;
-using DefaultEngine.Editor.Api.Services;
 using DefaultUnDo;
 using Microsoft.Extensions.Logging;
 
@@ -59,18 +57,4 @@ internal sealed class RedoMenu : ICommandMenu
     public bool CanExecute() => _manager.CanRedo;
 
     public void Execute() => _manager.Redo();
-}
-
-internal sealed class TestMenu : IAsyncCommandMenu
-{
-    private readonly IContentDialogService _service;
-
-    public IReadOnlyList<string> Path { get; } = ["test"];
-
-    public TestMenu(IContentDialogService service)
-    {
-        _service = service;
-    }
-
-    public Task ExecuteAsync() => _service.ShowAsync("kikoo", true);
 }

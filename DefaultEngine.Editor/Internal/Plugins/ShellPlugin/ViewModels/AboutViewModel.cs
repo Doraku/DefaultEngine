@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using DefaultEngine.Editor.Api;
 using DefaultEngine.Editor.Api.Plugins;
 
@@ -7,21 +9,37 @@ namespace DefaultEngine.Editor.Internal.Plugins.ShellPlugin.ViewModels;
 
 internal sealed class AboutViewModel
 {
-    private readonly IEnumerable<IServicesRegisterer> _servicesRegisterers;
-    private readonly IEnumerable<IPlugin> _plugins;
-    private readonly IEnumerable<IMenu> _menus;
+    public sealed record PluginInfo(
+        string? Name,
+        Version? Version)
+    {
+        public PluginInfo(AssemblyName assemblyName)
+            : this(assemblyName.Name, assemblyName.Version)
+        { }
 
-    public Version? Version { get; }
+        public static PluginInfo From(Type type) => new(type.Assembly.GetName());
+    }
+
+    public Version? MainVersion { get; }
+
+    public IEnumerable<IGrouping<PluginInfo, Type>> Items { get; }
 
     public AboutViewModel(
         IEnumerable<IServicesRegisterer> servicesRegisterers,
         IEnumerable<IPlugin> plugins,
         IEnumerable<IMenu> menus)
     {
-        _servicesRegisterers = servicesRegisterers;
-        _plugins = plugins;
-        _menus = menus;
+        MainVersion = (Assembly.GetEntryAssembly() ?? GetType().Assembly).GetName().Version;
 
-        Version = GetType().Assembly.GetName().Version;
+        Items = [.. Array.Empty<object>()
+            .Concat(servicesRegisterers)
+            .Concat(plugins)
+            .Concat(menus)
+            .Distinct()
+            .Select(item => item.GetType())
+            .OrderBy(type => type.FullName)
+            .GroupBy(PluginInfo.From)
+            .OrderBy(group => group.Key.Name)
+            .ThenBy(group => group.Key.Version)];
     }
 }
