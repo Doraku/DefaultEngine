@@ -37,6 +37,8 @@ internal sealed class SettingsMenu : IAsyncCommandMenu
     {
         await Task.CompletedTask.ConfigureAwait(ConfigureAwaitOptions.ForceYielding);
 
-        await _contentDialogService.ShowAsync(_provider.GetRequiredService<SettingsViewModel>()).ConfigureAwait(false);
+        using IServiceScope scope = _provider.CreateScope();
+
+        await _contentDialogService.ShowAsync(scope.ServiceProvider.GetRequiredService<SettingsViewModel>()).ConfigureAwait(false);
     }
 }

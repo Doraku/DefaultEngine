@@ -9,7 +9,7 @@ using DefaultEngine.Editor.Api.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace DefaultEngine.Editor.Internal.Plugins.MvvmPlugin;
+namespace DefaultEngine.Editor.Internal.Plugins.DataTemplatesPlugin;
 
 internal sealed class Plugin : IPlugin
 {

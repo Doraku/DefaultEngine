@@ -50,28 +50,28 @@ public class Runer : IDisposable
 
         PluginsHelper plugins = new(new FileInfo(Assembly.GetEntryAssembly()!.Location).Directory!);
 
-        ServiceCollection pluginsServices = [];
+        ServiceCollection services = [];
 
-        pluginsServices
+        services
             .AddLogging(builder => builder.AddSerilog(dispose: true))
             .AddSingleton(plugins)
             .AddSingleton(application);
 
         foreach (Type type in plugins.GetPluginsTypes().GetInstanciableImplementation<IServicesRegisterer>())
         {
-            pluginsServices.AddAsSingletonImplementation<IServicesRegisterer>(type);
+            services.AddAsSingletonImplementation<IServicesRegisterer>(type);
         }
 
-        ServiceProvider pluginsProvider = pluginsServices.BuildServiceProvider(
+        ServiceProvider provider = services.BuildServiceProvider(
             new ServiceProviderOptions()
             {
                 ValidateOnBuild = true,
                 ValidateScopes = true
             });
 
-        _disposables.Add(pluginsProvider);
+        _disposables.Add(provider);
 
-        return pluginsProvider;
+        return provider;
     }
 
     private async Task<IServiceProvider> CreateServicesAsync(Application application, IServiceProvider pluginsProvider)

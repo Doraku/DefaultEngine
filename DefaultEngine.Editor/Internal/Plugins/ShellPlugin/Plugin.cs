@@ -29,9 +29,10 @@ internal sealed class Plugin : IServicesRegisterer
 
     public void Register(IServiceCollection services)
     {
-        services.TryAddSingleton<AboutViewModel>();
         services.TryAddSingleton<ShellViewModel>();
         services.TryAddSingleton<IContentDialogService>(provider => Dispatcher.UIThread.Invoke(provider.GetRequiredService<ShellView>));
+
+        services.TryAddTransient<AboutViewModel>();
 
         foreach (Type type in _plugins.GetPluginsTypes().GetInstanciableImplementation<IMenu>())
         {

@@ -27,7 +27,7 @@ internal sealed class Plugin : IServicesRegisterer
 
     public void Register(IServiceCollection services)
     {
-        services.TryAddSingleton<SettingsViewModel>();
+        services.TryAddTransient<SettingsViewModel>();
 
         foreach (Type type in _plugins.GetPluginsTypes().GetInstanciableImplementation<ISettings>())
         {
