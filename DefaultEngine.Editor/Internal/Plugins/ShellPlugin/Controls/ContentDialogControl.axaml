@@ -5,8 +5,8 @@
     xmlns:behaviors="using:DefaultEngine.Editor.Api.Controls.Behaviors"
     xmlns:controls="using:DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Controls"
     xmlns:services="using:DefaultEngine.Editor.Api.Services"
-    behaviors:ContentDialog.IsFullScreen="{Binding #ContentDialogPresenter.Child.(behaviors:ContentDialog.IsFullScreen)}"
-    Background="White"
+    behaviors:ContentDialog.IsFullScreen="{Binding #ContentDialogPresenter.Child?.(behaviors:ContentDialog.IsFullScreen), TargetNullValue=False}"
+    Background="{Binding $parent[TopLevel].Background}"
     BorderBrush="{DynamicResource SystemAccentColor}"
     IsVisible="{Binding !!$self.Opacity}"
     Opacity="0"
@@ -62,23 +62,23 @@
                 HorizontalAlignment="Stretch"
                 Command="{Binding $parent[controls:ContentDialogControl].OnContentDialogReturn}"
                 CommandParameter="{x:Static services:IContentDialogService+DialogResult.Primary}"
-                Content="{Binding #ContentDialogPresenter.Child.(behaviors:ContentDialog.PrimaryContent)}"
-                IsEnabled="{Binding #ContentDialogPresenter.Child.(behaviors:ContentDialog.CanReturnPrimary)}"
+                Content="{Binding #ContentDialogPresenter.Child?.(behaviors:ContentDialog.PrimaryContent)}"
+                IsEnabled="{Binding #ContentDialogPresenter.Child?.(behaviors:ContentDialog.CanReturnPrimary), TargetNullValue=False}"
                 IsVisible="{Binding $self.Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
 
             <Button
                 HorizontalAlignment="Stretch"
                 Command="{Binding $parent[controls:ContentDialogControl].OnContentDialogReturn}"
                 CommandParameter="{x:Static services:IContentDialogService+DialogResult.Secondary}"
-                Content="{Binding #ContentDialogPresenter.Child.(behaviors:ContentDialog.SecondaryContent)}"
-                IsEnabled="{Binding #ContentDialogPresenter.Child.(behaviors:ContentDialog.CanReturnSecondary)}"
+                Content="{Binding #ContentDialogPresenter.Child?.(behaviors:ContentDialog.SecondaryContent)}"
+                IsEnabled="{Binding #ContentDialogPresenter.Child?.(behaviors:ContentDialog.CanReturnSecondary), TargetNullValue=False}"
                 IsVisible="{Binding $self.Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
 
             <Button
                 HorizontalAlignment="Stretch"
                 Command="{Binding $parent[controls:ContentDialogControl].OnContentDialogReturn}"
                 CommandParameter="{x:Static services:IContentDialogService+DialogResult.None}"
-                Content="{Binding #ContentDialogPresenter.Child.(behaviors:ContentDialog.NoneContent)}"
+                Content="{Binding #ContentDialogPresenter.Child?.(behaviors:ContentDialog.NoneContent)}"
                 IsVisible="{Binding $self.Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
 
         </UniformGrid>
