@@ -56,7 +56,7 @@ internal sealed class ShellViewModel
 
                     if (isNew)
                     {
-                        parentViewModel = distinctMenus.TryGetValue(parentKey, out IMenu? parentMenu) ? new MenuViewModel(parentMenu) : new MenuViewModel(value.Path[i]);
+                        parentViewModel = distinctMenus.Remove(parentKey, out IMenu? parentMenu) ? new MenuViewModel(parentMenu) : new MenuViewModel(value.Path[i]);
                         viewModels.Add(parentKey, parentViewModel);
                     }
 

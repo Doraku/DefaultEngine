@@ -7,13 +7,6 @@ using Microsoft.Extensions.Logging;
 
 namespace DefaultEngine.Editor.Internal.Plugins.UnDoPlugin.Menus;
 
-internal sealed class EditMenus : IMenu
-{
-    public int Order => int.MinValue + 1;
-
-    public IReadOnlyList<string> Path { get; } = ["Edit"];
-}
-
 internal sealed class UndoMenu : ICommandMenu
 {
     private readonly IUnDoManager _manager;

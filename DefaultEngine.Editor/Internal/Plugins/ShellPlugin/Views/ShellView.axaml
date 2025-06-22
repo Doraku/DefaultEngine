@@ -54,7 +54,7 @@
 
         <Grid DockPanel.Dock="Top">
 
-            <Rectangle Fill="{DynamicResource SystemAccentColorLight3}" IsHitTestVisible="False" />
+            <Rectangle Fill="{DynamicResource SystemAccentColor}" IsHitTestVisible="False" />
 
             <DockPanel Margin="0,0,200,0" HorizontalAlignment="Left">
 

@@ -1,0 +1,24 @@
+<DockPanel
+    x:Class="DefaultEngine.Editor.Internal.Plugins.SettingsPlugin.Views.SettingsView"
+    x:DataType="viewmodels:SettingsViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="using:DefaultEngine.Editor.Api.Controls.Behaviors"
+    xmlns:viewmodels="using:DefaultEngine.Editor.Internal.Plugins.SettingsPlugin.ViewModels"
+    behaviors:ContentDialog.NoneContent="Cancel"
+    behaviors:ContentDialog.PrimaryContent="Save">
+
+    <TreeView
+        x:Name="SectionsView"
+        ItemsSource="{Binding Sections}"
+        SelectionMode="AlwaysSelected">
+        <TreeView.ItemTemplate>
+            <TreeDataTemplate ItemsSource="{Binding Sections}">
+                <TextBlock Text="{Binding Header}" />
+            </TreeDataTemplate>
+        </TreeView.ItemTemplate>
+    </TreeView>
+
+    <ItemsControl Margin="10,0,0,0" ItemsSource="{Binding #SectionsView.((viewmodels:SectionViewModel)SelectedItem)?.Settings}" />
+
+</DockPanel>
