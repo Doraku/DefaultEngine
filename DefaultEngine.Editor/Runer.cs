@@ -127,6 +127,8 @@ public class Runer : IDisposable
 
             await splashScreen.SetInformations("creating main window").ConfigureAwait(true);
 
+            await Task.Delay(TimeSpan.FromSeconds(0.5)).ConfigureAwait(true);
+
             Window mainWindow = CreateMainWindow();
 
             mainWindow.Icon ??= splashScreen.Icon;
@@ -136,6 +138,8 @@ public class Runer : IDisposable
             mainWindow.Show();
 
             await splashScreen.SetInformations("welcome").ConfigureAwait(true);
+
+            await Task.Delay(TimeSpan.FromSeconds(0.5)).ConfigureAwait(true);
 
             splashScreen.Close();
         }

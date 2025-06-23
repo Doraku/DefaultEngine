@@ -9,6 +9,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.Messaging;
 using DefaultEngine.Editor.Api.Controls.Metadata;
+using DefaultEngine.Editor.Api.DependencyInjection;
 using DefaultEngine.Editor.Api.Services;
 using DefaultEngine.Editor.Internal.Plugins.ShellPlugin.Menus;
 using DefaultEngine.Editor.Internal.Plugins.ShellPlugin.ViewModels;
@@ -41,14 +42,17 @@ internal sealed partial class ShellView : Border, IRecipient<ExitMenu.Message>, 
         public void Execute(object? parameter) => _command.Execute(parameter);
     }
 
-    public ShellView(IMessenger messenger)
+    private readonly IDelayedItem<Window> _mainWindow;
+
+    public ShellView(IDelayedItem<Window> mainWindow, IMessenger messenger)
     {
         InitializeComponent();
 
         messenger.RegisterAll(this);
+        _mainWindow = mainWindow;
     }
 
-    private void RegisterMenusHotKey(IEnumerable<MenuViewModel> menus)
+    private async void RegisterMenusHotKey(IEnumerable<MenuViewModel> menus)
     {
         static IEnumerable<MenuViewModel> GetAllMenus(MenuViewModel menu)
         {
@@ -60,18 +64,15 @@ internal sealed partial class ShellView : Border, IRecipient<ExitMenu.Message>, 
             }
         }
 
-        TopLevel? topLevel = TopLevel.GetTopLevel(this);
+        TopLevel topLevel = await _mainWindow.Value.ConfigureAwait(true);
 
-        if (topLevel is { })
+        foreach (MenuViewModel menu in menus.SelectMany(GetAllMenus).Where(menu => menu.Command is { } && menu.HotKey is { }))
         {
-            foreach (MenuViewModel menu in menus.SelectMany(GetAllMenus).Where(menu => menu.Command is { } && menu.HotKey is { }))
+            topLevel.KeyBindings.Add(new KeyBinding
             {
-                topLevel.KeyBindings.Add(new KeyBinding
-                {
-                    Gesture = menu.HotKey!,
-                    Command = new HotKeyCommand(menu.Command!, TopMenu)
-                });
-            }
+                Gesture = menu.HotKey!,
+                Command = new HotKeyCommand(menu.Command!, TopMenu)
+            });
         }
     }
 
@@ -89,13 +90,17 @@ internal sealed partial class ShellView : Border, IRecipient<ExitMenu.Message>, 
 
     #region IRecipient
 
-    public void Receive(ExitMenu.Message message) => ((Window)TopLevel.GetTopLevel(this)!).Close();
+    public async void Receive(ExitMenu.Message message) => (await _mainWindow.Value.ConfigureAwait(true)).Close();
 
     #endregion
 
     #region IContentDialogService
 
-    public Task<IContentDialogService.DialogResult> ShowAsync(object content, CancellationToken cancellationToken) => ContentDialogHost.ShowAsync(content, cancellationToken);
+    public async Task<IContentDialogService.DialogResult> ShowAsync(object content, CancellationToken cancellationToken)
+        => await ContentDialogHost.ShowAsync(
+            await _mainWindow.Value.ConfigureAwait(false),
+            content,
+            cancellationToken).ConfigureAwait(false);
 
     #endregion
 }

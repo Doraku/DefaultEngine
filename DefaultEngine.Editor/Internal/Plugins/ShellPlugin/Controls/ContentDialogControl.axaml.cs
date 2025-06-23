@@ -56,18 +56,11 @@ internal sealed partial class ContentDialogControl : Border
         }
     }
 
-    public async Task<IContentDialogService.DialogResult> ShowAsync(object content, CancellationToken cancellationToken)
+    public async Task<IContentDialogService.DialogResult> ShowAsync(TopLevel topLevel, object content, CancellationToken cancellationToken)
     {
         if (!Dispatcher.UIThread.CheckAccess())
         {
-            return await Dispatcher.UIThread.InvokeAsync(() => ShowAsync(content, cancellationToken)).ConfigureAwait(false);
-        }
-
-        TopLevel? topLevel = TopLevel.GetTopLevel(this);
-
-        if (topLevel is null)
-        {
-            return IContentDialogService.DialogResult.None;
+            return await Dispatcher.UIThread.InvokeAsync(() => ShowAsync(topLevel, content, cancellationToken)).ConfigureAwait(false);
         }
 
         if (Tag is { } && _contentDialogResult is { })

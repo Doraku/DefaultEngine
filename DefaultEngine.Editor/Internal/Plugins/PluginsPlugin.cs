@@ -3,13 +3,13 @@ using System.Reflection;
 using DefaultEngine.Editor.Api.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DefaultEngine.Editor.Internal.Plugins.PluginsPlugin;
+namespace DefaultEngine.Editor.Internal.Plugins;
 
-internal sealed class Plugin : IServicesRegisterer
+internal sealed class PluginsPlugin : IServicesRegisterer
 {
     private readonly PluginsHelper _plugins;
 
-    public Plugin(PluginsHelper plugins)
+    public PluginsPlugin(PluginsHelper plugins)
     {
         _plugins = plugins;
     }

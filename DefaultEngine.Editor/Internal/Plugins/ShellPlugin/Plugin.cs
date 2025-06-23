@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Threading;
 using DefaultEngine.Editor.Api;
@@ -29,8 +31,17 @@ internal sealed class Plugin : IServicesRegisterer
 
     public void Register(IServiceCollection services)
     {
+        services.AddDelayedSingleton(out TaskCompletionSource<Window> delayedMainWindow);
+
         services.TryAddSingleton<ShellViewModel>();
-        services.TryAddSingleton<IContentDialogService>(provider => Dispatcher.UIThread.Invoke(provider.GetRequiredService<ShellView>));
+        services.TryAddSingleton<IContentDialogService>(provider =>
+        {
+            ShellView instance = Dispatcher.UIThread.Invoke(provider.GetRequiredService<ShellView>);
+
+            instance.Loaded += (_, _) => _ = TopLevel.GetTopLevel(instance) is Window window && delayedMainWindow.TrySetResult(window);
+
+            return instance;
+        });
 
         services.TryAddTransient<AboutViewModel>();
 

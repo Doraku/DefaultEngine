@@ -1,0 +1,12 @@
+﻿using DefaultEngine.Editor.Api.Plugins;
+using DefaultEngine.Editor.Api.Services;
+using DefaultEngine.Editor.Internal.Plugins.NotificationsPlugin.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
+namespace DefaultEngine.Editor.Internal.Plugins.NotificationsPlugin;
+
+internal sealed class Plugin : IServicesRegisterer
+{
+    public void Register(IServiceCollection services) => services.TryAddSingleton<INotificationService, NotificationService>();
+}
