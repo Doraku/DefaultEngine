@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using DefaultApplication;
 using DefaultApplication.Services;
 
 namespace DefaultApplication.Internal.Plugins.ShellPlugin.Menus;
@@ -38,12 +37,14 @@ internal sealed class ExitMenu : ICommandMenu
 internal sealed class TestMenu : IAsyncCommandMenu
 {
     private readonly IWorkerService _service;
+    private readonly INotificationService _notification;
 
     public IReadOnlyList<string> Path { get; } = ["File", "Test"];
 
-    public TestMenu(IWorkerService service)
+    public TestMenu(IWorkerService service, INotificationService notification)
     {
         _service = service;
+        _notification = notification;
     }
 
     public Task ExecuteAsync() => _service.ExecuteAsync(async operation =>
@@ -51,6 +52,8 @@ internal sealed class TestMenu : IAsyncCommandMenu
         operation.Name = "kikoo";
 
         await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
+
+        await _notification.ShowInformationAsync("kikoo").ConfigureAwait(false);
 
         operation.Name = "lol";
 
@@ -60,6 +63,7 @@ internal sealed class TestMenu : IAsyncCommandMenu
 
         for (int i = 0; i < 10; i++)
         {
+            await _notification.ShowWarningAsync(i).ConfigureAwait(false);
             operation.Name = $"doing {i}";
             await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
 

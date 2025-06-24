@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls;
@@ -12,13 +11,11 @@ using DefaultApplication.Controls.Metadata;
 using DefaultApplication.DependencyInjection;
 using DefaultApplication.Internal.Plugins.ShellPlugin.Menus;
 using DefaultApplication.Internal.Plugins.ShellPlugin.ViewModels;
-using DefaultApplication.Services;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DefaultApplication.Internal.Plugins.ShellPlugin.Views;
 
-[DataTemplate<ShellViewModel>(ServiceLifetime.Singleton)]
-internal sealed partial class ShellView : Border, IRecipient<ExitMenu.Message>, IContentDialogService
+[DataTemplate<ShellViewModel>]
+internal sealed partial class ShellView : Border, IRecipient<ExitMenu.Message>
 {
     private sealed class HotKeyCommand : ICommand
     {
@@ -91,16 +88,6 @@ internal sealed partial class ShellView : Border, IRecipient<ExitMenu.Message>, 
     #region IRecipient
 
     public async void Receive(ExitMenu.Message message) => ((Window)await _mainTopLevel.Task.ConfigureAwait(true)).Close();
-
-    #endregion
-
-    #region IContentDialogService
-
-    public async Task<IContentDialogService.DialogResult> ShowAsync(object content, CancellationToken cancellationToken)
-        => await ContentDialogHost.ShowAsync(
-            await _mainTopLevel.Task.ConfigureAwait(false),
-            content,
-            cancellationToken).ConfigureAwait(false);
 
     #endregion
 }

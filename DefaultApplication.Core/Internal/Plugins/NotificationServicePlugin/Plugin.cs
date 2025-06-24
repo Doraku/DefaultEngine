@@ -1,10 +1,10 @@
-﻿using DefaultApplication.Plugins;
+﻿using DefaultApplication.Internal.Plugins.NotificationsPlugin.Services;
+using DefaultApplication.Plugins;
 using DefaultApplication.Services;
-using DefaultApplication.Internal.Plugins.NotificationsPlugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace DefaultApplication.Internal.Plugins.NotificationsPlugin;
+namespace DefaultApplication.Internal.Plugins.NotificationServicePlugin;
 
 internal sealed class Plugin : IServicesRegisterer
 {

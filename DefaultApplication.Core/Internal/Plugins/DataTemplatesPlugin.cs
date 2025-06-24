@@ -30,20 +30,7 @@ internal sealed class DataTemplatesPlugin : IPlugin
 
             foreach ((Type type, DataTemplateAttribute attribute) in _plugins.GetPluginsTypes().GetInstanciableImplementation<Control>().GetTypesWithAttribute<DataTemplateAttribute>())
             {
-                switch (attribute.Lifetime)
-                {
-                    case ServiceLifetime.Transient:
-                        services.TryAddTransient(type);
-                        break;
-
-                    case ServiceLifetime.Scoped:
-                        services.TryAddScoped(type);
-                        break;
-
-                    case ServiceLifetime.Singleton:
-                        services.TryAddSingleton(type);
-                        break;
-                }
+                services.TryAddTransient(type);
 
                 dataTemplates.Add((type, attribute));
             }

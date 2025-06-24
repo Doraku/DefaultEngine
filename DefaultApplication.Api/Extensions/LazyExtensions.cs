@@ -27,21 +27,21 @@ public static class LazyExtensions
         return lazy.Value.ConfigureAwait(options);
     }
 
-    public static TaskAwaiter GetAwaiter<T>(this Lazy<Task> lazy)
+    public static TaskAwaiter GetAwaiter(this Lazy<Task> lazy)
     {
         ArgumentNullException.ThrowIfNull(lazy);
 
         return lazy.Value.GetAwaiter();
     }
 
-    public static ConfiguredTaskAwaitable ConfigureAwait<T>(this Lazy<Task> lazy, bool continueOnCapturedContext)
+    public static ConfiguredTaskAwaitable ConfigureAwait(this Lazy<Task> lazy, bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(lazy);
 
         return lazy.Value.ConfigureAwait(continueOnCapturedContext);
     }
 
-    public static ConfiguredTaskAwaitable ConfigureAwait<T>(this Lazy<Task> lazy, ConfigureAwaitOptions options)
+    public static ConfiguredTaskAwaitable ConfigureAwait(this Lazy<Task> lazy, ConfigureAwaitOptions options)
     {
         ArgumentNullException.ThrowIfNull(lazy);
 
