@@ -1,5 +1,5 @@
 ﻿using Avalonia;
-using DefaultEngine.Editor;
+using DefaultApplication;
 
 namespace DummyGame.Editor;
 
@@ -12,7 +12,7 @@ internal sealed class Program
 
     private static void Main(string[] args)
     {
-        using Runer runner = new();
+        using DesktopRuner runner = new();
 
         runner.Run(args);
     }

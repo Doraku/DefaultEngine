@@ -10,24 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="**/Resources/Images/**/*" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <PackageReference Include="Avalonia.Diagnostics" Version="12.0.999-cibuild0057085-alpha" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Avalonia.Desktop" Version="12.0.999-cibuild0057085-alpha" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.999-cibuild0057085-alpha" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="DefaultUnDo" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.2" />
-    <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\DefaultApplication.Plugin.DefaultUnDo\DefaultApplication.Plugin.DefaultUnDo.csproj" />
+    <ProjectReference Include="..\DefaultApplication\DefaultApplication.csproj" />
     <ProjectReference Include="..\DefaultEngine.Editor.Api\DefaultEngine.Editor.Api.csproj" />
   </ItemGroup>
 

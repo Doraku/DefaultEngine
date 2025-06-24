@@ -4,9 +4,12 @@
 
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <RootNamespace>DefaultEngine</RootNamespace>
 
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DefaultUnDo" Version="2.0.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DefaultApplication.Api\DefaultApplication.Api.csproj" />

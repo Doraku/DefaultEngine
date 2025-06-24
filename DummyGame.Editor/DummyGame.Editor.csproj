@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DefaultApplication.Core\DefaultApplication.Core.csproj" />
+    <ProjectReference Include="..\DefaultApplication\DefaultApplication.csproj" />
     <ProjectReference Include="..\DefaultEngine.Editor\DefaultEngine.Editor.csproj" />
     <ProjectReference Include="..\Test\Test.csproj" />
   </ItemGroup>

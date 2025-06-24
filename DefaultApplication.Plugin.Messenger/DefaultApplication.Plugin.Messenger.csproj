@@ -4,12 +4,15 @@
 
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <RootNamespace>DefaultEngine</RootNamespace>
-
+    
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DefaultApplication.Api\DefaultApplication.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
   </ItemGroup>
 
 </Project>

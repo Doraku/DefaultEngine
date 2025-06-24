@@ -4,9 +4,15 @@
 
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <RootNamespace>DefaultEngine</RootNamespace>
+    <RootNamespace>DefaultApplication</RootNamespace>
+    
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 
   </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Resources\Images\**\*.*" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DefaultApplication.Api\DefaultApplication.Api.csproj" />
