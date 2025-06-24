@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using DefaultApplication.Services;
 using DefaultApplication.Internal.Plugins.WorkerServicePlugin.ViewModels;
+using DefaultApplication.Services;
 using Microsoft.Extensions.Logging;
-
 using static DefaultApplication.Services.IWorkerService;
 
 namespace DefaultApplication.Internal.Plugins.WorkerServicePlugin.Services;
@@ -56,7 +55,7 @@ internal sealed class WorkerService : IWorkerService
             }
             catch (Exception exception)
             {
-                _logger.LogCritical(exception, $"Error when running operation {operation.Name}");
+                _logger.LogWorkerServiceException(operation, exception);
 
                 return new OperationResult<T>(Exception: exception);
             }

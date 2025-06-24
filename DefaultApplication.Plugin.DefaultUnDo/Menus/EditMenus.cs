@@ -18,6 +18,7 @@ internal sealed class UndoMenu : ICommandMenu
 
     public KeyGesture HotKey { get; } = new(Key.Z, KeyModifiers.Control);
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1848:Use the LoggerMessage delegates", Justification = "ugly test to remove")]
     public UndoMenu(IUnDoManager manager, ILogger<UndoMenu> logger)
     {
         _manager = manager;
