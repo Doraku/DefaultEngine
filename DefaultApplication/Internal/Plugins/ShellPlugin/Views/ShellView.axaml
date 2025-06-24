@@ -63,7 +63,7 @@
                     Height="32"
                     VerticalAlignment="Top"
                     DockPanel.Dock="Left"
-                    Source="/Resources/Images/DefaultLogo.png" />
+                    Source="avares://DefaultApplication.Core/Resources/Images/DefaultLogo.png" />
 
                 <Menu
                     x:Name="TopMenu"

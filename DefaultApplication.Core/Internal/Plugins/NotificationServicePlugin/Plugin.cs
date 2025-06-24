@@ -1,4 +1,4 @@
-﻿using DefaultApplication.Internal.Plugins.NotificationsPlugin.Services;
+﻿using DefaultApplication.Internal.Plugins.NotificationServicePlugin.Services;
 using DefaultApplication.Plugins;
 using DefaultApplication.Services;
 using Microsoft.Extensions.DependencyInjection;

@@ -26,7 +26,7 @@ public class DesktopRuner : BaseRuner
                 formatProvider: CultureInfo.InvariantCulture)
             .CreateLogger();
 
-        return new SerilogLoggerProvider().CreateLogger("DefaultEditor");
+        return new SerilogLoggerProvider().CreateLogger("DefaultApplication");
     }
 
     protected override AppBuilder ConfigureBuilder(AppBuilder builder)

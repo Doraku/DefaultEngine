@@ -9,10 +9,6 @@
 
   </PropertyGroup>
 
-  <ItemGroup>
-    <AvaloniaResource Include="**/Resources/Images/**/*" />
-  </ItemGroup>
-
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
     <PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
   </ItemGroup>

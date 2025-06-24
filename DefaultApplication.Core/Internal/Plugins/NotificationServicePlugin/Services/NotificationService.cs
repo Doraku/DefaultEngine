@@ -6,7 +6,7 @@ using Avalonia.Threading;
 using DefaultApplication.DependencyInjection;
 using DefaultApplication.Services;
 
-namespace DefaultApplication.Internal.Plugins.NotificationsPlugin.Services;
+namespace DefaultApplication.Internal.Plugins.NotificationServicePlugin.Services;
 
 internal sealed class NotificationService : INotificationService
 {
