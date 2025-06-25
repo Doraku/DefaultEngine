@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using DefaultApplication.Controls.Behaviors;
@@ -19,9 +21,9 @@ internal sealed partial class ContentDialogControl : Grid, IContentDialogService
     private readonly Task<TopLevel> _mainTopLevel;
     private readonly Stack<(object, TaskCompletionSource<IContentDialogService.DialogResult>)> _operations;
 
+    private Layoutable? _target;
     private TaskCompletionSource<bool> _available;
     private TaskCompletionSource<IContentDialogService.DialogResult>? _contentDialogResult;
-    private BindingExpressionBase? _marginBinding;
 
     public ContentDialogControl(IDelayed<TopLevel> mainTopLevel)
     {
@@ -47,6 +49,28 @@ internal sealed partial class ContentDialogControl : Grid, IContentDialogService
 
     private void InstallOnTopLevel(TopLevel topLevel)
     {
+        void OnTargetLayoutUpdated(object? sender, EventArgs e)
+        {
+            if (sender is Layoutable layoutable)
+            {
+                Thickness margin = layoutable.Margin;
+                double widthOffset = 0;
+                double heightOffset = 0;
+
+                if (sender is Window window && window.ExtendClientAreaToDecorationsHint)
+                {
+                    margin -= new Thickness(window.OffScreenMargin.Left / 2, window.OffScreenMargin.Top / 2, 0, 0);
+
+                    widthOffset = window.OffScreenMargin.Left + window.OffScreenMargin.Right;
+                    heightOffset = window.OffScreenMargin.Top + window.OffScreenMargin.Bottom;
+                }
+
+                Margin = new Thickness(layoutable.Bounds.Left - margin.Left, layoutable.Bounds.Top - margin.Top, 0, 0);
+                MaxWidth = layoutable.Bounds.Width - widthOffset;
+                MaxHeight = layoutable.Bounds.Height - heightOffset;
+            }
+        }
+
         void OnTopLevelTemplateApplied(object? sender, TemplateAppliedEventArgs e)
         {
             if (Parent is AdornerLayer adornerLayer)
@@ -57,23 +81,24 @@ internal sealed partial class ContentDialogControl : Grid, IContentDialogService
 
             TopLevel topLevel = (TopLevel)sender!;
             topLevel.TemplateApplied -= OnTopLevelTemplateApplied;
-            _marginBinding?.Dispose();
+            if (_target is { })
+            {
+                _target.LayoutUpdated -= OnTargetLayoutUpdated;
+            }
 
             InstallOnTopLevel(topLevel);
         }
 
-        topLevel.TemplateApplied += OnTopLevelTemplateApplied;
-
         if (topLevel.FindDescendantOfType<VisualLayerManager>()?.AdornerLayer is AdornerLayer adorner)
         {
+            _target = topLevel.GetVisualDescendants().OfType<Layoutable>().FirstOrDefault(ContentDialog.GetIsTarget) ?? topLevel;
+            _target.LayoutUpdated += OnTargetLayoutUpdated;
+
             adorner.Children.Add(this);
             AdornerLayer.SetAdornedElement(this, adorner);
-
-            if (topLevel is Window window)
-            {
-                _marginBinding = Bind(MarginProperty, new Binding("OffScreenMargin", BindingMode.OneWay) { Source = window });
-            }
         }
+
+        topLevel.TemplateApplied += OnTopLevelTemplateApplied;
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -141,6 +166,7 @@ internal sealed partial class ContentDialogControl : Grid, IContentDialogService
 
                 topLevel.KeyDown += OnContentDialogKeyDown;
                 Tag = operation.Content;
+                ContentDialog.SetIsVisible(_target, true);
                 _contentDialogResult = operation.ResultSource;
                 Opacity = 1;
 
@@ -155,6 +181,7 @@ internal sealed partial class ContentDialogControl : Grid, IContentDialogService
                 }
                 finally
                 {
+                    ContentDialog.SetIsVisible(_target, false);
                     Opacity = 0;
                     topLevel.KeyDown -= OnContentDialogKeyDown;
                     _contentDialogResult = null;

@@ -5,6 +5,7 @@
     xmlns:behaviors="using:DefaultApplication.Controls.Behaviors"
     xmlns:controls="using:DefaultApplication.Internal.Plugins.ContentDialogServicePlugin.Controls"
     xmlns:services="using:DefaultApplication.Services"
+    Background="Transparent"
     IsVisible="{Binding !!$self.Opacity}"
     Opacity="0">
 
@@ -36,7 +37,7 @@
                 <Setter Property="CornerRadius" Value="5" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="BoxShadow" Value="0 0 10 5 DarkGray" />
-                <Setter Property="Margin" Value="5" />
+                <Setter Property="Margin" Value="10" />
                 <Setter Property="Padding" Value="5" />
 
 

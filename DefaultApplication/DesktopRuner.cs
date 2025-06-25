@@ -68,10 +68,10 @@ public class DesktopRuner : BaseRuner
 
         Window window = new()
         {
+            ExtendClientAreaToDecorationsHint = true,
             Icon = new WindowIcon(iconStream),
             Title = "Default Application",
-            WindowState = WindowState.Maximized,
-            ExtendClientAreaToDecorationsHint = true
+            WindowState = WindowState.Maximized
         };
 
 #if DEBUG

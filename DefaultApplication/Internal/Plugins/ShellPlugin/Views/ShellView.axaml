@@ -16,11 +16,11 @@
 
     <Border.Styles>
 
-        <Style Selector=":is(InputElement).Blurable[IsEnabled=True]">
+        <Style Selector=":is(InputElement).Blurable[(behaviors|ContentDialog.IsVisible)=False]">
 
             <Style.Animations>
 
-                <Animation FillMode="Forward" Duration="0:0:0.3">
+                <Animation FillMode="Forward" Duration="0:0:0.5">
 
                     <KeyFrame Cue="100%">
                         <Setter Property="Effect" Value="blur(0)" />
@@ -32,14 +32,14 @@
 
         </Style>
 
-        <Style Selector=":is(InputElement).Blurable[IsEnabled=False]">
+        <Style Selector=":is(InputElement).Blurable[(behaviors|ContentDialog.IsVisible)=True]">
 
             <Style.Animations>
 
-                <Animation FillMode="Forward" Duration="0:0:0.3">
+                <Animation FillMode="Forward" Duration="0:0:0.5">
 
                     <KeyFrame Cue="100%">
-                        <Setter Property="Effect" Value="blur(1)" />
+                        <Setter Property="Effect" Value="blur(2)" />
                     </KeyFrame>
 
                 </Animation>
@@ -68,7 +68,7 @@
                 <Menu
                     x:Name="TopMenu"
                     Height="NaN"
-                    Classes="Blurable"
+                    IsEnabled="{Binding !#MainContentHost.(behaviors:ContentDialog.IsVisible)}"
                     ItemsSource="{Binding Menus}">
 
                     <Menu.ItemsPanel>
@@ -107,21 +107,19 @@
 
         </Grid>
 
-        <Grid>
-            <Grid
-                x:Name="MainContentHost"
-                Margin="5"
-                Classes="Blurable">
+        <Grid
+            x:Name="MainContentHost"
+            Margin="5"
+            behaviors:ContentDialog.IsTarget="True"
+            Classes="Blurable">
 
-                <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical">
 
-                    <TextBlock Text="Welcome to Avalonia!" />
+                <TextBlock Text="Welcome to Avalonia!" />
 
-                    <TextBox />
+                <TextBox />
 
-                </StackPanel>
-
-            </Grid>
+            </StackPanel>
 
         </Grid>
 

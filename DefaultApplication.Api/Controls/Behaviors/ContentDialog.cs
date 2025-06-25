@@ -5,6 +5,20 @@ namespace DefaultApplication.Controls.Behaviors;
 
 public sealed class ContentDialog : AvaloniaObject
 {
+    public static readonly AttachedProperty<bool> IsTargetProperty = AvaloniaProperty.RegisterAttached<ContentDialog, AvaloniaObject, bool>(
+      "IsTarget", false, false, BindingMode.OneWay);
+
+    public static void SetIsTarget(AvaloniaObject? element, bool value) => element?.SetValue(IsTargetProperty, value);
+
+    public static bool GetIsTarget(AvaloniaObject? element) => element?.GetValue(IsTargetProperty) is bool value && value;
+
+    public static readonly AttachedProperty<bool> IsVisibleProperty = AvaloniaProperty.RegisterAttached<ContentDialog, AvaloniaObject, bool>(
+      "IsVisible", false, false, BindingMode.OneWay);
+
+    public static void SetIsVisible(AvaloniaObject? element, bool value) => element?.SetValue(IsVisibleProperty, value);
+
+    public static bool GetIsVisible(AvaloniaObject? element) => element?.GetValue(IsVisibleProperty) is bool value && value;
+
     public static readonly AttachedProperty<bool> IsFullScreenProperty = AvaloniaProperty.RegisterAttached<ContentDialog, AvaloniaObject, bool>(
       "IsFullScreen", false, false, BindingMode.OneWay);
 
