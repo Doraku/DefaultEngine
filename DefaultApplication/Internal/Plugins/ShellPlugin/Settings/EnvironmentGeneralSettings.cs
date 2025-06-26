@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using Avalonia;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
-using DefaultApplication;
+using DefaultApplication.ComponentModel;
 
 namespace DefaultApplication.Internal.Plugins.ShellPlugin.Settings;
 
 internal sealed class EnvironmentGeneralSettings : ObservableObject, ISettings
 {
     private readonly Application _application;
+
+    public static ThemeVariant[] Themes { get; } = [ThemeVariant.Light, ThemeVariant.Dark];
 
     public IReadOnlyList<string> Path { get; } = ["Environment", "General"];
 
@@ -17,6 +20,8 @@ internal sealed class EnvironmentGeneralSettings : ObservableObject, ISettings
         _application = application;
     }
 
+    [Description("Color theme")]
+    [ItemsSource(nameof(Themes))]
     public ThemeVariant Theme
     {
         get => _application.ActualThemeVariant;

@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Reflection;
+using DefaultApplication.Internal.Plugins.MenuServicePlugin.Services;
 using DefaultApplication.Plugins;
+using DefaultApplication.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace DefaultApplication.Internal.Plugins;
+namespace DefaultApplication.Internal.Plugins.MenuServicePlugin;
 
-internal sealed class MenusPlugin : IServicesRegisterer
+internal sealed class Plugin : IServicesRegisterer
 {
     private readonly PluginsHelper _plugins;
 
-    public MenusPlugin(PluginsHelper plugins)
+    public Plugin(PluginsHelper plugins)
     {
         _plugins = plugins;
     }
 
     public void Register(IServiceCollection services)
     {
+        services.TryAddSingleton<IMenuService, MenuService>();
+
         foreach (Type type in _plugins.GetPluginsTypes().GetInstanciableImplementation<IMenu>())
         {
             services.AddAsSingletonImplementation<IMenu>(type);

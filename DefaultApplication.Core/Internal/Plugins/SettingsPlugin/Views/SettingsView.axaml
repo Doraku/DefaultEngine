@@ -5,14 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="using:DefaultApplication.Controls.Behaviors"
     xmlns:viewmodels="using:DefaultApplication.Internal.Plugins.SettingsPlugin.ViewModels"
-    behaviors:ContentDialog.IsFullScreen="True"
+    Margin="5"
     behaviors:ContentDialog.NoneContent="Cancel"
     behaviors:ContentDialog.PrimaryContent="Save">
 
-    <TreeView
-        x:Name="SectionsView"
-        ItemsSource="{Binding Sections}"
-        SelectionMode="AlwaysSelected">
+    <TreeView x:Name="SectionsView" ItemsSource="{Binding RootSection.Sections}">
         <TreeView.ItemTemplate>
             <TreeDataTemplate ItemsSource="{Binding Sections}">
                 <TextBlock Text="{Binding Header}" />
@@ -20,6 +17,9 @@
         </TreeView.ItemTemplate>
     </TreeView>
 
-    <ItemsControl Margin="10,0,0,0" ItemsSource="{Binding #SectionsView.((viewmodels:SectionViewModel)SelectedItem)?.Settings, TargetNullValue={x:Null}}" />
+    <ItemsControl
+        Margin="10,0,0,0"
+        Grid.IsSharedSizeScope="True"
+        ItemsSource="{Binding #SectionsView.((viewmodels:SectionViewModel)SelectedItem)?.Settings}" />
 
 </DockPanel>

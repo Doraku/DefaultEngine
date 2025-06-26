@@ -38,8 +38,6 @@
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="BoxShadow" Value="0 0 10 5 DarkGray" />
                 <Setter Property="Margin" Value="10" />
-                <Setter Property="Padding" Value="5" />
-
 
                 <Style Selector="^[(behaviors|ContentDialog.IsFullScreen)=True]">
 
@@ -49,7 +47,6 @@
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="BoxShadow" Value="0 0 0 0 DarkGray" />
                     <Setter Property="Margin" Value="0" />
-                    <Setter Property="Padding" Value="0" />
 
                 </Style>
 
@@ -60,13 +57,14 @@
         <DockPanel>
 
             <UniformGrid
-                Margin="0,5,0,0"
+                Margin="5,0"
                 HorizontalAlignment="Right"
                 ColumnSpacing="5"
                 DockPanel.Dock="Bottom"
                 Rows="1">
 
                 <Button
+                    Margin="0,5"
                     HorizontalAlignment="Stretch"
                     Command="{Binding $parent[controls:ContentDialogControl].OnContentDialogReturn}"
                     CommandParameter="{x:Static services:IContentDialogService+DialogResult.Primary}"
@@ -75,6 +73,7 @@
                     IsVisible="{Binding $self.Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
 
                 <Button
+                    Margin="0,5"
                     HorizontalAlignment="Stretch"
                     Command="{Binding $parent[controls:ContentDialogControl].OnContentDialogReturn}"
                     CommandParameter="{x:Static services:IContentDialogService+DialogResult.Secondary}"
@@ -83,6 +82,7 @@
                     IsVisible="{Binding $self.Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
 
                 <Button
+                    Margin="0,5"
                     HorizontalAlignment="Stretch"
                     Command="{Binding $parent[controls:ContentDialogControl].OnContentDialogReturn}"
                     CommandParameter="{x:Static services:IContentDialogService+DialogResult.None}"

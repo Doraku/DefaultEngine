@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Markup.Xaml.MarkupExtensions;
-using DefaultApplication;
-using DefaultApplication.Services;
 using DefaultApplication.Internal.Plugins.SettingsPlugin.ViewModels;
+using DefaultApplication.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DefaultApplication.Internal.Plugins.SettingsPlugin.Menus;
@@ -39,6 +38,8 @@ internal sealed class SettingsMenu : IAsyncCommandMenu
 
         using IServiceScope scope = _provider.CreateScope();
 
-        await _contentDialogService.ShowAsync(scope.ServiceProvider.GetRequiredService<SettingsViewModel>()).ConfigureAwait(false);
+        if (await _contentDialogService.ShowAsync(scope.ServiceProvider.GetRequiredService<SettingsViewModel>()).ConfigureAwait(false) != IContentDialogService.DialogResult.Primary)
+        {
+        }
     }
 }

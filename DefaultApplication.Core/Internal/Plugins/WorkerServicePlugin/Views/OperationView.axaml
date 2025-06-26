@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:viewmodels="using:DefaultApplication.Internal.Plugins.WorkerServicePlugin.ViewModels"
     MinWidth="300"
+    Margin="5"
     Orientation="Vertical">
 
     <ProgressBar

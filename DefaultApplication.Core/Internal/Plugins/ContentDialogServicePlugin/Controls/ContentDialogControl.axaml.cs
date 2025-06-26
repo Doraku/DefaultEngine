@@ -51,6 +51,11 @@ internal sealed partial class ContentDialogControl : Grid, IContentDialogService
     {
         void OnTargetLayoutUpdated(object? sender, EventArgs e)
         {
+            if (!IsVisible)
+            {
+                return;
+            }
+
             if (sender is Layoutable layoutable)
             {
                 Thickness margin = layoutable.Margin;

@@ -4,12 +4,10 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="using:DefaultApplication.Controls.Behaviors"
-    xmlns:controls="using:DefaultApplication.Internal.Plugins.ShellPlugin.Controls"
     xmlns:converters="using:DefaultApplication.Internal.Plugins.ShellPlugin.Converters"
     xmlns:services="using:DefaultApplication.Services"
     xmlns:templates="using:DefaultApplication.Controls.Templates"
     xmlns:viewmodels="using:DefaultApplication.Internal.Plugins.ShellPlugin.ViewModels"
-    xmlns:views="using:DefaultApplication.Internal.Plugins.ShellPlugin.Views"
     Margin="{Binding $parent[Window].OffScreenMargin}"
     BorderBrush="{DynamicResource SystemAccentColor}"
     BorderThickness="1">
@@ -69,7 +67,7 @@
                     x:Name="TopMenu"
                     Height="NaN"
                     IsEnabled="{Binding !#MainContentHost.(behaviors:ContentDialog.IsVisible)}"
-                    ItemsSource="{Binding Menus}">
+                    ItemsSource="{Binding Menus.Commands}">
 
                     <Menu.ItemsPanel>
 
@@ -83,13 +81,13 @@
 
                     <Menu.Styles>
 
-                        <Style x:DataType="viewmodels:MenuViewModel" Selector="Menu MenuItem">
+                        <Style x:DataType="services:IMenuService+IMenuCommand" Selector="Menu MenuItem">
 
                             <Setter Property="Icon" Value="{Binding Icon, Converter={x:Static converters:ObjectConverters.ToKnownIconType}}" />
                             <Setter Property="Header" Value="{Binding Header}" />
-                            <Setter Property="Command" Value="{Binding Command}" />
+                            <Setter Property="Command" Value="{Binding}" />
                             <Setter Property="InputGesture" Value="{Binding HotKey}" />
-                            <Setter Property="ItemsSource" Value="{Binding SubMenus}" />
+                            <Setter Property="ItemsSource" Value="{Binding SubCommands}" />
 
                         </Style>
 
@@ -109,11 +107,11 @@
 
         <Grid
             x:Name="MainContentHost"
-            Margin="5"
             behaviors:ContentDialog.IsTarget="True"
+            behaviors:ContentDialog.IsVisible="{Binding !Menus.IsEnabled, Mode=OneWayToSource}"
             Classes="Blurable">
 
-            <StackPanel Orientation="Vertical">
+            <StackPanel Margin="5" Orientation="Vertical">
 
                 <TextBlock Text="Welcome to Avalonia!" />
 

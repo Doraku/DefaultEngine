@@ -1,19 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DefaultApplication;
 using Microsoft.Extensions.Logging;
 
 namespace DefaultApplication.Internal.Plugins.SettingsPlugin.ViewModels;
 
 internal sealed class SettingsViewModel
 {
-    private readonly List<SectionViewModel> _sections;
-
-    public IReadOnlyCollection<SectionViewModel> Sections => _sections;
+    public SectionViewModel RootSection { get; }
 
     public SettingsViewModel(ILogger<SettingsViewModel> logger, IEnumerable<ISettings> settings)
     {
-        _sections = [];
+        RootSection = new SectionViewModel(string.Empty);
 
         Dictionary<string, SectionViewModel> distinctSections = [];
 
@@ -21,7 +18,13 @@ internal sealed class SettingsViewModel
 
         foreach (ISettings settingsPart in settings)
         {
-            SectionViewModel? parentSection = null;
+            if (settingsPart.Path is null || settingsPart.Path.Count is 0)
+            {
+                logger.LogIgnoringEmptyPathSettings(settingsPart);
+                continue;
+            }
+
+            SectionViewModel parentSection = RootSection;
 
             for (int i = 0; i < settingsPart.Path.Count; ++i)
             {
@@ -30,29 +33,15 @@ internal sealed class SettingsViewModel
                 if (!distinctSections.TryGetValue(sectionKey, out SectionViewModel? section))
                 {
                     section = new SectionViewModel(settingsPart.Path[i]);
-                }
+                    distinctSections.Add(sectionKey, section);
 
-                if (parentSection is { })
-                {
                     parentSection.Add(section);
-                }
-                else
-                {
-                    _sections.Add(section);
                 }
 
                 parentSection = section;
             }
 
-            if (parentSection is null)
-            {
-                logger.LogWarning($"ignoring {settingsPart.GetType()} as no path was provided");
-                continue;
-            }
-
             parentSection.Add(settingsPart);
         }
-
-        _sections.Sort(SectionViewModel.Compare);
     }
 }
