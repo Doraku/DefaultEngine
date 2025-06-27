@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System.Threading.Tasks;
+using Avalonia;
 using DefaultApplication;
 
 namespace DummyGame.Editor;
@@ -10,10 +11,10 @@ internal sealed class Program
             .Configure<Application>()
             .UsePlatformDetect();
 
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         using DesktopRuner runner = new();
 
-        runner.Run(args);
+        await runner.RunAsync(args).ConfigureAwait(false);
     }
 }

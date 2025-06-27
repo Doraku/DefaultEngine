@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Avalonia;
@@ -65,7 +66,7 @@ internal sealed class Plugin : IPlugin
                     .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                     .Where(property => property.GetGetMethod() is { } && property.GetSetMethod() is { }))
                 {
-                    grid.Children.Add(new TextBlock
+                    grid.Children.Add(new SelectableTextBlock
                     {
                         Text = property.GetCustomAttribute<DescriptionAttribute>()?.Description ?? property.Name,
                         VerticalAlignment = VerticalAlignment.Center,
@@ -105,6 +106,121 @@ internal sealed class Plugin : IPlugin
                         value = new CheckBox
                         {
                             [!ToggleButton.IsCheckedProperty] = new Binding(property.Name)
+                        };
+                    }
+                    else if (property.PropertyType == typeof(byte))
+                    {
+                        value = new NumericUpDown
+                        {
+                            ShowButtonSpinner = false,
+                            Minimum = byte.MinValue,
+                            Maximum = byte.MaxValue,
+                            ParsingNumberStyle = NumberStyles.Integer,
+                            [!NumericUpDown.ValueProperty] = new Binding(property.Name)
+                        };
+                    }
+                    else if (property.PropertyType == typeof(sbyte))
+                    {
+                        value = new NumericUpDown
+                        {
+                            ShowButtonSpinner = false,
+                            Minimum = sbyte.MinValue,
+                            Maximum = sbyte.MaxValue,
+                            ParsingNumberStyle = NumberStyles.Integer,
+                            [!NumericUpDown.ValueProperty] = new Binding(property.Name)
+                        };
+                    }
+                    else if (property.PropertyType == typeof(ushort))
+                    {
+                        value = new NumericUpDown
+                        {
+                            ShowButtonSpinner = false,
+                            Minimum = ushort.MinValue,
+                            Maximum = ushort.MaxValue,
+                            ParsingNumberStyle = NumberStyles.Integer,
+                            [!NumericUpDown.ValueProperty] = new Binding(property.Name)
+                        };
+                    }
+                    else if (property.PropertyType == typeof(short))
+                    {
+                        value = new NumericUpDown
+                        {
+                            ShowButtonSpinner = false,
+                            Minimum = short.MinValue,
+                            Maximum = short.MaxValue,
+                            ParsingNumberStyle = NumberStyles.Integer,
+                            [!NumericUpDown.ValueProperty] = new Binding(property.Name)
+                        };
+                    }
+                    else if (property.PropertyType == typeof(uint))
+                    {
+                        value = new NumericUpDown
+                        {
+                            ShowButtonSpinner = false,
+                            Minimum = uint.MinValue,
+                            Maximum = uint.MaxValue,
+                            ParsingNumberStyle = NumberStyles.Integer,
+                            [!NumericUpDown.ValueProperty] = new Binding(property.Name)
+                        };
+                    }
+                    else if (property.PropertyType == typeof(int))
+                    {
+                        value = new NumericUpDown
+                        {
+                            ShowButtonSpinner = false,
+                            Minimum = int.MinValue,
+                            Maximum = int.MaxValue,
+                            ParsingNumberStyle = NumberStyles.Integer,
+                            [!NumericUpDown.ValueProperty] = new Binding(property.Name)
+                        };
+                    }
+                    else if (property.PropertyType == typeof(ulong))
+                    {
+                        value = new NumericUpDown
+                        {
+                            ShowButtonSpinner = false,
+                            Minimum = ulong.MinValue,
+                            Maximum = ulong.MaxValue,
+                            ParsingNumberStyle = NumberStyles.Integer,
+                            [!NumericUpDown.ValueProperty] = new Binding(property.Name)
+                        };
+                    }
+                    else if (property.PropertyType == typeof(long))
+                    {
+                        value = new NumericUpDown
+                        {
+                            ShowButtonSpinner = false,
+                            Minimum = long.MinValue,
+                            Maximum = long.MaxValue,
+                            ParsingNumberStyle = NumberStyles.Integer,
+                            [!NumericUpDown.ValueProperty] = new Binding(property.Name)
+                        };
+                    }
+                    else if (property.PropertyType == typeof(float))
+                    {
+                        value = new NumericUpDown
+                        {
+                            ShowButtonSpinner = false,
+                            ParsingNumberStyle = NumberStyles.Float,
+                            [!NumericUpDown.ValueProperty] = new Binding(property.Name)
+                        };
+                    }
+                    else if (property.PropertyType == typeof(double))
+                    {
+                        value = new NumericUpDown
+                        {
+                            ShowButtonSpinner = false,
+                            ParsingNumberStyle = NumberStyles.Float,
+                            [!NumericUpDown.ValueProperty] = new Binding(property.Name)
+                        };
+                    }
+                    else if (property.PropertyType == typeof(decimal))
+                    {
+                        value = new NumericUpDown
+                        {
+                            ShowButtonSpinner = false,
+                            ParsingNumberStyle = NumberStyles.Float,
+                            [!NumericUpDown.ValueProperty] = new Binding(property.Name)
                         };
                     }
 

@@ -14,7 +14,7 @@ internal sealed class Dummy2Settings : ISettings
     [Description("this is a long name")]
     public string? Value1 { get; set; }
 
-    public bool Value2 { get; set; }
+    public bool ValueBool { get; set; }
 
     [ItemsSource(nameof(Path))]
     public string? Value3 { get; set; }
@@ -22,5 +22,11 @@ internal sealed class Dummy2Settings : ISettings
     [ItemsSource(nameof(Pouet))]
     public string? Value4 { get; set; }
 
-    public string? Value5 { get; set; }
+    public decimal ValueDecimal { get; set; }
+
+    public int ValueInt { get; set; }
+
+    public byte ValueByte { get; set; }
+
+    public float ValueFloat { get; set; }
 }

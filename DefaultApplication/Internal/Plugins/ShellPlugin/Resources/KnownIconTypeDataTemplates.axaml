@@ -6,27 +6,21 @@
 
     </DataTemplate>
 
-    <DataTemplate DataType="PathGeometry">
+    <DataTemplate DataType="StreamGeometry">
 
-        <Path Data="{Binding}">
+        <PathIcon Data="{Binding}">
 
-            <Path.Styles>
+            <PathIcon.Styles>
 
-                <Style Selector="Path">
+                <Style Selector="PathIcon:disabled">
 
-                    <Setter Property="Fill" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-
-                    <Style Selector="^:disabled">
-
-                        <Setter Property="Fill" Value="{DynamicResource SystemControlDisabledBaseMediumLowBrush}" />
-
-                    </Style>
+                    <Setter Property="Foreground" Value="{DynamicResource SystemControlDisabledBaseMediumLowBrush}" />
 
                 </Style>
 
-            </Path.Styles>
+            </PathIcon.Styles>
 
-        </Path>
+        </PathIcon>
 
     </DataTemplate>
 

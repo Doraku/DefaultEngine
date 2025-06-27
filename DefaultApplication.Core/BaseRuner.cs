@@ -151,8 +151,10 @@ public abstract class BaseRuner : IDisposable
 
     protected abstract TopLevel CreateMainTopLevel();
 
-    public void Run(string[] args)
+    public Task RunAsync(string[] args)
     {
+        TaskCompletionSource taskCompletionSource = new();
+
         void Run(Application app, string[] args)
         {
             ILogger logger = CreateLogger();
@@ -166,10 +168,21 @@ public abstract class BaseRuner : IDisposable
 
             _ = InitializeAsync(logger, app, shutdownTokenSource);
 
-            app.Run(shutdownTokenSource.Token);
+            try
+            {
+                app.Run(shutdownTokenSource.Token);
+                taskCompletionSource.SetResult();
+            }
+            catch (Exception exception)
+            {
+                logger.LogCritical(exception, "");
+                taskCompletionSource.SetException(exception);
+            }
         }
 
-        ConfigureBuilder(AppBuilder.Configure(CreateApplication)).Start(Run, args);
+        new Thread(() => ConfigureBuilder(AppBuilder.Configure(CreateApplication)).Start(Run, args)).Start();
+
+        return taskCompletionSource.Task;
     }
 
     #region IDisposable

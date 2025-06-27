@@ -1,5 +1,5 @@
 <Project>
-  
+
   <PropertyGroup>
     <Nullable>enable</Nullable>
     <AvaloniaVersion>11.3.2</AvaloniaVersion>
@@ -8,5 +8,5 @@
   <ItemGroup>
     <PackageReference Include="DefaultCSharp" Version="1.0.5" PrivateAssets="all" />
   </ItemGroup>
-  
+
 </Project>

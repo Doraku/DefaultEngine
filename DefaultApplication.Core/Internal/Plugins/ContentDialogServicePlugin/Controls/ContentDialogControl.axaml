@@ -1,4 +1,4 @@
-<Grid
+<Panel
     x:Class="DefaultApplication.Internal.Plugins.ContentDialogServicePlugin.Controls.ContentDialogControl"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -9,7 +9,7 @@
     IsVisible="{Binding !!$self.Opacity}"
     Opacity="0">
 
-    <Grid.Styles>
+    <Panel.Styles>
         <Style Selector="controls|ContentDialogControl">
             <Setter Property="Transitions">
                 <Transitions>
@@ -20,7 +20,7 @@
                 </Transitions>
             </Setter>
         </Style>
-    </Grid.Styles>
+    </Panel.Styles>
 
     <Border
         x:Name="ContentDialogBorder"
@@ -97,4 +97,4 @@
 
     </Border>
 
-</Grid>
+</Panel>

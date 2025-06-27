@@ -16,7 +16,7 @@ using DefaultApplication.Services;
 
 namespace DefaultApplication.Internal.Plugins.ContentDialogServicePlugin.Controls;
 
-internal sealed partial class ContentDialogControl : Grid, IContentDialogService
+internal sealed partial class ContentDialogControl : Panel, IContentDialogService
 {
     private readonly Task<TopLevel> _mainTopLevel;
     private readonly Stack<(object, TaskCompletionSource<IContentDialogService.DialogResult>)> _operations;
