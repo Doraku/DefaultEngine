@@ -9,10 +9,15 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace DefaultApplication.Internal.Plugins.AboutPlugin;
 
-internal sealed class Plugin : IServicesRegisterer
+internal sealed class Plugin : IServiceRegisterer
 {
-    public Plugin(Application application)
+    public Plugin(Application? application = null)
     {
+        if (application is null)
+        {
+            return;
+        }
+
         Uri baseUri = new("avares://DefaultApplication.Core");
         Uri resourcesUri = new(baseUri, "Internal/Plugins/AboutPlugin/Resources/");
 

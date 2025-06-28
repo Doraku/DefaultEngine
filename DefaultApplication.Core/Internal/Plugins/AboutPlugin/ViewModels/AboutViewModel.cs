@@ -24,7 +24,7 @@ internal sealed class AboutViewModel
     public IEnumerable<IGrouping<PluginInfo, Type>> Items { get; }
 
     public AboutViewModel(
-        IEnumerable<IServicesRegisterer> servicesRegisterers,
+        IEnumerable<IServiceRegisterer> servicesRegisterers,
         IEnumerable<IPlugin> plugins,
         IEnumerable<IMenu> menus)
     {

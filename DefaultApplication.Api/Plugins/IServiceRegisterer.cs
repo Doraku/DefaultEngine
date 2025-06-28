@@ -2,7 +2,7 @@
 
 namespace DefaultApplication.Plugins;
 
-public interface IServicesRegisterer
+public interface IServiceRegisterer
 {
     void Register(IServiceCollection services);
 }

@@ -6,9 +6,6 @@ namespace DefaultApplication.Internal;
 
 internal static partial class LoggerHelper
 {
-    [LoggerMessage(LogLevel.Information, "starting with args {Args}")]
-    public static partial void LogStart(this ILogger logger, string[] args);
-
     private static readonly Action<ILogger, Exception?> _logUnhandledExceptionCallback = LoggerMessage.Define(LogLevel.Error, new EventId(0, nameof(LogUnhandledException)), "unhandled exception");
 
     public static void LogUnhandledException(this ILogger logger, Exception? exception) => _logUnhandledExceptionCallback(logger, exception);
@@ -16,6 +13,13 @@ internal static partial class LoggerHelper
     private static readonly Action<ILogger, Exception?> _logUnobservedTaskExceptionCallback = LoggerMessage.Define(LogLevel.Error, new EventId(0, nameof(LogUnhandledException)), "unobserved task exception");
 
     public static void LogUnobservedTaskException(this ILogger logger, Exception? exception) => _logUnobservedTaskExceptionCallback(logger, exception);
+
+    [LoggerMessage(LogLevel.Information, "starting with args {Args}")]
+    public static partial void LogStart(this ILogger logger, string[] args);
+
+    private static readonly Action<ILogger, Exception?> _logRunnerException = LoggerMessage.Define(LogLevel.Critical, new EventId(0, nameof(LogRunnerException)), "runner exception");
+
+    public static void LogRunnerException(this ILogger logger, Exception? exception) => _logRunnerException(logger, exception);
 
     private static readonly Action<ILogger, Exception?> _logInitializationExceptionCallback = LoggerMessage.Define(LogLevel.Critical, new EventId(0, nameof(LogUnhandledException)), "error during initialization");
 

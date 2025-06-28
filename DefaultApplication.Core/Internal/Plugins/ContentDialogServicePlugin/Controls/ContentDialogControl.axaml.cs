@@ -22,7 +22,7 @@ internal sealed partial class ContentDialogControl : Panel, IContentDialogServic
     private readonly Stack<(object, TaskCompletionSource<IContentDialogService.DialogResult>)> _operations;
 
     private Layoutable? _target;
-    private TaskCompletionSource<bool> _available;
+    private TaskCompletionSource _available;
     private TaskCompletionSource<IContentDialogService.DialogResult>? _contentDialogResult;
 
     public ContentDialogControl(IDelayed<TopLevel> mainTopLevel)
@@ -41,8 +41,8 @@ internal sealed partial class ContentDialogControl : Panel, IContentDialogServic
             TaskScheduler.Default).Unwrap();
         _operations = [];
 
-        _available = new TaskCompletionSource<bool>();
-        _available.SetResult(true);
+        _available = new TaskCompletionSource();
+        _available.SetResult();
 
         InitializeComponent();
     }
@@ -114,7 +114,7 @@ internal sealed partial class ContentDialogControl : Panel, IContentDialogServic
             && !change.GetNewValue<bool>())
         {
             Tag = null;
-            _available.TrySetResult(true);
+            _available.TrySetResult();
         }
     }
 
@@ -167,7 +167,7 @@ internal sealed partial class ContentDialogControl : Panel, IContentDialogServic
 
                 await _available.Task.ConfigureAwait(true);
 
-                _available = new TaskCompletionSource<bool>();
+                _available = new TaskCompletionSource();
 
                 topLevel.KeyDown += OnContentDialogKeyDown;
                 Tag = operation.Content;

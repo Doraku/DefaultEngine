@@ -1,4 +1,8 @@
-﻿namespace DefaultApplication.Plugins;
+﻿using System.Threading.Tasks;
 
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1040:Avoid empty interfaces")]
-public interface IPlugin;
+namespace DefaultApplication.Plugins;
+
+public interface IPlugin
+{
+    Task StartAsync() => Task.CompletedTask;
+}

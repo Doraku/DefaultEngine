@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace DefaultApplication.Internal.Plugins.MenuServicePlugin;
 
-internal sealed class Plugin : IServicesRegisterer
+internal sealed class Plugin : IServiceRegisterer
 {
     private readonly PluginsHelper _plugins;
 

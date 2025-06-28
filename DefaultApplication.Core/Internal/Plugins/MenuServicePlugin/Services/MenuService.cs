@@ -138,7 +138,7 @@ internal sealed class MenuService : IMenuService
 
     public IReadOnlyCollection<IMenuService.IMenuCommand> Commands => _menus;
 
-    public MenuService(ILogger<MenuService> logger, IEnumerable<IMenu> menus, IDelayed<TopLevel> topLevel)
+    public MenuService(ILogger<MenuService> logger, IEnumerable<IMenu> menus, IDelayed<TopLevel>? topLevel = null)
     {
         _menus = [];
 
@@ -207,7 +207,7 @@ internal sealed class MenuService : IMenuService
 
         _menus.Sort(MenuItem.Compare);
 
-        topLevel.Task.ContinueWith(
+        topLevel?.Task.ContinueWith(
             async task => RegisterMenusHotKey(await task.ConfigureAwait(true)),
             CancellationToken.None,
             TaskContinuationOptions.ExecuteSynchronously,

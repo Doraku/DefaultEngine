@@ -14,7 +14,7 @@ internal sealed class PluginsHelper
 
     public PluginsHelper(DirectoryInfo directory)
     {
-        AssemblyName apiName = typeof(IServicesRegisterer).Assembly.GetName();
+        AssemblyName apiName = typeof(IServiceRegisterer).Assembly.GetName();
 
         HashSet<string> loadedNames = new(AppDomain.CurrentDomain.GetAssemblies().Select(assembly => assembly.GetName().Name).Where(name => name != null)!, StringComparer.OrdinalIgnoreCase);
         Dictionary<string, bool> checkedNames = new(StringComparer.OrdinalIgnoreCase)

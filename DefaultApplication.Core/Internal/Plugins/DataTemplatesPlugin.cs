@@ -15,17 +15,24 @@ internal sealed class DataTemplatesPlugin : IPlugin
 {
     internal sealed class DataTemplates : List<(Type, DataTemplateAttribute)>;
 
-    internal sealed class Registerer : IServicesRegisterer
+    internal sealed class Registerer : IServiceRegisterer
     {
         private readonly PluginsHelper _plugins;
+        private readonly Application? _application;
 
-        public Registerer(PluginsHelper plugins)
+        public Registerer(PluginsHelper plugins, Application? application = null)
         {
             _plugins = plugins;
+            _application = application;
         }
 
         public void Register(IServiceCollection services)
         {
+            if (_application is null)
+            {
+                return;
+            }
+
             DataTemplates dataTemplates = [];
 
             foreach ((Type type, DataTemplateAttribute attribute) in _plugins.GetPluginsTypes().GetInstanciableImplementation<Control>().GetTypesWithAttribute<DataTemplateAttribute>())
@@ -39,9 +46,14 @@ internal sealed class DataTemplatesPlugin : IPlugin
         }
     }
 
-    public DataTemplatesPlugin(IServiceProvider provider, Application application, DataTemplates dataTemplates)
+    public DataTemplatesPlugin(IServiceProvider provider, Application? application = null, DataTemplates? dataTemplates = null)
     {
-        foreach ((Type type, DataTemplateAttribute attribute) in dataTemplates)
+        if (application is null)
+        {
+            return;
+        }
+
+        foreach ((Type type, DataTemplateAttribute attribute) in dataTemplates!)
         {
             application.DataTemplates.Add(new FuncDataTemplate(attribute.DataType, (_, _) => provider.GetRequiredService(type) as Control, true));
         }

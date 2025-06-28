@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DefaultApplication.Internal.Plugins;
 
-internal sealed class PluginsPlugin : IServicesRegisterer
+internal sealed class PluginsPlugin : IServiceRegisterer
 {
     private readonly PluginsHelper _plugins;
 

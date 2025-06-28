@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace DefaultApplication.Internal.Plugins.WorkerServicePlugin;
 
-internal sealed class Plugin : IServicesRegisterer
+internal sealed class Plugin : IServiceRegisterer
 {
     public void Register(IServiceCollection services)
     {

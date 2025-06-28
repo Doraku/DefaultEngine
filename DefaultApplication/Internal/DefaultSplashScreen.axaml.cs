@@ -4,7 +4,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
-using static DefaultApplication.BaseRuner;
 
 namespace DefaultApplication.Internal;
 
@@ -21,6 +20,9 @@ internal sealed partial class DefaultSplashScreen : Window, ISplashScreen
         Show();
     }
 
+    [LoggerMessage(LogLevel.Information, "{Message}")]
+    private static partial void LogMessage(ILogger logger, string message);
+
     private void OnClicked(object? sender, PointerPressedEventArgs e)
     {
         if (sender is Visual visual
@@ -32,7 +34,7 @@ internal sealed partial class DefaultSplashScreen : Window, ISplashScreen
 
     public async Task ReportAsync(string message)
     {
-        _logger.LogInformation(message);
+        LogMessage(_logger, message);
         await Dispatcher.UIThread.InvokeAsync(() => InformationsTextBlock.Text = message);
     }
 

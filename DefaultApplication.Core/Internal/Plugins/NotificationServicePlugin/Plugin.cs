@@ -1,4 +1,5 @@
-﻿using DefaultApplication.Internal.Plugins.NotificationServicePlugin.Services;
+﻿using Avalonia;
+using DefaultApplication.Internal.Plugins.NotificationServicePlugin.Services;
 using DefaultApplication.Plugins;
 using DefaultApplication.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,7 +7,24 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace DefaultApplication.Internal.Plugins.NotificationServicePlugin;
 
-internal sealed class Plugin : IServicesRegisterer
+internal sealed class Plugin : IServiceRegisterer
 {
-    public void Register(IServiceCollection services) => services.TryAddSingleton<INotificationService, NotificationService>();
+    private readonly Application? _application;
+
+    public Plugin(Application? application = null)
+    {
+        _application = application;
+    }
+
+    public void Register(IServiceCollection services)
+    {
+        if (_application is { })
+        {
+            services.TryAddSingleton<INotificationService, NotificationService>();
+        }
+        else
+        {
+            services.TryAddSingleton<INotificationService, NoApplicationNotificationService>();
+        }
+    }
 }
