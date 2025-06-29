@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using DefaultApplication.Internal.Plugins.SettingsPlugin.ViewModels;
 using DefaultApplication.Services;
+using DefaultApplication.Settings;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DefaultApplication.Internal.Plugins.SettingsPlugin.Menus;
@@ -40,6 +41,17 @@ internal sealed class SettingsMenu : IAsyncCommandMenu
 
         if (await _contentDialogService.ShowAsync(scope.ServiceProvider.GetRequiredService<SettingsViewModel>()).ConfigureAwait(false) != IContentDialogService.DialogResult.Primary)
         {
+            foreach (ISettings settings in _provider.GetRequiredService<IEnumerable<ISettings>>())
+            {
+                settings.Read();
+            }
+        }
+        else
+        {
+            foreach (ISettings settings in _provider.GetRequiredService<IEnumerable<ISettings>>())
+            {
+                settings.Write();
+            }
         }
     }
 }

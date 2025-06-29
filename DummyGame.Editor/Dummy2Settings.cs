@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using DefaultApplication;
 using DefaultApplication.ComponentModel;
+using DefaultApplication.Settings;
 
 namespace DummyGame.Editor;
 
@@ -29,4 +29,7 @@ internal sealed class Dummy2Settings : ISettings
     public byte ValueByte { get; set; }
 
     public float ValueFloat { get; set; }
+
+    public void Read() { }
+    public void Write() { }
 }

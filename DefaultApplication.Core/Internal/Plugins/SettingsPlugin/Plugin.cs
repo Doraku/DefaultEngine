@@ -8,6 +8,7 @@ using Avalonia.Threading;
 using DefaultApplication.Internal.Plugins.SettingsPlugin.Controls.Templates;
 using DefaultApplication.Internal.Plugins.SettingsPlugin.ViewModels;
 using DefaultApplication.Plugins;
+using DefaultApplication.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -37,6 +38,11 @@ internal sealed class Plugin : IPlugin
 
     public Plugin(IEnumerable<ISettings> settings, Application? application = null)
     {
+        foreach (ISettings setting in settings)
+        {
+            setting.Read();
+        }
+
         if (application is null)
         {
             return;

@@ -50,7 +50,7 @@
 
     <DockPanel>
 
-        <Grid DockPanel.Dock="Top">
+        <Panel DockPanel.Dock="Top">
 
             <Rectangle Fill="{DynamicResource SystemAccentColor}" IsHitTestVisible="False" />
 
@@ -103,9 +103,9 @@
 
             </DockPanel>
 
-        </Grid>
+        </Panel>
 
-        <Grid
+        <Panel
             x:Name="MainContentHost"
             behaviors:ContentDialog.IsTarget="True"
             behaviors:ContentDialog.IsVisible="{Binding !Menus.IsEnabled, Mode=OneWayToSource}"
@@ -119,7 +119,7 @@
 
             </StackPanel>
 
-        </Grid>
+        </Panel>
 
     </DockPanel>
 

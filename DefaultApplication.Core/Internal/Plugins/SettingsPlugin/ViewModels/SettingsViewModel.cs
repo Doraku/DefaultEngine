@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DefaultApplication.Settings;
 using Microsoft.Extensions.Logging;
 
 namespace DefaultApplication.Internal.Plugins.SettingsPlugin.ViewModels;
