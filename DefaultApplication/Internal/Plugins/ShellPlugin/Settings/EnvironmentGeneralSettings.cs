@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using DefaultApplication.ComponentModel;
@@ -28,8 +27,7 @@ internal sealed class EnvironmentGeneralSettings : BaseJsonSettings
         _theme = ThemeVariant.Light;
     }
 
-    [Description("Color theme")]
-    [SettingsItemsSource(nameof(Themes))]
+    [SettingsInformation("Color theme", "change the color theme of the whole application", nameof(Themes))]
     public ThemeVariant Theme
     {
         get => _theme;

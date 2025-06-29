@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -34,7 +33,7 @@ internal sealed class SettingsTemplate : IDataTemplate
     };
 
     private readonly Type _settingsType;
-    private readonly List<(string Name, IBinding ValueBinding, Func<IBinding, Control> ControlFactory)> _members;
+    private readonly List<(string Name, string? Description, IBinding ValueBinding, Func<IBinding, Control> ControlFactory)> _members;
 
     public SettingsTemplate(Type settingsType)
     {
@@ -45,18 +44,19 @@ internal sealed class SettingsTemplate : IDataTemplate
             .GetProperties(BindingFlags.Instance | BindingFlags.Public)
             .Where(property => property.GetGetMethod() is { } && property.GetSetMethod() is { }))
         {
-            string name = property.GetCustomAttribute<DescriptionAttribute>()?.Description ?? property.Name;
+            SettingsInformationAttribute? information = property.GetCustomAttribute<SettingsInformationAttribute>();
+            string name = information?.Name ?? property.Name;
             Binding valueBinding = new(property.Name) { UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
 
-            if (property.GetCustomAttribute<SettingsItemsSourceAttribute>() is SettingsItemsSourceAttribute itemsSource)
+            if (information?.ItemsSourceMember is string itemsSourceMember)
             {
-                MethodInfo? itemsSourceGetter = _settingsType.GetProperty(itemsSource.MemberName, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public)?.GetGetMethod();
+                MethodInfo? itemsSourceGetter = _settingsType.GetProperty(itemsSourceMember, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public)?.GetGetMethod();
 
                 if (itemsSourceGetter is null)
                 { }
                 else if (itemsSourceGetter.IsStatic)
                 {
-                    _members.Add((name, valueBinding, binding => new ComboBox
+                    _members.Add((name, information?.Description, valueBinding, binding => new ComboBox
                     {
                         [!SelectingItemsControl.SelectedItemProperty] = binding,
                         [ItemsControl.ItemsSourceProperty] = itemsSourceGetter.Invoke(null, null)
@@ -64,16 +64,16 @@ internal sealed class SettingsTemplate : IDataTemplate
                 }
                 else
                 {
-                    _members.Add((name, valueBinding, binding => new ComboBox
+                    _members.Add((name, information?.Description, valueBinding, binding => new ComboBox
                     {
                         [!SelectingItemsControl.SelectedItemProperty] = binding,
-                        [!ItemsControl.ItemsSourceProperty] = new Binding(itemsSource.MemberName)
+                        [!ItemsControl.ItemsSourceProperty] = new Binding(itemsSourceMember)
                     }));
                 }
             }
             else if (_factories.TryGetValue(property.PropertyType, out Func<IBinding, Control>? factory))
             {
-                _members.Add((name, valueBinding, factory));
+                _members.Add((name, information?.Description, valueBinding, factory));
             }
         }
     }
@@ -99,7 +99,7 @@ internal sealed class SettingsTemplate : IDataTemplate
         grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto) { SharedSizeGroup = "SettingsHeaders" });
         grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
 
-        foreach ((string name, IBinding valueBinding, Func<IBinding, Control> controlFactory) in _members)
+        foreach ((string name, string? description, IBinding valueBinding, Func<IBinding, Control> controlFactory) in _members)
         {
             grid.Children.Add(new SelectableTextBlock
             {
@@ -112,6 +112,7 @@ internal sealed class SettingsTemplate : IDataTemplate
             });
 
             Control valueControl = controlFactory(valueBinding);
+            valueControl[ToolTip.TipProperty] = description;
             valueControl[Grid.ColumnProperty] = 1;
             valueControl[Grid.RowProperty] = grid.RowDefinitions.Count;
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using DefaultApplication.ComponentModel;
 using DefaultApplication.Settings;
 
@@ -11,15 +10,15 @@ internal sealed class Dummy2Settings : ISettings
 
     public static IEnumerable<string> Pouet { get; } = ["kikoo", "lol"];
 
-    [Description("this is a long name")]
+    [SettingsInformation("this is a long name")]
     public string? Value1 { get; set; }
 
     public bool ValueBool { get; set; }
 
-    [SettingsItemsSource(nameof(Path))]
+    [SettingsInformation(itemsSourceMember: nameof(Path))]
     public string? Value3 { get; set; }
 
-    [SettingsItemsSource(nameof(Pouet))]
+    [SettingsInformation(itemsSourceMember: nameof(Pouet))]
     public string? Value4 { get; set; }
 
     public decimal ValueDecimal { get; set; }
