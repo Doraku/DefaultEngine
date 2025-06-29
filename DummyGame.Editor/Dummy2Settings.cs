@@ -16,10 +16,10 @@ internal sealed class Dummy2Settings : ISettings
 
     public bool ValueBool { get; set; }
 
-    [ItemsSource(nameof(Path))]
+    [SettingsItemsSource(nameof(Path))]
     public string? Value3 { get; set; }
 
-    [ItemsSource(nameof(Pouet))]
+    [SettingsItemsSource(nameof(Pouet))]
     public string? Value4 { get; set; }
 
     public decimal ValueDecimal { get; set; }

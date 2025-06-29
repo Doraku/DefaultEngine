@@ -11,7 +11,8 @@ internal sealed class OperationViewModel : INotifyPropertyChanged, ICancellableO
 {
     private readonly CancellationTokenSource? _cancellationTokenSource;
 
-    private string? _name;
+    private object? _header;
+    private object? _content;
     private bool _hasError;
     private double _maximumProgress;
     private double _currentProgress;
@@ -20,10 +21,16 @@ internal sealed class OperationViewModel : INotifyPropertyChanged, ICancellableO
 
     public bool IsCancellable => _cancellationTokenSource is { IsCancellationRequested: false };
 
-    public string? Name
+    public object? Header
     {
-        get => _name;
-        set => SetProperty(ref _name, value);
+        get => _header;
+        set => SetProperty(ref _header, value);
+    }
+
+    public object? Content
+    {
+        get => _content;
+        set => SetProperty(ref _content, value);
     }
 
     public bool HasError

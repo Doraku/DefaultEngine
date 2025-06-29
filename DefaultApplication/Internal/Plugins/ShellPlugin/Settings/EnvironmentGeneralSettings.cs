@@ -29,7 +29,7 @@ internal sealed class EnvironmentGeneralSettings : BaseJsonSettings
     }
 
     [Description("Color theme")]
-    [ItemsSource(nameof(Themes))]
+    [SettingsItemsSource(nameof(Themes))]
     public ThemeVariant Theme
     {
         get => _theme;

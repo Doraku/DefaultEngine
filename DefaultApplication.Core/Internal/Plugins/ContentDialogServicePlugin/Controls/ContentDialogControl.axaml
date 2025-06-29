@@ -56,6 +56,14 @@
 
         <DockPanel>
 
+            <ContentPresenter
+                Padding="5"
+                Background="{DynamicResource SystemAccentColor}"
+                Content="{Binding #ContentDialogPresenter.Child?.(behaviors:ContentDialog.Header)}"
+                DockPanel.Dock="Top"
+                Foreground="{Binding $parent[TopLevel].Foreground}"
+                IsVisible="{Binding $self.Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
             <UniformGrid
                 Margin="5,0"
                 HorizontalAlignment="Right"

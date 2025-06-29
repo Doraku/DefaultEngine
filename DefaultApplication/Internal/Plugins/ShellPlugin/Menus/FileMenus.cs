@@ -49,13 +49,13 @@ internal sealed class TestMenu : IAsyncCommandMenu
 
     public Task ExecuteAsync() => _service.ExecuteAsync(async operation =>
     {
-        operation.Name = "kikoo";
+        operation.Header = "kikoo";
 
         await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
 
         await _notification.ShowInformationAsync("kikoo").ConfigureAwait(false);
 
-        operation.Name = "lol";
+        operation.Header = "lol";
 
         await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
 
@@ -64,7 +64,7 @@ internal sealed class TestMenu : IAsyncCommandMenu
         for (int i = 0; i < 10; i++)
         {
             await _notification.ShowWarningAsync(i).ConfigureAwait(false);
-            operation.Name = $"doing {i}";
+            operation.Content = $"doing {i}";
             await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
 
             if (i % 2 == 0)

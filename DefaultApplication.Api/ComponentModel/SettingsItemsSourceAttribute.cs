@@ -3,11 +3,11 @@
 namespace DefaultApplication.ComponentModel;
 
 [AttributeUsage(AttributeTargets.Property)]
-public sealed class ItemsSourceAttribute : Attribute
+public sealed class SettingsItemsSourceAttribute : Attribute
 {
     public string MemberName { get; }
 
-    public ItemsSourceAttribute(string memberName)
+    public SettingsItemsSourceAttribute(string memberName)
     {
         MemberName = memberName;
     }

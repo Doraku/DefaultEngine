@@ -14,7 +14,7 @@ public static class IWorkerServiceExtensions
 
         return service.ExecuteAsync(operation =>
         {
-            operation.Name = operationName;
+            operation.Header = operationName;
 
             return task(operation.CancellationToken);
         });
@@ -27,7 +27,7 @@ public static class IWorkerServiceExtensions
 
         return service.ExecuteAsync(operation =>
         {
-            operation.Name = operationName;
+            operation.Header = operationName;
 
             return task(operation.CancellationToken);
         });
@@ -40,7 +40,7 @@ public static class IWorkerServiceExtensions
 
         return service.ExecuteAsync(operation =>
         {
-            operation.Name = operationName;
+            operation.Header = operationName;
 
             return task();
         });
@@ -53,7 +53,7 @@ public static class IWorkerServiceExtensions
 
         return service.ExecuteAsync(operation =>
         {
-            operation.Name = operationName;
+            operation.Header = operationName;
 
             return task();
         });

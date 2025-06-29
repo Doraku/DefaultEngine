@@ -8,7 +8,9 @@ public interface IWorkerService
 {
     interface IOperation
     {
-        string? Name { get; set; }
+        object? Header { get; set; }
+
+        object? Content { get; set; }
 
         bool HasError { get; set; }
 

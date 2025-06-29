@@ -19,6 +19,13 @@ public sealed class ContentDialog : AvaloniaObject
 
     public static bool GetIsVisible(AvaloniaObject? element) => element?.GetValue(IsVisibleProperty) is bool value && value;
 
+    public static readonly AttachedProperty<object?> HeaderProperty = AvaloniaProperty.RegisterAttached<ContentDialog, AvaloniaObject, object?>(
+      "Header", null, false, BindingMode.OneWay);
+
+    public static void SetHeader(AvaloniaObject? element, object? value) => element?.SetValue(HeaderProperty, value);
+
+    public static object? GetHeader(AvaloniaObject? element) => element?.GetValue(HeaderProperty);
+
     public static readonly AttachedProperty<bool> IsFullScreenProperty = AvaloniaProperty.RegisterAttached<ContentDialog, AvaloniaObject, bool>(
       "IsFullScreen", false, false, BindingMode.OneWay);
 

@@ -3,9 +3,12 @@
     x:DataType="viewmodels:OperationViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="using:DefaultApplication.Controls.Behaviors"
     xmlns:viewmodels="using:DefaultApplication.Internal.Plugins.WorkerServicePlugin.ViewModels"
+    xmlns:views="using:DefaultApplication.Internal.Plugins.WorkerServicePlugin.Views"
     MinWidth="300"
     Margin="5"
+    behaviors:ContentDialog.Header="{Binding Header}"
     Orientation="Vertical">
 
     <ProgressBar
@@ -24,12 +27,14 @@
 
     </ProgressBar>
 
-    <TextBlock
-        Margin="0,5"
+    <ContentPresenter
+        Margin="0,5,0,0"
         HorizontalAlignment="Center"
-        Text="{Binding Name}" />
+        Content="{Binding $parent[views:OperationView].DataContext?.Content}"
+        IsVisible="{Binding $self.Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
 
     <Button
+        Margin="0,5,0,0"
         HorizontalAlignment="Right"
         Command="{Binding Cancel}"
         Content="Cancel"

@@ -26,9 +26,9 @@ internal static partial class LoggerHelper
 
     public static void LogInitializationException(this ILogger logger, Exception? exception) => _logInitializationExceptionCallback(logger, exception);
 
-    private static readonly Action<ILogger, string?, Exception?> _logWorkerServiceExceptionCallback = LoggerMessage.Define<string?>(LogLevel.Error, new EventId(0, nameof(LogUnhandledException)), "error when running operation {OperationName}");
+    private static readonly Action<ILogger, object?, Exception?> _logWorkerServiceExceptionCallback = LoggerMessage.Define<object?>(LogLevel.Error, new EventId(0, nameof(LogUnhandledException)), "error when running operation {OperationHeader}");
 
-    public static void LogWorkerServiceException(this ILogger logger, IWorkerService.IOperation operation, Exception? exception) => _logWorkerServiceExceptionCallback(logger, operation.Name, exception);
+    public static void LogWorkerServiceException(this ILogger logger, IWorkerService.IOperation operation, Exception? exception) => _logWorkerServiceExceptionCallback(logger, operation.Header, exception);
 
     [LoggerMessage(LogLevel.Warning, "ignoring {Menu} because of empty path")]
     private static partial void LogIgnoringEmptyPathMenu(this ILogger logger, Type menu);

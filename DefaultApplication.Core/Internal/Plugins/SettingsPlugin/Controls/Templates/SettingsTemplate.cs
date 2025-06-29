@@ -48,7 +48,7 @@ internal sealed class SettingsTemplate : IDataTemplate
             string name = property.GetCustomAttribute<DescriptionAttribute>()?.Description ?? property.Name;
             Binding valueBinding = new(property.Name) { UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
 
-            if (property.GetCustomAttribute<ItemsSourceAttribute>() is ItemsSourceAttribute itemsSource)
+            if (property.GetCustomAttribute<SettingsItemsSourceAttribute>() is SettingsItemsSourceAttribute itemsSource)
             {
                 MethodInfo? itemsSourceGetter = _settingsType.GetProperty(itemsSource.MemberName, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public)?.GetGetMethod();
 
@@ -106,6 +106,7 @@ internal sealed class SettingsTemplate : IDataTemplate
                 Text = name,
                 VerticalAlignment = VerticalAlignment.Center,
                 IsTabStop = false,
+                IsEnabled = false,
                 [Grid.ColumnProperty] = 0,
                 [Grid.RowProperty] = grid.RowDefinitions.Count,
             });
