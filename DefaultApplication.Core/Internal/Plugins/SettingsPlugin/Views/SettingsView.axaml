@@ -5,10 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="using:DefaultApplication.Controls.Behaviors"
     xmlns:viewmodels="using:DefaultApplication.Internal.Plugins.SettingsPlugin.ViewModels"
+    xmlns:views="using:DefaultApplication.Internal.Plugins.SettingsPlugin.Views"
     Margin="5"
+    behaviors:ContentDialog.Header="Settings"
     behaviors:ContentDialog.NoneContent="Cancel"
-    behaviors:ContentDialog.PrimaryContent="Save"
-    behaviors:ContentDialog.Header="Settings">
+    behaviors:ContentDialog.PrimaryContent="Save">
 
     <DockPanel Margin="0,0,0,5" DockPanel.Dock="Top">
 
@@ -17,10 +18,12 @@
             VerticalAlignment="Center"
             Text="search" />
 
-        <TextBox>
+        <TextBox x:Name="Filter">
+
             <TextBox.InnerRightContent>
                 <PathIcon Margin="5" Data="{StaticResource SettingsPlugin.SearchIcon}" />
             </TextBox.InnerRightContent>
+
         </TextBox>
 
     </DockPanel>
@@ -29,16 +32,48 @@
         x:Name="SectionsView"
         DockPanel.Dock="Left"
         ItemsSource="{Binding RootSection.Sections}">
+
+        <TreeView.Styles>
+
+            <Style Selector="TreeViewItem">
+
+                <Setter Property="IsVisible">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource SectionToIsVisibleConverter}">
+                            <Binding />
+                            <Binding ElementName="Filter" Path="Text" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+
+            </Style>
+
+        </TreeView.Styles>
+
         <TreeView.ItemTemplate>
+
             <TreeDataTemplate ItemsSource="{Binding Sections}">
+
                 <TextBlock Text="{Binding Header}" />
+
             </TreeDataTemplate>
+
         </TreeView.ItemTemplate>
+
     </TreeView>
 
     <ItemsControl
         Margin="10,0,0,0"
         Grid.IsSharedSizeScope="True"
-        ItemsSource="{Binding #SectionsView.((viewmodels:SectionViewModel)SelectedItem)?.Settings}" />
+        PropertyChanged="OnSettingsPropertyChanged">
+
+        <ItemsControl.ItemsSource>
+            <MultiBinding Converter="{StaticResource SectionToSettingsConverter}">
+                <Binding ElementName="SectionsView" Path="SelectedItem" />
+                <Binding ElementName="Filter" Path="Text" />
+            </MultiBinding>
+        </ItemsControl.ItemsSource>
+
+    </ItemsControl>
 
 </DockPanel>

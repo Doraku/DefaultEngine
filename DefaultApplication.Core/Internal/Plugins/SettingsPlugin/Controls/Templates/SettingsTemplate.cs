@@ -52,23 +52,24 @@ internal sealed class SettingsTemplate : IDataTemplate
             {
                 MethodInfo? itemsSourceGetter = _settingsType.GetProperty(itemsSourceMember, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public)?.GetGetMethod();
 
-                if (itemsSourceGetter is null)
-                { }
-                else if (itemsSourceGetter.IsStatic)
+                Func<IBinding, Control>? factory = itemsSourceGetter?.IsStatic switch
                 {
-                    _members.Add((name, information?.Description, valueBinding, binding => new ComboBox
+                    true => binding => new ComboBox
                     {
                         [!SelectingItemsControl.SelectedItemProperty] = binding,
                         [ItemsControl.ItemsSourceProperty] = itemsSourceGetter.Invoke(null, null)
-                    }));
-                }
-                else
-                {
-                    _members.Add((name, information?.Description, valueBinding, binding => new ComboBox
+                    },
+                    false => binding => new ComboBox
                     {
                         [!SelectingItemsControl.SelectedItemProperty] = binding,
                         [!ItemsControl.ItemsSourceProperty] = new Binding(itemsSourceMember)
-                    }));
+                    },
+                    _ => null
+                };
+
+                if (factory is { })
+                {
+                    _members.Add((name, information?.Description, valueBinding, factory));
                 }
             }
             else if (_factories.TryGetValue(property.PropertyType, out Func<IBinding, Control>? factory))

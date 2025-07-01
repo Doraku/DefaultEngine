@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using DefaultApplication.Settings;
 
 namespace DefaultApplication.Internal.Plugins.SettingsPlugin.ViewModels;
@@ -14,7 +13,7 @@ internal sealed class SectionViewModel
 
     public IReadOnlyList<SectionViewModel>? Sections => _sections;
 
-    public IEnumerable<ISettings> Settings => _settings ?? Sections?.Select(section => section.Settings).FirstOrDefault() ?? [];
+    public IEnumerable<ISettings>? Settings => _settings;
 
     public SectionViewModel(string header)
     {

@@ -30,5 +30,6 @@ internal sealed class Dummy2Settings : ISettings
     public float ValueFloat { get; set; }
 
     public void Read() { }
+
     public void Write() { }
 }
