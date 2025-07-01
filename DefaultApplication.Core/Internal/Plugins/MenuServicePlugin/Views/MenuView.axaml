@@ -1,0 +1,44 @@
+<Menu
+    x:Class="DefaultApplication.MenuView"
+    x:DataType="services:MenuService"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:DefaultApplication.Internal.Plugins.MenuServicePlugin.Converters"
+    xmlns:services="using:DefaultApplication.Internal.Plugins.MenuServicePlugin.Services"
+    xmlns:servicesapi="using:DefaultApplication.Services"
+    xmlns:templates="using:DefaultApplication.Controls.Templates"
+    Height="NaN"
+    IsEnabled="{Binding IsEnabled}"
+    ItemsSource="{Binding Commands}">
+
+    <Menu.ItemsPanel>
+
+        <ItemsPanelTemplate>
+
+            <WrapPanel VerticalAlignment="Center" />
+
+        </ItemsPanelTemplate>
+
+    </Menu.ItemsPanel>
+
+    <Menu.Styles>
+
+        <Style x:DataType="servicesapi:IMenuService+IMenuCommand" Selector="Menu MenuItem">
+
+            <Setter Property="Icon" Value="{Binding Icon, Converter={x:Static converters:ObjectConverters.ToKnownIconType}}" />
+            <Setter Property="Header" Value="{Binding Header}" />
+            <Setter Property="Command" Value="{Binding}" />
+            <Setter Property="InputGesture" Value="{Binding HotKey}" />
+            <Setter Property="ItemsSource" Value="{Binding SubCommands}" />
+
+        </Style>
+
+    </Menu.Styles>
+
+    <Menu.DataTemplates>
+
+        <templates:DataTemplateInclude Source="avares://DefaultApplication.Core/Internal/Plugins/MenuServicePlugin/Resources/KnownIconTypeDataTemplates.axaml" />
+
+    </Menu.DataTemplates>
+
+</Menu>

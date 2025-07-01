@@ -4,10 +4,8 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="using:DefaultApplication.Controls.Behaviors"
-    xmlns:converters="using:DefaultApplication.Internal.Plugins.ShellPlugin.Converters"
-    xmlns:services="using:DefaultApplication.Services"
-    xmlns:templates="using:DefaultApplication.Controls.Templates"
     xmlns:viewmodels="using:DefaultApplication.Internal.Plugins.ShellPlugin.ViewModels"
+    xmlns:views="using:DefaultApplication.Internal.Plugins.ShellPlugin.Views"
     Margin="{Binding $parent[Window].OffScreenMargin}"
     BorderBrush="{DynamicResource SystemAccentColor}"
     BorderThickness="1">
@@ -63,43 +61,7 @@
                     DockPanel.Dock="Left"
                     Source="avares://DefaultApplication.Core/Resources/Images/DefaultLogo.png" />
 
-                <Menu
-                    x:Name="TopMenu"
-                    Height="NaN"
-                    IsEnabled="{Binding !#MainContentHost.(behaviors:ContentDialog.IsVisible)}"
-                    ItemsSource="{Binding Menus.Commands}">
-
-                    <Menu.ItemsPanel>
-
-                        <ItemsPanelTemplate>
-
-                            <WrapPanel VerticalAlignment="Center" />
-
-                        </ItemsPanelTemplate>
-
-                    </Menu.ItemsPanel>
-
-                    <Menu.Styles>
-
-                        <Style x:DataType="services:IMenuService+IMenuCommand" Selector="Menu MenuItem">
-
-                            <Setter Property="Icon" Value="{Binding Icon, Converter={x:Static converters:ObjectConverters.ToKnownIconType}}" />
-                            <Setter Property="Header" Value="{Binding Header}" />
-                            <Setter Property="Command" Value="{Binding}" />
-                            <Setter Property="InputGesture" Value="{Binding HotKey}" />
-                            <Setter Property="ItemsSource" Value="{Binding SubCommands}" />
-
-                        </Style>
-
-                    </Menu.Styles>
-
-                    <Menu.DataTemplates>
-
-                        <templates:DataTemplateInclude Source="avares://DefaultApplication/Internal/Plugins/ShellPlugin/Resources/KnownIconTypeDataTemplates.axaml" />
-
-                    </Menu.DataTemplates>
-
-                </Menu>
+                <ContentPresenter Content="{Binding $parent[views:ShellView].DataContext.Menus}" />
 
             </DockPanel>
 

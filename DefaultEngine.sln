@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultApplication.Browser"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_DefaultApplication", "_DefaultApplication", "{3475B6FA-FE56-40D6-BBCD-154B9CD3049B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultApplication.Plugin.DockingLayout", "DefaultApplication.Plugin.DockingLayout\DefaultApplication.Plugin.DockingLayout.csproj", "{FD816EC5-F00E-4703-B053-606924251564}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{EB501521-257E-0549-CD7B-89C777A33E1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB501521-257E-0549-CD7B-89C777A33E1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB501521-257E-0549-CD7B-89C777A33E1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD816EC5-F00E-4703-B053-606924251564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD816EC5-F00E-4703-B053-606924251564}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD816EC5-F00E-4703-B053-606924251564}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD816EC5-F00E-4703-B053-606924251564}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,6 +97,7 @@ Global
 		{A4CE9D84-D6B2-48E5-B378-637AADFE6CBD} = {3475B6FA-FE56-40D6-BBCD-154B9CD3049B}
 		{D672210F-DD09-474F-8A53-89681951CEEA} = {3475B6FA-FE56-40D6-BBCD-154B9CD3049B}
 		{EB501521-257E-0549-CD7B-89C777A33E1C} = {3475B6FA-FE56-40D6-BBCD-154B9CD3049B}
+		{FD816EC5-F00E-4703-B053-606924251564} = {3475B6FA-FE56-40D6-BBCD-154B9CD3049B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB9C8A4D-0B27-4A42-92AB-E8C6BF303EB9}

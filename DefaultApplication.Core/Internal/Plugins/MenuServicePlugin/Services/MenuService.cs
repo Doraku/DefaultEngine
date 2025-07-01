@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -12,7 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DefaultApplication.Internal.Plugins.MenuServicePlugin.Services;
 
-internal sealed class MenuService : IMenuService
+internal sealed class MenuService : IMenuService, INotifyPropertyChanged
 {
     private sealed class MenuItem : IMenuService.IMenuCommand
     {
@@ -134,7 +136,13 @@ internal sealed class MenuService : IMenuService
 
     private readonly List<MenuItem> _menus;
 
-    public bool IsEnabled { get; set; }
+    private bool _isEnabled;
+
+    public bool IsEnabled
+    {
+        get => _isEnabled;
+        set => SetProperty(ref _isEnabled, value);
+    }
 
     public IReadOnlyCollection<IMenuService.IMenuCommand> Commands => _menus;
 
@@ -235,4 +243,20 @@ internal sealed class MenuService : IMenuService
             });
         }
     }
+
+    #region INotifyPropertyChanged
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void NotifyPropertyChanged(string? propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+    private void SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        field = value;
+
+        NotifyPropertyChanged(propertyName);
+    }
+
+    #endregion
+
 }

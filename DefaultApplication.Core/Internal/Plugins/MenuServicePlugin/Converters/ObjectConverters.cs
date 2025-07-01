@@ -6,7 +6,7 @@ using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 
-namespace DefaultApplication.Internal.Plugins.ShellPlugin.Converters;
+namespace DefaultApplication.Internal.Plugins.MenuServicePlugin.Converters;
 
 internal static class ObjectConverters
 {
