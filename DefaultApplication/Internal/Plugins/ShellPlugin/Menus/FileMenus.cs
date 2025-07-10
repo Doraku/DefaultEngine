@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Input;
-using CommunityToolkit.Mvvm.Messaging;
+using DefaultApplication.DependencyInjection;
 using DefaultApplication.Services;
 
 namespace DefaultApplication.Internal.Plugins.ShellPlugin.Menus;
@@ -14,11 +15,9 @@ internal sealed class FileMenu : IMenu
     public IReadOnlyList<string> Path { get; } = ["File"];
 }
 
-internal sealed class ExitMenu : ICommandMenu
+internal sealed class ExitMenu : IAsyncCommandMenu
 {
-    internal sealed record Message;
-
-    private readonly IMessenger _messenger;
+    private readonly IDelayed<TopLevel> _mainTopLevel;
 
     public int Order => int.MaxValue;
 
@@ -26,12 +25,12 @@ internal sealed class ExitMenu : ICommandMenu
 
     public KeyGesture HotKey { get; } = new(Key.F4, KeyModifiers.Alt);
 
-    public ExitMenu(IMessenger messenger)
+    public ExitMenu(IDelayed<TopLevel> mainTopLevel)
     {
-        _messenger = messenger;
+        _mainTopLevel = mainTopLevel;
     }
 
-    public void Execute() => _messenger.Send<Message>();
+    public async Task ExecuteAsync() => ((Window)await _mainTopLevel.Task.ConfigureAwait(true)).Close();
 }
 
 internal sealed class TestMenu : IAsyncCommandMenu

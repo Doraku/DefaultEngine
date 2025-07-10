@@ -3,7 +3,7 @@ using DefaultApplication.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace DefaultApplication.Plugin.Messenger;
+namespace DefaultApplication.Messenger;
 
 internal sealed class Plugin : IServiceRegisterer
 {

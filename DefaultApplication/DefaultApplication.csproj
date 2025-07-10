@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DefaultApplication.Core\DefaultApplication.Core.csproj" />
+    <ProjectReference Include="..\DefaultApplication.Plugin.DockingLayout\DefaultApplication.Plugin.DockingLayout.csproj" />
     <ProjectReference Include="..\DefaultApplication.Plugin.Messenger\DefaultApplication.Plugin.Messenger.csproj" />
   </ItemGroup>
 

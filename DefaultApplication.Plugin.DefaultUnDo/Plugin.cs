@@ -7,7 +7,7 @@ using DefaultUnDo;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace DefaultApplication.Plugin.DefaultUnDo;
+namespace DefaultApplication.DefaultUnDo;
 
 internal sealed class Plugin : IServiceRegisterer
 {

@@ -3,7 +3,8 @@
   <PropertyGroup>
 
     <TargetFramework>net9.0</TargetFramework>
-    
+    <RootNamespace>DefaultApplication.Messenger</RootNamespace>
+
   </PropertyGroup>
 
   <ItemGroup>
