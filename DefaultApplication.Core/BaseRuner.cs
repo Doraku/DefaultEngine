@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -8,6 +7,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using DefaultApplication.Internal;
 using DefaultApplication.Plugins;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +28,7 @@ public abstract class BaseRuner : IDisposable
     {
         await Task.CompletedTask.ConfigureAwait(ConfigureAwaitOptions.ForceYielding);
 
-        PluginsHelper plugins = new(new FileInfo(Assembly.GetEntryAssembly()!.Location).Directory!);
+        PluginsHelper plugins = new();
 
         ServiceCollection services = [];
 
@@ -39,7 +39,7 @@ public abstract class BaseRuner : IDisposable
             services.AddSingleton(application);
         }
 
-        foreach (Type type in plugins.GetPluginsTypes().GetInstanciableImplementation<IServiceRegisterer>())
+        foreach (Type type in plugins.GetTypes().GetInstanciableImplementation<IServiceRegisterer>())
         {
             services.AddAsSingletonImplementation<IServiceRegisterer>(type);
         }
@@ -90,7 +90,7 @@ public abstract class BaseRuner : IDisposable
         {
             IEnumerable<IPlugin>? plugins;
 
-            using (ISplashScreen splashScreen = application is { } ? CreateSplashScreen(logger) : new NoApplicationSplashScreen(logger))
+            using (ISplashScreen splashScreen = application is { } ? CreateSplashScreen(application, logger) : new NoApplicationSplashScreen(logger))
             {
                 await splashScreen.ReportAsync("registering service registerers").ConfigureAwait(true);
 
@@ -108,28 +108,23 @@ public abstract class BaseRuner : IDisposable
 
                 object content = await CreateContentAsync(services).ConfigureAwait(true);
 
-                if (delayedMainTopLevel is { })
+                if (application is { } && delayedMainTopLevel is { })
                 {
                     await Task.Delay(TimeSpan.FromSeconds(0.5)).ConfigureAwait(true);
 
-                    TopLevel topLevel = CreateMainTopLevel();
+                    TopLevel topLevel = CreateMainTopLevel(application);
 
                     await splashScreen.ReportAsync("hello").ConfigureAwait(true);
 
                     topLevel.Content = content;
                     topLevel.Closed += (_, _) => shutdownTokenSource?.Cancel();
 
-                    switch (topLevel)
-                    {
-                        case WindowBase window:
-                            window.Show();
-                            break;
-
-                        default:
-                            throw new NotSupportedException($"Unhandled TopLevel type {topLevel.GetType()}");
-                    }
-
                     delayedMainTopLevel.SetResult(topLevel);
+
+                    if (topLevel is Window window)
+                    {
+                        window.Show();
+                    }
 
                     await Task.Delay(TimeSpan.FromSeconds(0.5)).ConfigureAwait(true);
                 }
@@ -137,10 +132,8 @@ public abstract class BaseRuner : IDisposable
 
             await Task.WhenAll(plugins.Select(plugin => plugin.StartAsync())).ConfigureAwait(true);
         }
-        catch (Exception exception)
+        catch
         {
-            logger.LogInitializationException(exception);
-
             await (shutdownTokenSource?.CancelAsync() ?? Task.CompletedTask).ConfigureAwait(true);
 
             throw;
@@ -149,23 +142,20 @@ public abstract class BaseRuner : IDisposable
 
     protected abstract ILogger CreateLogger();
 
-    protected abstract AppBuilder ConfigureBuilder(AppBuilder builder);
+    protected abstract Task<AppBuilder> ConfigureBuilderAsync(AppBuilder builder);
 
     protected abstract Application CreateApplication();
 
-    protected abstract ISplashScreen CreateSplashScreen(ILogger logger);
+    protected abstract ISplashScreen CreateSplashScreen(Application application, ILogger logger);
 
     protected abstract IServiceProvider BuildServiceProvider(IServiceCollection services);
 
     protected abstract Task<object> CreateContentAsync(IServiceProvider services);
 
-    protected abstract TopLevel CreateMainTopLevel();
+    protected abstract TopLevel CreateMainTopLevel(Application application);
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types")]
-    public Task RunAsync(string[] args)
+    public async Task RunAsync(string[] args)
     {
-        TaskCompletionSource taskCompletionSource = new();
-
         ILogger logger = CreateLogger();
 
         AppDomain.CurrentDomain.UnhandledException += (_, args) => logger.LogUnhandledException(args.ExceptionObject as Exception);
@@ -173,27 +163,24 @@ public abstract class BaseRuner : IDisposable
 
         logger.LogStart(args);
 
-        void Run(Application app, string[] _)
+        try
         {
+            AppBuilder builder = await ConfigureBuilderAsync(AppBuilder.Configure(CreateApplication)).ConfigureAwait(true);
+
             using CancellationTokenSource shutdownTokenSource = new();
 
-            Task initializationTask = InitializeAsync(logger, app, shutdownTokenSource);
+            Task initializationTask = InitializeAsync(logger, builder.Instance, shutdownTokenSource);
 
-            try
-            {
-                app.Run(shutdownTokenSource.Token);
-                initializationTask.ContinueWith(_ => taskCompletionSource.SetResult(), TaskScheduler.Default);
-            }
-            catch (Exception exception)
-            {
-                logger.LogRunnerException(exception);
-                taskCompletionSource.SetException(exception);
-            }
+            Dispatcher.UIThread.MainLoop(shutdownTokenSource.Token);
+
+            await initializationTask.ConfigureAwait(false);
         }
+        catch (Exception exception)
+        {
+            logger.LogRunnerException(exception);
 
-        new Thread(() => ConfigureBuilder(AppBuilder.Configure(CreateApplication)).Start(Run, args)).Start();
-
-        return taskCompletionSource.Task;
+            throw;
+        }
     }
 
     #region IDisposable

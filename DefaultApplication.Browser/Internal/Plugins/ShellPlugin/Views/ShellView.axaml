@@ -5,10 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="using:DefaultApplication.Controls.Behaviors"
     xmlns:viewmodels="using:DefaultApplication.Internal.Plugins.ShellPlugin.ViewModels"
-    xmlns:views="using:DefaultApplication.Internal.Plugins.ShellPlugin.Views"
-    Margin="{Binding $parent[Window].OffScreenMargin}"
-    BorderBrush="{DynamicResource SystemAccentColor}"
-    BorderThickness="1">
+    xmlns:views="using:DefaultApplication.Internal.Plugins.ShellPlugin.Views">
 
     <Border.Styles>
 
@@ -52,14 +49,10 @@
 
             <Rectangle Fill="{DynamicResource SystemAccentColor}" IsHitTestVisible="False" />
 
-            <DockPanel Margin="0,0,200,0" HorizontalAlignment="Left">
-
-                <Image
-                    Width="29"
-                    Height="29"
-                    VerticalAlignment="Top"
-                    DockPanel.Dock="Left"
-                    Source="avares://DefaultApplication.Core/Resources/Images/DefaultLogo.png" />
+            <DockPanel
+                MinHeight="29"
+                Margin="0,0,200,0"
+                HorizontalAlignment="Left">
 
                 <ContentPresenter Content="{Binding $parent[views:ShellView].DataContext.Menus}" />
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -10,9 +9,9 @@ namespace DefaultApplication.Internal;
 
 internal sealed class PluginsHelper
 {
-    private readonly IReadOnlyCollection<Assembly> _pluginCandidates;
+    private readonly IReadOnlyCollection<Assembly> _candidates;
 
-    public PluginsHelper(DirectoryInfo directory)
+    public PluginsHelper()
     {
         AssemblyName apiName = typeof(IServiceRegisterer).Assembly.GetName();
 
@@ -23,7 +22,7 @@ internal sealed class PluginsHelper
             [apiName.Name!] = true
         };
 
-        List<AssemblyName> pluginCandidates = [];
+        List<AssemblyName> candidates = [];
         AssemblyLoadContext context = new("Plugins", true);
 
         bool HandleNames(IEnumerable<AssemblyName> names)
@@ -46,7 +45,7 @@ internal sealed class PluginsHelper
                 checkedNames[name.Name!] = couldBePlugin;
                 if (couldBePlugin)
                 {
-                    pluginCandidates.Add(name);
+                    candidates.Add(name);
                     mayBePlugin = true;
                 }
             }
@@ -54,12 +53,12 @@ internal sealed class PluginsHelper
             return mayBePlugin;
         }
 
-        HandleNames(directory.EnumerateFiles("*.dll").Select(dll => AssemblyName.GetAssemblyName(dll.FullName)));
+        HandleNames([Assembly.GetEntryAssembly()!.GetName()]);
 
         context.Unload();
 
-        _pluginCandidates = [.. pluginCandidates.Select(Assembly.Load)];
+        _candidates = [.. candidates.Select(Assembly.Load)];
     }
 
-    public IEnumerable<TypeInfo> GetPluginsTypes() => _pluginCandidates.AsParallel().SelectMany(assembly => assembly.DefinedTypes);
+    public IEnumerable<TypeInfo> GetTypes() => _candidates.AsParallel().SelectMany(assembly => assembly.DefinedTypes);
 }

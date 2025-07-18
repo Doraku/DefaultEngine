@@ -29,7 +29,7 @@ internal sealed class Plugin : IPlugin
         {
             services.TryAddTransient<SettingsViewModel>();
 
-            foreach (Type type in _plugins.GetPluginsTypes().GetInstanciableImplementation<ISettings>())
+            foreach (Type type in _plugins.GetTypes().GetInstanciableImplementation<ISettings>())
             {
                 services.AddAsSingletonImplementation<ISettings>(type);
             }

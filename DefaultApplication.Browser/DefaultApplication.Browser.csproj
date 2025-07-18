@@ -2,15 +2,17 @@
   <PropertyGroup>
     
     <TargetFramework>net9.0-browser</TargetFramework>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebuggerSupport>true</DebuggerSupport>
-    <WasmDebugLevel>5</WasmDebugLevel>
-    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-  
-  </PropertyGroup>
+    <RootNamespace>DefaultApplication</RootNamespace>
 
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    
+  </PropertyGroup>
   <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
+    <Content Remove="wwwroot\DefaultLogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="wwwroot\DefaultLogo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +21,7 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.2" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
 

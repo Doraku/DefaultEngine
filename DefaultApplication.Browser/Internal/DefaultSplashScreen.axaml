@@ -1,0 +1,22 @@
+<DockPanel
+    x:Class="DefaultApplication.Internal.DefaultSplashScreen"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    HorizontalAlignment="Center"
+    VerticalAlignment="Center">
+
+    <TextBlock
+        x:Name="InformationsTextBlock"
+        HorizontalAlignment="Center"
+        DockPanel.Dock="Bottom"
+        Text="starting" />
+
+    <ProgressBar
+        x:Name="InformationsProgress"
+        Margin="5"
+        DockPanel.Dock="Bottom"
+        IsIndeterminate="True" />
+
+    <Image Width="400" Source="avares://DefaultApplication.Core/Resources/Images/DefaultApplicationLogo.png" />
+
+</DockPanel>

@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" Condition="'$(Configuration)' == 'Debug'" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\DefaultApplication.Api\DefaultApplication.Api.csproj" />
   </ItemGroup>
   

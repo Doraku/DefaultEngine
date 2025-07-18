@@ -35,7 +35,7 @@ internal sealed class DataTemplatesPlugin : IPlugin
 
             DataTemplates dataTemplates = [];
 
-            foreach ((Type type, DataTemplateAttribute attribute) in _plugins.GetPluginsTypes().GetInstanciableImplementation<Control>().GetTypesWithAttribute<DataTemplateAttribute>())
+            foreach ((Type type, DataTemplateAttribute attribute) in _plugins.GetTypes().GetInstanciableImplementation<Control>().GetTypesWithAttribute<DataTemplateAttribute>())
             {
                 services.TryAddTransient(type);
 

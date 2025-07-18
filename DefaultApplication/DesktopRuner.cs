@@ -29,10 +29,12 @@ public class DesktopRuner : BaseRuner
         return new SerilogLoggerProvider().CreateLogger("DefaultApplication");
     }
 
-    protected override AppBuilder ConfigureBuilder(AppBuilder builder)
-        => builder
-            .UsePlatformDetect()
-            .LogToTrace();
+    protected override Task<AppBuilder> ConfigureBuilderAsync(AppBuilder builder)
+        => Task.FromResult(
+            builder
+                .UsePlatformDetect()
+                .LogToTrace()
+                .SetupWithoutStarting());
 
     protected override Application CreateApplication()
     {
@@ -43,7 +45,7 @@ public class DesktopRuner : BaseRuner
         return application;
     }
 
-    protected override ISplashScreen CreateSplashScreen(Microsoft.Extensions.Logging.ILogger logger) => new DefaultSplashScreen(logger);
+    protected override ISplashScreen CreateSplashScreen(Application application, Microsoft.Extensions.Logging.ILogger logger) => new DefaultSplashScreen(logger);
 
     protected override IServiceProvider BuildServiceProvider(IServiceCollection services)
         => services
@@ -62,7 +64,7 @@ public class DesktopRuner : BaseRuner
         return services.GetRequiredService<ShellViewModel>();
     }
 
-    protected override TopLevel CreateMainTopLevel()
+    protected override TopLevel CreateMainTopLevel(Application application)
     {
         using Stream iconStream = AssetLoader.Open(new Uri("avares://DefaultApplication.Core/Resources/Images/DefaultLogo.png"));
 

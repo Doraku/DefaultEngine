@@ -1,53 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Avalonia.Controls;
-using Avalonia.Input;
-using DefaultApplication.DependencyInjection;
-using DefaultApplication.DockingLayout;
-using DefaultApplication.Internal.Plugins.ShellPlugin.Settings;
 using DefaultApplication.Services;
 
 namespace DefaultApplication.Internal.Plugins.ShellPlugin.Menus;
-
-internal sealed class FileMenu : IMenu
-{
-    public int Order => int.MinValue;
-
-    public IReadOnlyList<string> Path { get; } = ["File"];
-}
-
-internal sealed class ExitMenu : IAsyncCommandMenu
-{
-    private readonly IDelayed<TopLevel> _mainTopLevel;
-
-    public int Order => int.MaxValue;
-
-    public IReadOnlyList<string> Path { get; } = ["File", "Exit"];
-
-    public KeyGesture HotKey { get; } = new(Key.F4, KeyModifiers.Alt);
-
-    public ExitMenu(IDelayed<TopLevel> mainTopLevel)
-    {
-        _mainTopLevel = mainTopLevel;
-    }
-
-    public async Task ExecuteAsync() => ((Window)await _mainTopLevel.Task.ConfigureAwait(true)).Close();
-}
-
-internal sealed class DockMenu : ICommandMenu
-{
-    private readonly IDockingLayoutService _service;
-
-    public IReadOnlyList<string> Path { get; } = ["File", "dock test"];
-
-    public DockMenu(IDockingLayoutService service)
-    {
-        _service = service;
-    }
-
-    public void Execute() => _service.Show<EnvironmentGeneralSettings>();
-}
 
 internal sealed class TestMenu : IAsyncCommandMenu
 {

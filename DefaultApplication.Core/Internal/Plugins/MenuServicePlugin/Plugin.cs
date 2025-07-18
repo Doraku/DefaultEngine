@@ -21,7 +21,7 @@ internal sealed class Plugin : IServiceRegisterer
     {
         services.TryAddSingleton<IMenuService, MenuService>();
 
-        foreach (Type type in _plugins.GetPluginsTypes().GetInstanciableImplementation<IMenu>())
+        foreach (Type type in _plugins.GetTypes().GetInstanciableImplementation<IMenu>())
         {
             services.AddAsSingletonImplementation<IMenu>(type);
         }

@@ -9,6 +9,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DefaultApplication.Core\DefaultApplication.Core.csproj" />
+    <ProjectReference Include="..\DefaultApplication.Plugin.DefaultUnDo\DefaultApplication.Plugin.DefaultUnDo.csproj" />
+    <ProjectReference Include="..\DefaultApplication.Plugin.DockingLayout\DefaultApplication.Plugin.DockingLayout.csproj" />
+    <ProjectReference Include="..\DefaultApplication.Plugin.Messenger\DefaultApplication.Plugin.Messenger.csproj" />
     <ProjectReference Include="..\DefaultApplication\DefaultApplication.csproj" />
     <ProjectReference Include="..\DefaultEngine.Editor\DefaultEngine.Editor.csproj" />
     <ProjectReference Include="..\Test\Test.csproj" />

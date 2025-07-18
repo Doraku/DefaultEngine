@@ -16,7 +16,7 @@ internal sealed class PluginsPlugin : IServiceRegisterer
 
     public void Register(IServiceCollection services)
     {
-        foreach (Type type in _plugins.GetPluginsTypes().GetInstanciableImplementation<IPlugin>())
+        foreach (Type type in _plugins.GetTypes().GetInstanciableImplementation<IPlugin>())
         {
             services.AddAsSingletonImplementation<IPlugin>(type);
         }
