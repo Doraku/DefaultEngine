@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+
+    <None Include="AssemblyInfo.cs" Pack="true" PackagePath="contentFiles\cs\net9.0\DefaultApplication.Plugin.DefaultUnDo\" />
+
+    <None Include="projects\**\*" Pack="true" PackagePath="projects" />
+
+    <None Include="DefaultApplication.Plugin.DefaultUnDo.targets" Pack="true" PackagePath="build\" />
+    <None Include="DefaultApplication.Plugin.DefaultUnDo.targets" Pack="true" PackagePath="buildCrossTargeting\" />
+    
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DefaultUnDo" Version="2.0.0" />
   </ItemGroup>
 

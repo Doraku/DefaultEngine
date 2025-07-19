@@ -3,9 +3,9 @@ using DefaultApplication.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace DefaultApplication.Messenger;
+namespace DefaultApplication.Messenger.Internal;
 
-internal sealed class Plugin : IServiceRegisterer
+public sealed class Plugin : IServiceRegisterer
 {
     public void Register(IServiceCollection services) => services.TryAddSingleton<IMessenger, WeakReferenceMessenger>();
 }

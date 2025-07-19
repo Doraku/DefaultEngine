@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\DefaultApplication.Plugin.DefaultUnDo\AssemblyInfo.cs" Visible="false" />
+    <Compile Include="..\DefaultApplication.Plugin.Messenger\AssemblyInfo.cs" Visible="false" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\DefaultApplication.Core\DefaultApplication.Core.csproj" />
     <ProjectReference Include="..\DefaultApplication.Plugin.DefaultUnDo\DefaultApplication.Plugin.DefaultUnDo.csproj" />
     <ProjectReference Include="..\DefaultApplication.Plugin.DockingLayout\DefaultApplication.Plugin.DockingLayout.csproj" />

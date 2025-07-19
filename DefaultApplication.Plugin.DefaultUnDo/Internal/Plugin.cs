@@ -7,7 +7,7 @@ using DefaultUnDo;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace DefaultApplication.DefaultUnDo;
+namespace DefaultApplication.DefaultUnDo.Internal;
 
 internal sealed class Plugin : IServiceRegisterer
 {
@@ -19,7 +19,7 @@ internal sealed class Plugin : IServiceRegisterer
         }
 
         Uri baseUri = new("avares://DefaultApplication.Plugin.DefaultUnDo");
-        Uri resourcesUri = new(baseUri, "Resources/");
+        Uri resourcesUri = new(baseUri, "Internal/Resources/");
 
         Dispatcher.UIThread.Invoke(() =>
         {

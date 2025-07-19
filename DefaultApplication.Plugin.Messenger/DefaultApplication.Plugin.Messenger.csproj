@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+
+    <None Include="AssemblyInfo.cs" Pack="true" PackagePath="contentFiles\cs\net9.0\DefaultApplication.Plugin.Messenger\" />
+
+    <None Include="projects\**\*" Pack="true" PackagePath="projects" />
+
+    <None Include="DefaultApplication.Plugin.Messenger.targets" Pack="true" PackagePath="build\" />
+    <None Include="DefaultApplication.Plugin.Messenger.targets" Pack="true" PackagePath="buildCrossTargeting\" />
+
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
   </ItemGroup>
 

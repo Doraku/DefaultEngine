@@ -4,7 +4,7 @@ using Avalonia.Markup.Xaml.MarkupExtensions;
 using DefaultUnDo;
 using Microsoft.Extensions.Logging;
 
-namespace DefaultApplication.DefaultUnDo.Menus;
+namespace DefaultApplication.DefaultUnDo.Internal.Menus;
 
 internal sealed class UndoMenu : ICommandMenu
 {

@@ -1,0 +1,1 @@
+[assembly: DefaultApplication.Messenger.Plugin]
