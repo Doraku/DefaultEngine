@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Browser;
@@ -37,19 +37,6 @@ internal sealed class BrowserRuner : BaseRuner
         return new SerilogLoggerProvider().CreateLogger("DefaultApplication");
     }
 
-    protected override async Task<AppBuilder> ConfigureBuilderAsync(AppBuilder builder)
-    {
-        Trace.Listeners.Add(new ConsoleTraceListener());
-
-        builder = builder
-            .WithInterFont()
-            .LogToTrace();
-
-        await builder.SetupBrowserAppAsync().ConfigureAwait(false);
-
-        return builder;
-    }
-
     protected override Application CreateApplication()
     {
         Application application = new();
@@ -59,29 +46,37 @@ internal sealed class BrowserRuner : BaseRuner
         return application;
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Trimming", "IL2075:'this' argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The return value of the source method does not have matching annotations.", Justification = "no trimming")]
+    protected override async Task<AppBuilder> ConfigureBuilderAsync(AppBuilder builder)
+    {
+        Trace.Listeners.Add(new ConsoleTraceListener());
+
+        builder = builder
+            .WithInterFont()
+            .LogToTrace();
+
+        await builder.StartBrowserAppAsync("out").ConfigureAwait(false);
+
+        return builder;
+    }
+
+    protected override async Task RunAsync(AppBuilder builder, CancellationToken cancellationToken)
+    {
+        TaskCompletionSource task = new();
+
+        using (cancellationToken.Register(task.SetResult))
+        {
+            await task.Task.ConfigureAwait(false);
+        }
+    }
+
     protected override ISplashScreen CreateSplashScreen(Application application, Microsoft.Extensions.Logging.ILogger logger)
     {
-        ISplashScreen splashScreen = new DefaultSplashScreen(logger);
+        DefaultSplashScreen splashScreen = new(logger);
 
-        TopLevel? topLevel = null;
-
-        // it should be an Avalonia.BrowserSingleViewLifetime
-        if (application.ApplicationLifetime is ISingleTopLevelApplicationLifetime lifetime)
+        if (application.ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            // we need to initialize the view
-            AvaloniaView view = new("out");
-            lifetime.GetType().GetField("View", BindingFlags.Instance | BindingFlags.Public)?.SetValue(lifetime, view);
-
-            topLevel = lifetime.GetType().GetProperty("TopLevel")?.GetValue(lifetime) as TopLevel;
+            singleViewPlatform.MainView = splashScreen;
         }
-
-        if (topLevel is null)
-        {
-            throw new Exception("failed to initialize application lifetime with AvaloniaView");
-        }
-
-        topLevel.Content = splashScreen;
 
         return splashScreen;
     }
@@ -106,7 +101,7 @@ internal sealed class BrowserRuner : BaseRuner
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Trimming", "IL2075:'this' argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The return value of the source method does not have matching annotations.", Justification = "no trimming")]
     protected override TopLevel CreateMainTopLevel(Application application)
     {
-        // should be initialized in CreateSplashScreen already
+        // it should be an Avalonia.BrowserSingleViewLifetime
         return (TopLevel)application.ApplicationLifetime!.GetType().GetProperty("TopLevel")?.GetValue(application.ApplicationLifetime)!;
     }
 }

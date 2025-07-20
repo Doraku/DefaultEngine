@@ -2,14 +2,11 @@
   <PropertyGroup>
     
     <TargetFramework>net9.0-browser</TargetFramework>
+    <OutputType>Exe</OutputType>
     <RootNamespace>DefaultApplication</RootNamespace>
 
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <!--<WasmEnableThreads>true</WasmEnableThreads>-->
-
-    <DebuggerSupport>true</DebuggerSupport>
-    <WasmDebugLevel>5</WasmDebugLevel>
     
   </PropertyGroup>
 

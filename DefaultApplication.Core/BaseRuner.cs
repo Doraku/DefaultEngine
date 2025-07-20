@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avalonia.Threading;
 using DefaultApplication.Internal;
 using DefaultApplication.Plugins;
 using Microsoft.Extensions.DependencyInjection;
@@ -142,9 +141,11 @@ public abstract class BaseRuner : IDisposable
 
     protected abstract ILogger CreateLogger();
 
+    protected abstract Application CreateApplication();
+
     protected abstract Task<AppBuilder> ConfigureBuilderAsync(AppBuilder builder);
 
-    protected abstract Application CreateApplication();
+    protected abstract Task RunAsync(AppBuilder builder, CancellationToken cancellationToken);
 
     protected abstract ISplashScreen CreateSplashScreen(Application application, ILogger logger);
 
@@ -171,7 +172,7 @@ public abstract class BaseRuner : IDisposable
 
             Task initializationTask = InitializeAsync(logger, builder.Instance, shutdownTokenSource);
 
-            Dispatcher.UIThread.MainLoop(shutdownTokenSource.Token);
+            await RunAsync(builder, shutdownTokenSource.Token).ConfigureAwait(true);
 
             await initializationTask.ConfigureAwait(false);
         }

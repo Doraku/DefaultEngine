@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -29,13 +30,6 @@ public class DesktopRuner : BaseRuner
         return new SerilogLoggerProvider().CreateLogger("DefaultApplication");
     }
 
-    protected override Task<AppBuilder> ConfigureBuilderAsync(AppBuilder builder)
-        => Task.FromResult(
-            builder
-                .UsePlatformDetect()
-                .LogToTrace()
-                .SetupWithoutStarting());
-
     protected override Application CreateApplication()
     {
         Application application = new();
@@ -43,6 +37,22 @@ public class DesktopRuner : BaseRuner
         application.Styles.Add(new FluentTheme());
 
         return application;
+    }
+
+    protected override Task<AppBuilder> ConfigureBuilderAsync(AppBuilder builder)
+        => Task.FromResult(
+            builder
+                .UsePlatformDetect()
+                .LogToTrace()
+                .SetupWithoutStarting());
+
+    protected override Task RunAsync(AppBuilder builder, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+
+        builder.Instance?.Run(cancellationToken);
+
+        return Task.CompletedTask;
     }
 
     protected override ISplashScreen CreateSplashScreen(Application application, Microsoft.Extensions.Logging.ILogger logger) => new DefaultSplashScreen(logger);
