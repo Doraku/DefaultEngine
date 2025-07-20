@@ -1,9 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Avalonia;
 using DefaultApplication.Services;
 
 namespace DefaultApplication.Internal.Plugins.ShellPlugin.Menus;
+
+internal sealed class FileMenu : IMenu
+{
+    public int Order => int.MinValue;
+
+    public IReadOnlyList<string> Path { get; } = ["File"];
+}
+
+internal sealed class ExitMenu : ICommandMenu
+{
+    private readonly Application _application;
+
+    public int Order => int.MaxValue;
+
+    public IReadOnlyList<string> Path { get; } = ["File", "Exit"];
+
+    public ExitMenu(Application application)
+    {
+        _application = application;
+    }
+
+    public void Execute() => ((BrowserApplication)_application).RequestShutdown();
+}
 
 internal sealed class TestMenu : IAsyncCommandMenu
 {

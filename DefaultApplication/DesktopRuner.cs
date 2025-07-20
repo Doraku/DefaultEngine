@@ -74,7 +74,7 @@ public class DesktopRuner : BaseRuner
         return services.GetRequiredService<ShellViewModel>();
     }
 
-    protected override TopLevel CreateMainTopLevel(Application application)
+    protected override TopLevel CreateMainTopLevel(Application application, CancellationTokenSource shutdownTokenSource)
     {
         using Stream iconStream = AssetLoader.Open(new Uri("avares://DefaultApplication.Core/Resources/Images/DefaultLogo.png"));
 
@@ -85,6 +85,8 @@ public class DesktopRuner : BaseRuner
             Title = "Default Application",
             WindowState = WindowState.Maximized
         };
+
+        window.Closed += (_, _) => shutdownTokenSource.Cancel();
 
 #if DEBUG
         window.AttachDevTools();

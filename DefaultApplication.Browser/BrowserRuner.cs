@@ -16,6 +16,13 @@ using Serilog.Extensions.Logging;
 
 namespace DefaultApplication;
 
+internal sealed class BrowserApplication : Application
+{
+    public event Action? ShutdownRequested;
+
+    public void RequestShutdown() => ShutdownRequested?.Invoke();
+}
+
 internal sealed class BrowserRuner : BaseRuner
 {
     private static async Task Main(string[] args)
@@ -39,7 +46,7 @@ internal sealed class BrowserRuner : BaseRuner
 
     protected override Application CreateApplication()
     {
-        Application application = new();
+        BrowserApplication application = new();
 
         application.Styles.Add(new FluentTheme());
 
@@ -99,8 +106,13 @@ internal sealed class BrowserRuner : BaseRuner
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Trimming", "IL2075:'this' argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The return value of the source method does not have matching annotations.", Justification = "no trimming")]
-    protected override TopLevel CreateMainTopLevel(Application application)
+    protected override TopLevel CreateMainTopLevel(Application application, CancellationTokenSource shutdownTokenSource)
     {
+        if (application is BrowserApplication browserApplication)
+        {
+            browserApplication.ShutdownRequested += shutdownTokenSource.Cancel;
+        }
+
         // it should be an Avalonia.BrowserSingleViewLifetime
         return (TopLevel)application.ApplicationLifetime!.GetType().GetProperty("TopLevel")?.GetValue(application.ApplicationLifetime)!;
     }

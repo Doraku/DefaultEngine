@@ -107,16 +107,15 @@ public abstract class BaseRuner : IDisposable
 
                 object content = await CreateContentAsync(services).ConfigureAwait(true);
 
-                if (application is { } && delayedMainTopLevel is { })
+                if (application is { } && delayedMainTopLevel is { } && shutdownTokenSource is { })
                 {
                     await Task.Delay(TimeSpan.FromSeconds(0.5)).ConfigureAwait(true);
 
-                    TopLevel topLevel = CreateMainTopLevel(application);
+                    TopLevel topLevel = CreateMainTopLevel(application, shutdownTokenSource);
 
                     await splashScreen.ReportAsync("hello").ConfigureAwait(true);
 
                     topLevel.Content = content;
-                    topLevel.Closed += (_, _) => shutdownTokenSource?.Cancel();
 
                     delayedMainTopLevel.SetResult(topLevel);
 
@@ -153,7 +152,7 @@ public abstract class BaseRuner : IDisposable
 
     protected abstract Task<object> CreateContentAsync(IServiceProvider services);
 
-    protected abstract TopLevel CreateMainTopLevel(Application application);
+    protected abstract TopLevel CreateMainTopLevel(Application application, CancellationTokenSource shutdownTokenSource);
 
     public async Task RunAsync(string[] args)
     {
@@ -172,7 +171,7 @@ public abstract class BaseRuner : IDisposable
 
             Task initializationTask = InitializeAsync(logger, builder.Instance, shutdownTokenSource);
 
-            await RunAsync(builder, shutdownTokenSource.Token).ConfigureAwait(true);
+            await RunAsync(builder, shutdownTokenSource.Token).ConfigureAwait(false);
 
             await initializationTask.ConfigureAwait(false);
         }
