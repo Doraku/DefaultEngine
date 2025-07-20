@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -38,6 +39,8 @@ internal sealed class BrowserRuner : BaseRuner
 
     protected override async Task<AppBuilder> ConfigureBuilderAsync(AppBuilder builder)
     {
+        Trace.Listeners.Add(new ConsoleTraceListener());
+
         builder = builder
             .WithInterFont()
             .LogToTrace();

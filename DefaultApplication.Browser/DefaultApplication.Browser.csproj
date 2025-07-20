@@ -6,17 +6,14 @@
 
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <!--<WasmEnableThreads>true</WasmEnableThreads>-->
+
+    <DebuggerSupport>true</DebuggerSupport>
+    <WasmDebugLevel>5</WasmDebugLevel>
     
   </PropertyGroup>
-  <ItemGroup>
-    <Content Remove="wwwroot\DefaultLogo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AvaloniaResource Include="wwwroot\DefaultLogo.png" />
-  </ItemGroup>
 
   <ItemGroup>
-    
     <PackageReference Include="Avalonia.Browser" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
@@ -24,7 +21,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.2" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
-
   </ItemGroup>
 
   <ItemGroup>
