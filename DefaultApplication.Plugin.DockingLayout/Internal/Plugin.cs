@@ -9,21 +9,27 @@ namespace DefaultApplication.DockingLayout.Internal;
 
 internal sealed class Plugin : IServiceRegisterer
 {
+    private readonly Application? _application;
+
     public Plugin(Application? application = null)
     {
-        if (application is null)
-        {
-            return;
-        }
-
-        Uri baseUri = new("avares://DefaultApplication.Plugin.DockingLayout");
-        Uri resourcesUri = new(baseUri, "Internal/Resources/");
-
-        Dispatcher.UIThread.Invoke(() => application.Styles.Add(new StyleInclude(baseUri) { Source = new Uri(resourcesUri, "Styles.axaml") }));
+        _application = application;
     }
 
     public void Register(IServiceCollection services)
     {
-        services.AddSingleton<IDockingLayoutService, DockingLayoutService>();
+        if (_application is { })
+        {
+            Uri baseUri = new("avares://DefaultApplication.Plugin.DockingLayout");
+            Uri resourcesUri = new(baseUri, "Internal/Resources/");
+
+            Dispatcher.UIThread.Invoke(() => _application.Styles.Add(new StyleInclude(baseUri) { Source = new Uri(resourcesUri, "Styles.axaml") }));
+
+            services.AddSingleton<IDockingLayoutService, DockingLayoutService>();
+        }
+        else
+        {
+            services.AddSingleton<IDockingLayoutService, NoApplicationDockingLayoutService>();
+        }
     }
 }
