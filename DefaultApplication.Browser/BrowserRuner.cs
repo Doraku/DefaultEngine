@@ -34,6 +34,8 @@ internal sealed class BrowserRuner : BaseRuner
 
     protected override Microsoft.Extensions.Logging.ILogger CreateLogger()
     {
+        Trace.Listeners.Add(new ConsoleTraceListener());
+
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
             .WriteTo.Debug(
@@ -55,8 +57,6 @@ internal sealed class BrowserRuner : BaseRuner
 
     protected override async Task<AppBuilder> ConfigureBuilderAsync(AppBuilder builder)
     {
-        Trace.Listeners.Add(new ConsoleTraceListener());
-
         builder = builder
             .WithInterFont()
             .LogToTrace();

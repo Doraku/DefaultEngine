@@ -88,6 +88,7 @@ public abstract class BaseRuner : IDisposable
         try
         {
             IEnumerable<IPlugin>? plugins;
+            Task? pluginsTask = null;
 
             using (ISplashScreen splashScreen = application is { } ? CreateSplashScreen(application, logger) : new NoApplicationSplashScreen(logger))
             {
@@ -102,13 +103,14 @@ public abstract class BaseRuner : IDisposable
                 await splashScreen.ReportAsync("creating plugins").ConfigureAwait(true);
 
                 plugins = await Task.Run(() => services.GetService<IEnumerable<IPlugin>>()).ConfigureAwait(true) ?? [];
-
-                await splashScreen.ReportAsync("creating content").ConfigureAwait(true);
-
-                object content = await CreateContentAsync(services).ConfigureAwait(true);
+                pluginsTask = Task.WhenAll(plugins.Select(plugin => plugin.StartAsync()));
 
                 if (application is { } && delayedMainTopLevel is { } && shutdownTokenSource is { })
                 {
+                    await splashScreen.ReportAsync("creating content").ConfigureAwait(true);
+
+                    object content = await CreateContentAsync(services).ConfigureAwait(true);
+
                     await Task.Delay(TimeSpan.FromSeconds(0.5)).ConfigureAwait(true);
 
                     TopLevel topLevel = CreateMainTopLevel(application, shutdownTokenSource);
@@ -123,12 +125,12 @@ public abstract class BaseRuner : IDisposable
                     }
 
                     delayedMainTopLevel.SetResult(topLevel);
-
-                    await Task.Delay(TimeSpan.FromSeconds(0.5)).ConfigureAwait(true);
                 }
+
+                await Task.Delay(TimeSpan.FromSeconds(0.5)).ConfigureAwait(true);
             }
 
-            await Task.WhenAll(plugins.Select(plugin => plugin.StartAsync())).ConfigureAwait(true);
+            await pluginsTask.ConfigureAwait(true);
         }
         catch
         {
@@ -146,7 +148,7 @@ public abstract class BaseRuner : IDisposable
 
     protected abstract Task RunAsync(AppBuilder builder, CancellationToken cancellationToken);
 
-    protected abstract ISplashScreen CreateSplashScreen(Application application, ILogger logger);
+    protected virtual ISplashScreen CreateSplashScreen(Application application, ILogger logger) => new NoApplicationSplashScreen(logger);
 
     protected abstract IServiceProvider BuildServiceProvider(IServiceCollection services);
 
@@ -165,13 +167,16 @@ public abstract class BaseRuner : IDisposable
 
         try
         {
-            AppBuilder builder = await ConfigureBuilderAsync(AppBuilder.Configure(CreateApplication)).ConfigureAwait(true);
-
             using CancellationTokenSource shutdownTokenSource = new();
+
+            AppBuilder? builder = await ConfigureBuilderAsync(AppBuilder.Configure(CreateApplication)).ConfigureAwait(true);
 
             Task initializationTask = InitializeAsync(logger, builder.Instance, shutdownTokenSource);
 
-            await RunAsync(builder, shutdownTokenSource.Token).ConfigureAwait(false);
+            if (builder is { })
+            {
+                await RunAsync(builder, shutdownTokenSource.Token).ConfigureAwait(false);
+            }
 
             await initializationTask.ConfigureAwait(false);
         }
