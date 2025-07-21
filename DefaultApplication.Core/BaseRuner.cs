@@ -179,6 +179,8 @@ public abstract class BaseRuner : IDisposable
             }
 
             await initializationTask.ConfigureAwait(false);
+
+            logger.LogEnd();
         }
         catch (Exception exception)
         {

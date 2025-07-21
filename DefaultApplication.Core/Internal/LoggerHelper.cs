@@ -18,6 +18,9 @@ internal static partial class LoggerHelper
     [LoggerMessage(LogLevel.Information, "starting with args {Args}")]
     public static partial void LogStart(this ILogger logger, string[] args);
 
+    [LoggerMessage(LogLevel.Information, "ending")]
+    public static partial void LogEnd(this ILogger logger);
+
     private static readonly Action<ILogger, Exception?> _logRunnerException = LoggerMessage.Define(LogLevel.Critical, new EventId(0, nameof(LogRunnerException)), "runner exception");
 
     public static void LogRunnerException(this ILogger logger, Exception? exception) => _logRunnerException(logger, exception);

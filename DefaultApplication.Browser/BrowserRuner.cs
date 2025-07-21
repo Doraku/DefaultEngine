@@ -105,7 +105,6 @@ internal sealed class BrowserRuner : BaseRuner
         return services.GetRequiredService<ShellViewModel>();
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Trimming", "IL2075:'this' argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The return value of the source method does not have matching annotations.", Justification = "no trimming")]
     protected override TopLevel CreateMainTopLevel(Application application, CancellationTokenSource shutdownTokenSource)
     {
         if (application is BrowserApplication browserApplication)
@@ -113,7 +112,13 @@ internal sealed class BrowserRuner : BaseRuner
             browserApplication.ShutdownRequested += shutdownTokenSource.Cancel;
         }
 
-        // it should be an Avalonia.BrowserSingleViewLifetime
-        return (TopLevel)application.ApplicationLifetime!.GetType().GetProperty("TopLevel")?.GetValue(application.ApplicationLifetime)!;
+        TopLevel? topLevel = null;
+
+        if (application.ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
+        {
+            topLevel = TopLevel.GetTopLevel(singleViewPlatform.MainView);
+        }
+
+        return topLevel ?? throw new Exception("Could not retrieve TopLevel");
     }
 }
