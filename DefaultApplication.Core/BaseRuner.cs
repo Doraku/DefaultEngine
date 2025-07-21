@@ -117,12 +117,12 @@ public abstract class BaseRuner : IDisposable
 
                     topLevel.Content = content;
 
-                    delayedMainTopLevel.SetResult(topLevel);
-
                     if (topLevel is Window window)
                     {
                         window.Show();
                     }
+
+                    delayedMainTopLevel.SetResult(topLevel);
 
                     await Task.Delay(TimeSpan.FromSeconds(0.5)).ConfigureAwait(true);
                 }

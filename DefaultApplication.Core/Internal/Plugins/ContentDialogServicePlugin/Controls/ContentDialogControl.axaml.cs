@@ -186,7 +186,11 @@ internal sealed partial class ContentDialogControl : Panel, IContentDialogServic
                 }
                 finally
                 {
-                    ContentDialog.SetIsVisible(_target, false);
+                    if (_operations.Count is 0)
+                    {
+                        ContentDialog.SetIsVisible(_target, false);
+                    }
+
                     Opacity = 0;
                     topLevel.KeyDown -= OnContentDialogKeyDown;
                     _contentDialogResult = null;
