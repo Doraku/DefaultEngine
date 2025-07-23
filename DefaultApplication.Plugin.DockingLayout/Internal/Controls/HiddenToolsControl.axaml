@@ -56,7 +56,10 @@
             <Setter Property="Template">
                 <ControlTemplate>
                     <Panel Margin="{TemplateBinding Margin}">
-                        <Border BorderBrush="{DynamicResource SystemAccentColor}" BorderThickness="0,2,0,0">
+                        <Border
+                            BorderBrush="{DynamicResource SystemAccentColor}"
+                            BorderThickness="0,2,0,0"
+                            Classes="FlyoutBorder">
                             <Border
                                 Background="{Binding $parent[TopLevel].Background}"
                                 BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
@@ -73,6 +76,12 @@
                                 </ScrollViewer>
                             </Border>
                         </Border>
+                        <Rectangle
+                            MinWidth="3"
+                            MinHeight="3"
+                            Classes="FlyoutResizeThumb"
+                            Fill="Transparent"
+                            PointerPressed="OnFlyoutResize" />
                     </Panel>
                 </ControlTemplate>
             </Setter>
@@ -98,6 +107,46 @@
                     <Binding Path="$parent[ItemsControl].Bounds.Width" />
                 </MultiBinding>
             </Setter>
+        </Style>
+
+        <Style Selector="ItemsControl.Vertical Rectangle.FlyoutResizeThumb">
+            <Setter Property="Cursor" Value="SizeWestEast" />
+        </Style>
+
+        <Style Selector="ItemsControl.Left Rectangle.FlyoutResizeThumb">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+
+        <Style Selector="ItemsControl.Left Border.FlyoutBorder">
+            <Setter Property="Margin" Value="0 0 2 0" />
+        </Style>
+
+        <Style Selector="ItemsControl.Right Rectangle.FlyoutResizeThumb">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+
+        <Style Selector="ItemsControl.Right Border.FlyoutBorder">
+            <Setter Property="Margin" Value="2 0 0 0" />
+        </Style>
+
+        <Style Selector="ItemsControl.Horizontal Rectangle.FlyoutResizeThumb">
+            <Setter Property="Cursor" Value="SizeNorthSouth" />
+        </Style>
+
+        <Style Selector="ItemsControl.Top Rectangle.FlyoutResizeThumb">
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+        </Style>
+
+        <Style Selector="ItemsControl.Top Border.FlyoutBorder">
+            <Setter Property="Margin" Value="0 0 0 2" />
+        </Style>
+
+        <Style Selector="ItemsControl.Bottom Rectangle.FlyoutResizeThumb">
+            <Setter Property="VerticalAlignment" Value="Top" />
+        </Style>
+
+        <Style Selector="ItemsControl.Bottom Border.FlyoutBorder">
+            <Setter Property="Margin" Value="0 2 0 0" />
         </Style>
 
     </ItemsControl.Styles>
