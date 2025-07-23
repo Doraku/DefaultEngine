@@ -172,10 +172,4 @@
         </DataTemplate>
     </ItemsControl.ItemTemplate>
 
-    <FlyoutBase.AttachedFlyout>
-        <Flyout FlyoutPresenterClasses="ToolFlyout">
-            <TextBlock Text="poeut" />
-        </Flyout>
-    </FlyoutBase.AttachedFlyout>
-
 </ItemsControl>

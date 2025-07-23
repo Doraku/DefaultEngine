@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -9,19 +10,43 @@ namespace DefaultApplication.DockingLayout.Internal.Controls;
 
 internal sealed partial class HiddenToolsControl : ItemsControl
 {
+    private readonly ConditionalWeakTable<object, Flyout> _flyouts;
+
     protected override Type StyleKeyOverride => typeof(ItemsControl);
 
     public HiddenToolsControl()
     {
+        _flyouts = [];
+
         InitializeComponent();
     }
 
     private void OnHiddenToolClicked(object? sender, PointerPressedEventArgs e)
     {
-        if (FlyoutBase.GetAttachedFlyout(this) is not Flyout flyout)
+        Flyout Create(object content)
+        {
+            Flyout flyout = new()
+            {
+                Content = content,
+                Placement =
+                    Classes.Contains("Top") ? PlacementMode.Bottom
+                    : Classes.Contains("Left") ? PlacementMode.Right
+                    : Classes.Contains("Right") ? PlacementMode.Left
+                    : PlacementMode.Top
+            };
+
+            flyout.FlyoutPresenterClasses.Add("ToolFlyout");
+
+            return flyout;
+        }
+
+        if (sender is not StyledElement control
+            || control.DataContext is not object content)
         {
             return;
         }
+
+        Flyout flyout = _flyouts.GetValue(content, Create);
 
         if (flyout.IsOpen)
         {
@@ -30,12 +55,7 @@ internal sealed partial class HiddenToolsControl : ItemsControl
             return;
         }
 
-        flyout.Placement =
-            Classes.Contains("Top") ? PlacementMode.Bottom
-            : Classes.Contains("Left") ? PlacementMode.Right
-            : Classes.Contains("Right") ? PlacementMode.Left
-            : PlacementMode.Top;
-
+        FlyoutBase.SetAttachedFlyout(this, flyout);
         FlyoutBase.ShowAttachedFlyout(this);
     }
 
