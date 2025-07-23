@@ -36,7 +36,7 @@
 
             <Style Selector="^:pointerover">
                 <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}" />
-                <Setter Property="TextElement.Foreground" Value="{DynamicResource SystemControlHighlightAltBaseMediumHighBrush}" />
+                <Setter Property="TextElement.Foreground" Value="{Binding $parent[TopLevel].Foreground}" />
             </Style>
 
         </Style>
@@ -49,6 +49,42 @@
             <Setter Property="BorderThickness" Value="0 5 0 0" />
         </Style>
 
+        <Style Selector="Button.ToolButton">
+
+            <Setter Property="Foreground" Value="{Binding $parent[TopLevel].Foreground}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Panel
+                        Width="18"
+                        Height="18"
+                        Background="{TemplateBinding Background}">
+                        <Viewbox Margin="4">
+                            <PathIcon Data="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" />
+                        </Viewbox>
+                    </Panel>
+                </ControlTemplate>
+            </Setter>
+
+            <Style Selector="^:pointerover">
+
+                <Setter Property="Foreground" Value="{Binding $parent[TopLevel].Background}" />
+                <Setter Property="Background" Value="{Binding $parent[TopLevel].Foreground}" />
+
+            </Style>
+
+            <Style Selector="^:pressed">
+
+                <Setter Property="RenderTransform" Value="none" />
+                <Setter Property="Foreground" Value="{Binding $parent[TopLevel].Background}" />
+                <Setter Property="Background" Value="{Binding $parent[TopLevel].Foreground}" />
+
+            </Style>
+
+        </Style>
+
         <Style Selector="FlyoutPresenter.ToolFlyout">
             <Setter Property="MaxHeight" Value="{Binding $parent[ItemsControl].Parent.Bounds.Height}" />
             <Setter Property="MaxWidth" Value="{Binding $parent[ItemsControl].Parent.Bounds.Width}" />
@@ -59,22 +95,68 @@
                     <Panel Margin="{TemplateBinding Margin}">
                         <Border
                             BorderBrush="{DynamicResource SystemAccentColor}"
-                            BorderThickness="0,2,0,0"
+                            BorderThickness="0,3,0,0"
                             Classes="FlyoutBorder">
                             <Border
                                 Background="{Binding $parent[TopLevel].Background}"
                                 BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
                                 BorderThickness="1,0,1,1">
-                                <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
-                                    <ContentPresenter
-                                        x:Name="PART_ContentPresenter"
-                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                        HorizontalContentAlignment="Stretch"
-                                        VerticalContentAlignment="Stretch"
-                                        Content="{TemplateBinding Content}"
-                                        ContentTemplate="{TemplateBinding ContentTemplate}" />
-                                </ScrollViewer>
+                                <DockPanel>
+
+                                    <DockPanel Background="Transparent" DockPanel.Dock="Top">
+
+                                        <Button
+                                            Margin="0,1,5,0"
+                                            Classes="ToolButton"
+                                            Content="{DynamicResource DockingLayoutPlugin.CloseIcon}"
+                                            DockPanel.Dock="Right"
+                                            ToolTip.Tip="Close" />
+
+                                        <Button
+                                            Margin="0,1,0,0"
+                                            Classes="ToolButton"
+                                            Content="{DynamicResource DockingLayoutPlugin.PinIcon}"
+                                            DockPanel.Dock="Right"
+                                            ToolTip.Tip="Auto Hide" />
+
+
+                                        <ContentPresenter HorizontalAlignment="Left" Content="kikoo" />
+
+                                        <StackPanel Margin="10,1,0,0" Orientation="Vertical">
+                                            <Rectangle
+                                                Height="1"
+                                                Margin="0,5,0,0"
+                                                Stroke="{Binding $parent[TopLevel].Foreground}"
+                                                StrokeDashArray="1, 5"
+                                                StrokeThickness="1" />
+                                            <Rectangle
+                                                Height="1"
+                                                Margin="3,2,3,0"
+                                                Stroke="{Binding $parent[TopLevel].Foreground}"
+                                                StrokeDashArray="1, 5"
+                                                StrokeThickness="1" />
+                                            <Rectangle
+                                                Height="1"
+                                                Margin="0,2,0,0"
+                                                Stroke="{Binding $parent[TopLevel].Foreground}"
+                                                StrokeDashArray="1, 5"
+                                                StrokeThickness="1" />
+                                        </StackPanel>
+
+                                    </DockPanel>
+
+                                    <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+                                        <ContentPresenter
+                                            x:Name="PART_ContentPresenter"
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            HorizontalContentAlignment="Stretch"
+                                            VerticalContentAlignment="Stretch"
+                                            Content="{TemplateBinding Content}"
+                                            ContentTemplate="{TemplateBinding ContentTemplate}" />
+                                    </ScrollViewer>
+
+                                </DockPanel>
                             </Border>
                         </Border>
                         <Rectangle

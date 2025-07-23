@@ -23,7 +23,12 @@ internal sealed class Plugin : IServiceRegisterer
             Uri baseUri = new("avares://DefaultApplication.Plugin.DockingLayout");
             Uri resourcesUri = new(baseUri, "Internal/Resources/");
 
-            Dispatcher.UIThread.Invoke(() => _application.Styles.Add(new StyleInclude(baseUri) { Source = new Uri(resourcesUri, "Styles.axaml") }));
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                _application.Styles.Add(new StyleInclude(baseUri) { Source = new Uri(resourcesUri, "Styles.axaml") });
+
+                _application.Resources.MergedDictionaries.Add(new ResourceInclude(baseUri) { Source = new Uri(resourcesUri, "Resources.axaml") });
+            });
 
             services.AddSingleton<IDockingLayoutService, DockingLayoutService>();
         }
