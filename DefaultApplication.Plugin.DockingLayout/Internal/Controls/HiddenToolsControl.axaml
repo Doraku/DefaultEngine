@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:DefaultApplication.DockingLayout.Controls"
     xmlns:converters="using:DefaultApplication.DockingLayout.Internal.Converters"
+    xmlns:system="using:System"
     Background="Transparent">
 
     <ItemsControl.Styles>
@@ -91,9 +92,14 @@
             <Setter Property="Width" Value="{Binding $parent[ItemsControl].Bounds.Width}" />
             <Setter Property="Margin" Value="5 0" />
             <Setter Property="MaxHeight">
-                <MultiBinding Converter="{x:Static converters:OperationConverters.SubstractDoubles}">
+                <MultiBinding Converter="{x:Static converters:OperationConverters.SumDoubles}">
                     <Binding Path="$parent[ItemsControl].Parent.Bounds.Height" />
-                    <Binding Path="$parent[ItemsControl].Bounds.Height" />
+                    <Binding Converter="{x:Static converters:OperationConverters.NegateDouble}" Path="$parent[ItemsControl].Bounds.Height" />
+                    <Binding>
+                        <Binding.Source>
+                            <system:Double>2</system:Double>
+                        </Binding.Source>
+                    </Binding>
                 </MultiBinding>
             </Setter>
         </Style>
@@ -102,9 +108,14 @@
             <Setter Property="Height" Value="{Binding $parent[ItemsControl].Bounds.Height}" />
             <Setter Property="Margin" Value="0 5" />
             <Setter Property="MaxWidth">
-                <MultiBinding Converter="{x:Static converters:OperationConverters.SubstractDoubles}">
+                <MultiBinding Converter="{x:Static converters:OperationConverters.SumDoubles}">
                     <Binding Path="$parent[ItemsControl].Parent.Bounds.Width" />
-                    <Binding Path="$parent[ItemsControl].Bounds.Width" />
+                    <Binding Converter="{x:Static converters:OperationConverters.NegateDouble}" Path="$parent[ItemsControl].Bounds.Width" />
+                    <Binding>
+                        <Binding.Source>
+                            <system:Double>2</system:Double>
+                        </Binding.Source>
+                    </Binding>
                 </MultiBinding>
             </Setter>
         </Style>

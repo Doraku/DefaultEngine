@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 
 namespace DefaultApplication.DockingLayout.Internal.Controls;
@@ -28,6 +30,7 @@ internal sealed partial class HiddenToolsControl : ItemsControl
             Flyout flyout = new()
             {
                 Content = content,
+                OverlayDismissEventPassThrough = true,
                 Placement =
                     Classes.Contains("Top") ? PlacementMode.Bottom
                     : Classes.Contains("Left") ? PlacementMode.Right
@@ -53,6 +56,16 @@ internal sealed partial class HiddenToolsControl : ItemsControl
             flyout.Hide();
 
             return;
+        }
+
+        foreach (FlyoutBase openedFlyout in Parent
+            ?.GetLogicalDescendants()
+            .OfType<HiddenToolsControl>()
+            .Select(FlyoutBase.GetAttachedFlyout)
+            .Where(flyout => flyout?.IsOpen ?? false)
+            .Select(flyout => flyout!) ?? [])
+        {
+            openedFlyout.Hide();
         }
 
         FlyoutBase.SetAttachedFlyout(this, flyout);
