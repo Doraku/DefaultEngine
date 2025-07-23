@@ -1,0 +1,34 @@
+<Border
+    x:Class="DefaultApplication.DockingLayout.Internal.Controls.DockableControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Margin="{Binding $parent[Window].OffScreenMargin}"
+    BorderBrush="{DynamicResource SystemAccentColor}"
+    BorderThickness="1">
+
+    <DockPanel>
+
+        <Panel DockPanel.Dock="Top">
+
+            <Rectangle Fill="{DynamicResource SystemAccentColor}" IsHitTestVisible="False" />
+
+            <DockPanel Margin="0,0,200,0" HorizontalAlignment="Left">
+
+                <Image
+                    Width="29"
+                    Height="29"
+                    VerticalAlignment="Top"
+                    DockPanel.Dock="Left"
+                    Source="avares://DefaultApplication.Core/Resources/Images/DefaultLogo.png" />
+
+                <TextBlock Text="kikoo" />
+
+            </DockPanel>
+
+        </Panel>
+
+        <ContentPresenter x:Name="Presenter" />
+
+    </DockPanel>
+
+</Border>

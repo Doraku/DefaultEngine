@@ -1,0 +1,132 @@
+<ItemsControl
+    x:Class="DefaultApplication.DockingLayout.Internal.Controls.HiddenToolsControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:DefaultApplication.DockingLayout.Controls"
+    xmlns:converters="using:DefaultApplication.DockingLayout.Internal.Converters"
+    Background="Transparent">
+
+    <ItemsControl.Styles>
+
+        <Style Selector="ItemsControl:empty">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+
+        <Style Selector="ItemsControl.Vertical WrapPanel.HiddenToolsPanel">
+            <Setter Property="Orientation" Value="Vertical" />
+        </Style>
+
+        <Style Selector="LayoutTransformControl.HiddenTool">
+            <Setter Property="Margin" Value="5 0" />
+        </Style>
+
+        <Style Selector="ItemsControl.Vertical LayoutTransformControl.HiddenTool">
+            <Setter Property="LayoutTransform">
+                <RotateTransform Angle="90" CenterX="0.5" CenterY="0.5" />
+            </Setter>
+            <Setter Property="Margin" Value="0 5" />
+        </Style>
+
+        <Style Selector="Border.HiddenTool">
+
+            <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+            <Setter Property="BorderThickness" Value="0 0 0 5" />
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+
+            <Style Selector="^:pointerover">
+                <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}" />
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource SystemControlHighlightAltBaseMediumHighBrush}" />
+            </Style>
+
+        </Style>
+
+        <Style Selector="ItemsControl.Top Border.HiddenTool">
+            <Setter Property="BorderThickness" Value="0 5 0 0" />
+        </Style>
+
+        <Style Selector="ItemsControl.Right Border.HiddenTool">
+            <Setter Property="BorderThickness" Value="0 5 0 0" />
+        </Style>
+
+        <Style Selector="FlyoutPresenter.ToolFlyout">
+            <Setter Property="MaxHeight" Value="{Binding $parent[ItemsControl].Parent.Bounds.Height}" />
+            <Setter Property="MaxWidth" Value="{Binding $parent[ItemsControl].Parent.Bounds.Width}" />
+            <Setter Property="Height" Value="200" />
+            <Setter Property="Width" Value="200" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Panel Margin="{TemplateBinding Margin}">
+                        <Border BorderBrush="{DynamicResource SystemAccentColor}" BorderThickness="0,2,0,0">
+                            <Border
+                                Background="{Binding $parent[TopLevel].Background}"
+                                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                BorderThickness="1,0,1,1">
+                                <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+                                    <ContentPresenter
+                                        x:Name="PART_ContentPresenter"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        HorizontalContentAlignment="Stretch"
+                                        VerticalContentAlignment="Stretch"
+                                        Content="{TemplateBinding Content}"
+                                        ContentTemplate="{TemplateBinding ContentTemplate}" />
+                                </ScrollViewer>
+                            </Border>
+                        </Border>
+                    </Panel>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="ItemsControl.Horizontal FlyoutPresenter.ToolFlyout">
+            <Setter Property="Width" Value="{Binding $parent[ItemsControl].Bounds.Width}" />
+            <Setter Property="Margin" Value="5 0" />
+            <Setter Property="MaxHeight">
+                <MultiBinding Converter="{x:Static converters:OperationConverters.SubstractDoubles}">
+                    <Binding Path="$parent[ItemsControl].Parent.Bounds.Height" />
+                    <Binding Path="$parent[ItemsControl].Bounds.Height" />
+                </MultiBinding>
+            </Setter>
+        </Style>
+
+        <Style Selector="ItemsControl.Vertical FlyoutPresenter.ToolFlyout">
+            <Setter Property="Height" Value="{Binding $parent[ItemsControl].Bounds.Height}" />
+            <Setter Property="Margin" Value="0 5" />
+            <Setter Property="MaxWidth">
+                <MultiBinding Converter="{x:Static converters:OperationConverters.SubstractDoubles}">
+                    <Binding Path="$parent[ItemsControl].Parent.Bounds.Width" />
+                    <Binding Path="$parent[ItemsControl].Bounds.Width" />
+                </MultiBinding>
+            </Setter>
+        </Style>
+
+    </ItemsControl.Styles>
+
+    <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+            <WrapPanel Classes="HiddenToolsPanel" />
+        </ItemsPanelTemplate>
+    </ItemsControl.ItemsPanel>
+
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <LayoutTransformControl Classes="HiddenTool">
+                <Border
+                    Background="Transparent"
+                    Classes="HiddenTool"
+                    PointerPressed="OnHiddenToolClicked">
+
+                    <TextBlock Text="{Binding}" />
+
+                </Border>
+            </LayoutTransformControl>
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+
+    <FlyoutBase.AttachedFlyout>
+        <Flyout FlyoutPresenterClasses="ToolFlyout">
+            <TextBlock Text="poeut" />
+        </Flyout>
+    </FlyoutBase.AttachedFlyout>
+
+</ItemsControl>

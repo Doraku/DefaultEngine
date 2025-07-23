@@ -1,0 +1,76 @@
+<Grid
+    x:Class="DefaultApplication.DockingLayout.Controls.LayoutRoot"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:collections="using:System.Collections"
+    xmlns:controls="using:DefaultApplication.DockingLayout.Internal.Controls"
+    xmlns:system="using:System">
+
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+    </Grid.ColumnDefinitions>
+
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <controls:HiddenToolsControl
+        Grid.Row="0"
+        Grid.Column="1"
+        Classes="Horizontal Top">
+        <controls:HiddenToolsControl.ItemsSource>
+            <collections:ArrayList>
+                <system:String>tab 1</system:String>
+                <system:String>tab 2</system:String>
+            </collections:ArrayList>
+        </controls:HiddenToolsControl.ItemsSource>
+    </controls:HiddenToolsControl>
+
+    <controls:HiddenToolsControl
+        Grid.Row="2"
+        Grid.Column="1"
+        Classes="Horizontal Bottom">
+        <controls:HiddenToolsControl.ItemsSource>
+            <collections:ArrayList>
+                <system:String>tab 1</system:String>
+                <system:String>tab 2</system:String>
+            </collections:ArrayList>
+        </controls:HiddenToolsControl.ItemsSource>
+    </controls:HiddenToolsControl>
+
+    <controls:HiddenToolsControl
+        Grid.Row="1"
+        Grid.Column="0"
+        Classes="Vertical Left">
+        <controls:HiddenToolsControl.ItemsSource>
+            <collections:ArrayList>
+                <system:String>tab 1</system:String>
+                <system:String>tab 2</system:String>
+            </collections:ArrayList>
+        </controls:HiddenToolsControl.ItemsSource>
+    </controls:HiddenToolsControl>
+
+    <controls:HiddenToolsControl
+        Grid.Row="1"
+        Grid.Column="2"
+        Classes="Vertical Right">
+        <controls:HiddenToolsControl.ItemsSource>
+            <collections:ArrayList>
+                <system:String>tab 1</system:String>
+                <system:String>tab 2</system:String>
+            </collections:ArrayList>
+        </controls:HiddenToolsControl.ItemsSource>
+    </controls:HiddenToolsControl>
+
+    <ContentPresenter
+        x:Name="CenterPresenter"
+        Grid.Row="1"
+        Grid.Column="1"
+        Margin="5"
+        Background="Yellow" />
+
+</Grid>

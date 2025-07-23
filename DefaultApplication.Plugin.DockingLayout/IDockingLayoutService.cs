@@ -2,7 +2,13 @@
 
 public interface IDockingLayoutService
 {
-    void Show<T>() where T : notnull;
+    enum DockableType
+    {
+        Document,
+        Tool
+    }
 
-    void Show<T>(T content);
+    void Show<T>(DockableType dockableType) where T : notnull;
+
+    void Show<T>(T content, DockableType dockableType);
 }

@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using DefaultApplication.DependencyInjection;
-using DefaultApplication.DockingLayout;
-using DefaultApplication.Internal.Plugins.ShellPlugin.Settings;
 using DefaultApplication.Services;
 
 namespace DefaultApplication.Internal.Plugins.ShellPlugin.Menus;
@@ -33,20 +31,6 @@ internal sealed class ExitMenu : IAsyncCommandMenu
     }
 
     public async Task ExecuteAsync() => ((Window)await _mainTopLevel.Task.ConfigureAwait(true)).Close();
-}
-
-internal sealed class DockMenu : ICommandMenu
-{
-    private readonly IDockingLayoutService _service;
-
-    public IReadOnlyList<string> Path { get; } = ["File", "dock test"];
-
-    public DockMenu(IDockingLayoutService service)
-    {
-        _service = service;
-    }
-
-    public void Execute() => _service.Show<EnvironmentGeneralSettings>();
 }
 
 internal sealed class TestMenu : IAsyncCommandMenu
