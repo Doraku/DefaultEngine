@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Avalonia;
@@ -14,11 +16,19 @@ internal sealed partial class HiddenToolsControl : ItemsControl
 {
     private readonly ConditionalWeakTable<object, Flyout> _flyouts;
 
+    public IList<object> Tools { get; }
+
     protected override Type StyleKeyOverride => typeof(ItemsControl);
 
     public HiddenToolsControl()
     {
         _flyouts = [];
+
+        Tools = new ObservableCollection<object>
+        {
+            "item 1",
+            "item 2"
+        };
 
         InitializeComponent();
     }
@@ -112,5 +122,52 @@ internal sealed partial class HiddenToolsControl : ItemsControl
 
         control.PointerMoved += OnResising;
         control.PointerReleased += OnResized;
+    }
+
+    private void OnToolFlyoutHeaderBarClicked(object? sender, PointerPressedEventArgs e)
+    {
+        void Remove(object content)
+        {
+            _flyouts.Remove(content);
+            Tools.Remove(content);
+        }
+
+        void OnDragged(object? sender, PointerEventArgs e)
+        {
+            if (sender is not InputElement control)
+            {
+                return;
+            }
+
+            control.PointerReleased -= OnDropped;
+            control.PointerMoved -= OnDragged;
+
+            DataObject data = new();
+
+            data.Set(LayoutOperation.Id, new LayoutOperation(control.DataContext!, this, Remove));
+
+            DragDrop.DoDragDrop(e, data, DragDropEffects.Move);
+
+            FlyoutBase.GetAttachedFlyout(this)?.Hide();
+        }
+
+        void OnDropped(object? sender, PointerReleasedEventArgs e)
+        {
+            if (sender is not InputElement control)
+            {
+                return;
+            }
+
+            control.PointerReleased -= OnDropped;
+            control.PointerMoved -= OnDragged;
+        }
+
+        if (sender is not InputElement control)
+        {
+            return;
+        }
+
+        control.PointerReleased += OnDropped;
+        control.PointerMoved += OnDragged;
     }
 }

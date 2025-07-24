@@ -1,0 +1,86 @@
+<Grid
+    x:Class="DefaultApplication.DockingLayout.Internal.Controls.LayoutDropControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid.Styles>
+
+        <Style Selector="Border.LayoutTarget">
+
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}" />
+            <Setter Property="Background" Value="{Binding $parent[TopLevel].Background}" />
+            <Setter Property="DragDrop.AllowDrop" Value="True" />
+
+            <Style Selector="^ PathIcon">
+                <Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}" />
+            </Style>
+
+        </Style>
+
+    </Grid.Styles>
+
+    <Rectangle
+        x:Name="LayoutTarget"
+        Fill="{DynamicResource SystemAccentColor}"
+        IsVisible="False"
+        Opacity="0.5" />
+
+    <Border
+        HorizontalAlignment="Left"
+        VerticalAlignment="Center"
+        Classes="LayoutTarget"
+        DragDrop.DragEnter="OnDragEnter"
+        DragDrop.DragLeave="OnDragLeave"
+        DragDrop.DragOver="OnDragOver"
+        DragDrop.Drop="OnDrop">
+        <Viewbox>
+            <PathIcon Data="{DynamicResource DockingLayoutPlugin.DockLeftIcon}" />
+        </Viewbox>
+    </Border>
+
+    <Border
+        HorizontalAlignment="Right"
+        VerticalAlignment="Center"
+        Classes="LayoutTarget"
+        DragDrop.DragEnter="OnDragEnter"
+        DragDrop.DragLeave="OnDragLeave"
+        DragDrop.DragOver="OnDragOver"
+        DragDrop.Drop="OnDrop">
+        <Viewbox>
+            <PathIcon Data="{DynamicResource DockingLayoutPlugin.DockRightIcon}" />
+        </Viewbox>
+    </Border>
+
+    <Border
+        HorizontalAlignment="Center"
+        VerticalAlignment="Top"
+        Classes="LayoutTarget"
+        DragDrop.DragEnter="OnDragEnter"
+        DragDrop.DragLeave="OnDragLeave"
+        DragDrop.DragOver="OnDragOver"
+        DragDrop.Drop="OnDrop">
+        <Viewbox>
+            <PathIcon Data="{DynamicResource DockingLayoutPlugin.DockTopIcon}" />
+        </Viewbox>
+    </Border>
+
+    <Border
+        HorizontalAlignment="Center"
+        VerticalAlignment="Bottom"
+        Classes="LayoutTarget"
+        DragDrop.DragEnter="OnDragEnter"
+        DragDrop.DragLeave="OnDragLeave"
+        DragDrop.DragOver="OnDragOver"
+        DragDrop.Drop="OnDrop">
+        <Viewbox>
+            <PathIcon Data="{DynamicResource DockingLayoutPlugin.DockBottomIcon}" />
+        </Viewbox>
+    </Border>
+
+</Grid>

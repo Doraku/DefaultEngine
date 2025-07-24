@@ -4,73 +4,53 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:collections="using:System.Collections"
     xmlns:controls="using:DefaultApplication.DockingLayout.Internal.Controls"
-    xmlns:system="using:System">
+    xmlns:system="using:System"
+    ColumnDefinitions="Auto, *, Auto"
+    DragDrop.AllowDrop="True"
+    DragDrop.DragEnter="OnDragEnter"
+    DragDrop.DragLeave="OnDragLeave"
+    DragDrop.DragOver="OnDragOver"
+    DragDrop.Drop="OnDrop"
+    Grid.RowDefinitions="Auto, *, Auto">
 
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="Auto" />
-    </Grid.ColumnDefinitions>
+    <Grid.Styles>
 
-    <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="*" />
-        <RowDefinition Height="Auto" />
-    </Grid.RowDefinitions>
+        <Style Selector=":is(Visual) controls|LayoutDropControl">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+
+        <Style Selector=":is(Visual).LayoutOver controls|LayoutDropControl">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+
+    </Grid.Styles>
 
     <controls:HiddenToolsControl
         Grid.Row="0"
         Grid.Column="1"
-        Classes="Horizontal Top">
-        <controls:HiddenToolsControl.ItemsSource>
-            <collections:ArrayList>
-                <system:String>tab 1</system:String>
-                <system:String>tab 2</system:String>
-            </collections:ArrayList>
-        </controls:HiddenToolsControl.ItemsSource>
-    </controls:HiddenToolsControl>
+        Classes="Horizontal Top" />
 
     <controls:HiddenToolsControl
         Grid.Row="2"
         Grid.Column="1"
-        Classes="Horizontal Bottom">
-        <controls:HiddenToolsControl.ItemsSource>
-            <collections:ArrayList>
-                <system:String>tab 1</system:String>
-                <system:String>tab 2</system:String>
-            </collections:ArrayList>
-        </controls:HiddenToolsControl.ItemsSource>
-    </controls:HiddenToolsControl>
+        Classes="Horizontal Bottom" />
 
     <controls:HiddenToolsControl
         Grid.Row="1"
         Grid.Column="0"
-        Classes="Vertical Left">
-        <controls:HiddenToolsControl.ItemsSource>
-            <collections:ArrayList>
-                <system:String>tab 1</system:String>
-                <system:String>tab 2</system:String>
-            </collections:ArrayList>
-        </controls:HiddenToolsControl.ItemsSource>
-    </controls:HiddenToolsControl>
+        Classes="Vertical Left" />
 
     <controls:HiddenToolsControl
         Grid.Row="1"
         Grid.Column="2"
-        Classes="Vertical Right">
-        <controls:HiddenToolsControl.ItemsSource>
-            <collections:ArrayList>
-                <system:String>tab 1</system:String>
-                <system:String>tab 2</system:String>
-            </collections:ArrayList>
-        </controls:HiddenToolsControl.ItemsSource>
-    </controls:HiddenToolsControl>
+        Classes="Vertical Right" />
 
     <ContentPresenter
         x:Name="CenterPresenter"
         Grid.Row="1"
         Grid.Column="1"
-        Margin="5"
-        Background="Yellow" />
+        Margin="5" />
+
+    <controls:LayoutDropControl Grid.RowSpan="3" Grid.ColumnSpan="3" />
 
 </Grid>

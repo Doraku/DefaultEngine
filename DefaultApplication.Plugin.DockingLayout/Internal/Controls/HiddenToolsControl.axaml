@@ -5,7 +5,8 @@
     xmlns:controls="using:DefaultApplication.DockingLayout.Controls"
     xmlns:converters="using:DefaultApplication.DockingLayout.Internal.Converters"
     xmlns:system="using:System"
-    Background="Transparent">
+    Background="Transparent"
+    ItemsSource="{Binding $self.Tools}">
 
     <ItemsControl.Styles>
 
@@ -92,7 +93,7 @@
             <Setter Property="Width" Value="200" />
             <Setter Property="Template">
                 <ControlTemplate>
-                    <Panel Margin="{TemplateBinding Margin}">
+                    <Panel Margin="{TemplateBinding Margin}" DataContext="{TemplateBinding Content}">
                         <Border
                             BorderBrush="{DynamicResource SystemAccentColor}"
                             BorderThickness="0,3,0,0"
@@ -103,7 +104,10 @@
                                 BorderThickness="1,0,1,1">
                                 <DockPanel>
 
-                                    <DockPanel Background="Transparent" DockPanel.Dock="Top">
+                                    <DockPanel
+                                        Background="Transparent"
+                                        DockPanel.Dock="Top"
+                                        PointerPressed="OnToolFlyoutHeaderBarClicked">
 
                                         <Button
                                             Margin="0,1,5,0"
@@ -152,7 +156,7 @@
                                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                             HorizontalContentAlignment="Stretch"
                                             VerticalContentAlignment="Stretch"
-                                            Content="{TemplateBinding Content}"
+                                            Content="{Binding}"
                                             ContentTemplate="{TemplateBinding ContentTemplate}" />
                                     </ScrollViewer>
 

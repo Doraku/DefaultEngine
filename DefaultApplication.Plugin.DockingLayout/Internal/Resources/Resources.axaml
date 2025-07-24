@@ -6,4 +6,12 @@
 
     <PathGeometry x:Key="DockingLayoutPlugin.CloseIcon">M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z</PathGeometry>
 
+    <PathGeometry x:Key="DockingLayoutPlugin.DockBottomIcon">M20 4H4A2 2 0 0 0 2 6V18A2 2 0 0 0 4 20H20A2 2 0 0 0 22 18V6A2 2 0 0 0 20 4M20 13H4V6H20Z</PathGeometry>
+
+    <PathGeometry x:Key="DockingLayoutPlugin.DockLeftIcon">M20 4H4A2 2 0 0 0 2 6V18A2 2 0 0 0 4 20H20A2 2 0 0 0 22 18V6A2 2 0 0 0 20 4M20 18H9V6H20Z</PathGeometry>
+
+    <PathGeometry x:Key="DockingLayoutPlugin.DockRightIcon">M20 4H4A2 2 0 0 0 2 6V18A2 2 0 0 0 4 20H20A2 2 0 0 0 22 18V6A2 2 0 0 0 20 4M15 18H4V6H15Z</PathGeometry>
+
+    <PathGeometry x:Key="DockingLayoutPlugin.DockTopIcon">M4 20H20C21.11 20 22 19.11 22 18V6C22 4.89 21.11 4 20 4H4C2.9 4 2 4.89 2 6V18C2 19.11 2.9 20 4 20M4 11H20V18H4V11Z</PathGeometry>
+
 </ResourceDictionary>
