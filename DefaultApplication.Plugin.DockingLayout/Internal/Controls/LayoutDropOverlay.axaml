@@ -25,11 +25,13 @@
 
     </Grid.Styles>
 
-    <Rectangle
+    <Border
         x:Name="LayoutTarget"
-        Fill="{DynamicResource SystemAccentColor}"
-        IsVisible="False"
-        Opacity="0.5" />
+        BorderBrush="{DynamicResource SystemAccentColor}"
+        BorderThickness="5"
+        IsVisible="False">
+        <Rectangle Fill="{DynamicResource SystemAccentColor}" Opacity="0.5" />
+    </Border>
 
     <Border
         HorizontalAlignment="Left"
@@ -82,5 +84,76 @@
             <PathIcon Data="{DynamicResource DockingLayoutPlugin.DockBottomIcon}" />
         </Viewbox>
     </Border>
+
+    <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+        <Border
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Classes="LayoutTarget"
+            DockPanel.Dock="Left"
+            DragDrop.DragEnter="OnDragEnter"
+            DragDrop.DragLeave="OnDragLeave"
+            DragDrop.DragOver="OnDragOver"
+            DragDrop.Drop="OnDrop">
+            <Viewbox>
+                <PathIcon Data="{DynamicResource DockingLayoutPlugin.DockLeftIcon}" />
+            </Viewbox>
+        </Border>
+
+        <Border
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Classes="LayoutTarget"
+            DockPanel.Dock="Right"
+            DragDrop.DragEnter="OnDragEnter"
+            DragDrop.DragLeave="OnDragLeave"
+            DragDrop.DragOver="OnDragOver"
+            DragDrop.Drop="OnDrop">
+            <Viewbox>
+                <PathIcon Data="{DynamicResource DockingLayoutPlugin.DockRightIcon}" />
+            </Viewbox>
+        </Border>
+
+        <Border
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Classes="LayoutTarget"
+            DockPanel.Dock="Top"
+            DragDrop.DragEnter="OnDragEnter"
+            DragDrop.DragLeave="OnDragLeave"
+            DragDrop.DragOver="OnDragOver"
+            DragDrop.Drop="OnDrop">
+            <Viewbox>
+                <PathIcon Data="{DynamicResource DockingLayoutPlugin.DockTopIcon}" />
+            </Viewbox>
+        </Border>
+
+        <Border
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Classes="LayoutTarget"
+            DockPanel.Dock="Bottom"
+            DragDrop.DragEnter="OnDragEnter"
+            DragDrop.DragLeave="OnDragLeave"
+            DragDrop.DragOver="OnDragOver"
+            DragDrop.Drop="OnDrop">
+            <Viewbox>
+                <PathIcon Data="{DynamicResource DockingLayoutPlugin.DockBottomIcon}" />
+            </Viewbox>
+        </Border>
+
+        <Border
+            Classes="LayoutTarget"
+            DragDrop.DragEnter="OnDragEnter"
+            DragDrop.DragLeave="OnDragLeave"
+            DragDrop.DragOver="OnDragOver"
+            DragDrop.Drop="OnDrop">
+            <Viewbox>
+                <PathIcon Data="{DynamicResource DockingLayoutPlugin.DockFillIcon}" />
+            </Viewbox>
+        </Border>
+
+    </DockPanel>
 
 </Grid>

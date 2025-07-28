@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
+using DefaultApplication.DockingLayout.Controls;
 
 namespace DefaultApplication.DockingLayout.Internal.Controls;
 
@@ -51,6 +53,8 @@ internal sealed partial class LayoutDropControl : Grid
 
     private void OnDrop(object? sender, DragEventArgs e)
     {
+        LayoutTarget.IsVisible = false;
+
         if (sender is not Layoutable control
             || e.Data.Get(LayoutOperation.Id) is not LayoutOperation operation)
         {
@@ -62,15 +66,29 @@ internal sealed partial class LayoutDropControl : Grid
             (HorizontalAlignment.Left, _) => "Left",
             (HorizontalAlignment.Right, _) => "Right",
             (_, VerticalAlignment.Top) => "Top",
-            _ => "Bottom",
+            (_, VerticalAlignment.Bottom) => "Bottom",
+            _ => "Fill",
         };
 
-        if (Parent?.GetLogicalChildren().OfType<HiddenToolsControl>().FirstOrDefault(target => target.Classes.Contains(className)) is not HiddenToolsControl target)
+        Action<object>? addAction = null;
+
+        if (className is "Fill")
+        {
+            if (this.FindLogicalAncestorOfType<LayoutRoot>() is LayoutRoot root)
+            {
+                addAction = content => root.MainContent.Content = new LayoutContentPresenter { DataContext = content };
+            }
+        }
+        else if (Parent?.GetLogicalChildren().OfType<HideableItemsControl>().FirstOrDefault(target => target.Classes.Contains(className)) is HideableItemsControl target)
+        {
+            addAction = target.Hideables.Add;
+        }
+        else
         {
             return;
         }
 
-        operation.RemoveAction(operation.Content);
-        target.Tools.Add(operation.Content);
+        operation.RemoveAction();
+        addAction.Invoke(operation.Content);
     }
 }

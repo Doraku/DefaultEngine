@@ -5,6 +5,7 @@
     xmlns:collections="using:System.Collections"
     xmlns:controls="using:DefaultApplication.DockingLayout.Internal.Controls"
     xmlns:system="using:System"
+    Background="Transparent"
     ColumnDefinitions="Auto, *, Auto"
     DragDrop.AllowDrop="True"
     DragDrop.DragEnter="OnDragEnter"
@@ -25,32 +26,32 @@
 
     </Grid.Styles>
 
-    <controls:HiddenToolsControl
+    <controls:HideableItemsControl
         Grid.Row="0"
         Grid.Column="1"
         Classes="Horizontal Top" />
 
-    <controls:HiddenToolsControl
+    <controls:HideableItemsControl
         Grid.Row="2"
         Grid.Column="1"
         Classes="Horizontal Bottom" />
 
-    <controls:HiddenToolsControl
+    <controls:HideableItemsControl
         Grid.Row="1"
         Grid.Column="0"
         Classes="Vertical Left" />
 
-    <controls:HiddenToolsControl
+    <controls:HideableItemsControl
         Grid.Row="1"
         Grid.Column="2"
         Classes="Vertical Right" />
 
     <ContentPresenter
-        x:Name="CenterPresenter"
+        x:Name="MainContent"
         Grid.Row="1"
         Grid.Column="1"
         Margin="5" />
 
-    <controls:LayoutDropControl Grid.RowSpan="3" Grid.ColumnSpan="3" />
+    <controls:LayoutDropControl Grid.Row="1" Grid.Column="1" />
 
 </Grid>

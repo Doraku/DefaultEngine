@@ -1,0 +1,21 @@
+<Grid
+    x:Class="DefaultApplication.DockingLayout.Internal.Controls.SplittedGrid"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ContentPresenter
+        x:Name="FirstContent"
+        Grid.Row="0"
+        Grid.Column="0" />
+
+    <GridSplitter
+        Grid.Row="1"
+        Grid.Column="1"
+        Background="Transparent" />
+
+    <ContentPresenter
+        x:Name="SecondContent"
+        Grid.Row="2"
+        Grid.Column="2" />
+
+</Grid>

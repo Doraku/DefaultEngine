@@ -12,28 +12,33 @@ using Avalonia.VisualTree;
 
 namespace DefaultApplication.DockingLayout.Internal.Controls;
 
-internal sealed partial class HiddenToolsControl : ItemsControl
+internal sealed partial class HideableItemsControl : ItemsControl
 {
     private readonly ConditionalWeakTable<object, Flyout> _flyouts;
 
-    public IList<object> Tools { get; }
+    public IList<object> Hideables { get; }
 
     protected override Type StyleKeyOverride => typeof(ItemsControl);
 
-    public HiddenToolsControl()
+    public HideableItemsControl()
     {
         _flyouts = [];
 
-        Tools = new ObservableCollection<object>
+        Hideables = new ObservableCollection<object>
         {
-            "item 1",
-            "item 2"
+            Guid.NewGuid().ToString(),
+            Guid.NewGuid().ToString()
         };
+
+        foreach (object item in Hideables)
+        {
+            item.SetLayoutOptions(LayoutOptions.Closable | LayoutOptions.Hideable | LayoutOptions.Movable);
+        }
 
         InitializeComponent();
     }
 
-    private void OnHiddenToolClicked(object? sender, PointerPressedEventArgs e)
+    private void OnHideableClicked(object? sender, PointerPressedEventArgs e)
     {
         Flyout Create(object content)
         {
@@ -48,12 +53,13 @@ internal sealed partial class HiddenToolsControl : ItemsControl
                     : PlacementMode.Top
             };
 
-            flyout.FlyoutPresenterClasses.Add("ToolFlyout");
+            flyout.FlyoutPresenterClasses.Add("HideableFlyout");
 
             return flyout;
         }
 
-        if (sender is not StyledElement control
+        if (sender is not Visual control
+            || !e.GetCurrentPoint(control).Properties.IsLeftButtonPressed
             || control.DataContext is not object content)
         {
             return;
@@ -70,7 +76,7 @@ internal sealed partial class HiddenToolsControl : ItemsControl
 
         foreach (FlyoutBase openedFlyout in Parent
             ?.GetLogicalDescendants()
-            .OfType<HiddenToolsControl>()
+            .OfType<HideableItemsControl>()
             .Select(FlyoutBase.GetAttachedFlyout)
             .Where(flyout => flyout?.IsOpen ?? false)
             .Select(flyout => flyout!) ?? [])
@@ -122,52 +128,5 @@ internal sealed partial class HiddenToolsControl : ItemsControl
 
         control.PointerMoved += OnResising;
         control.PointerReleased += OnResized;
-    }
-
-    private void OnToolFlyoutHeaderBarClicked(object? sender, PointerPressedEventArgs e)
-    {
-        void Remove(object content)
-        {
-            _flyouts.Remove(content);
-            Tools.Remove(content);
-        }
-
-        void OnDragged(object? sender, PointerEventArgs e)
-        {
-            if (sender is not InputElement control)
-            {
-                return;
-            }
-
-            control.PointerReleased -= OnDropped;
-            control.PointerMoved -= OnDragged;
-
-            DataObject data = new();
-
-            data.Set(LayoutOperation.Id, new LayoutOperation(control.DataContext!, this, Remove));
-
-            DragDrop.DoDragDrop(e, data, DragDropEffects.Move);
-
-            FlyoutBase.GetAttachedFlyout(this)?.Hide();
-        }
-
-        void OnDropped(object? sender, PointerReleasedEventArgs e)
-        {
-            if (sender is not InputElement control)
-            {
-                return;
-            }
-
-            control.PointerReleased -= OnDropped;
-            control.PointerMoved -= OnDragged;
-        }
-
-        if (sender is not InputElement control)
-        {
-            return;
-        }
-
-        control.PointerReleased += OnDropped;
-        control.PointerMoved += OnDragged;
     }
 }
