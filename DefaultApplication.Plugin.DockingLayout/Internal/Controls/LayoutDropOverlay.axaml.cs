@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
@@ -10,6 +11,14 @@ namespace DefaultApplication.DockingLayout.Internal.Controls;
 
 internal sealed partial class LayoutDropControl : Grid
 {
+    public static readonly StyledProperty<bool> AllowStackingProperty = AvaloniaProperty.Register<LayoutDropControl, bool>(nameof(AllowStacking), false);
+
+    public bool AllowStacking
+    {
+        get => GetValue(AllowStackingProperty);
+        set => SetValue(AllowStackingProperty, value);
+    }
+
     public LayoutDropControl()
     {
         InitializeComponent();
@@ -74,14 +83,14 @@ internal sealed partial class LayoutDropControl : Grid
 
         if (className is "Fill")
         {
-            if (this.FindLogicalAncestorOfType<LayoutRoot>() is LayoutRoot root)
+            if (this.FindLogicalAncestorOfType<LayoutControl>() is LayoutControl root)
             {
-                addAction = content => root.MainContent.Content = new LayoutContentPresenter { DataContext = content };
+                //addAction = content => root.Content = content;
             }
         }
-        else if (Parent?.GetLogicalChildren().OfType<HideableItemsControl>().FirstOrDefault(target => target.Classes.Contains(className)) is HideableItemsControl target)
+        else if (Parent?.GetLogicalChildren().OfType<HideablesControl>().FirstOrDefault(target => target.Classes.Contains(className)) is HideablesControl target)
         {
-            addAction = target.Hideables.Add;
+            //addAction = target.Hideables.Add;
         }
         else
         {

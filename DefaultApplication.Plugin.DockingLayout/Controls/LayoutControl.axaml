@@ -1,0 +1,68 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:DefaultApplication.DockingLayout.Internal.Controls"
+    xmlns:local="using:DefaultApplication.DockingLayout.Controls">
+
+    <ControlTheme x:Key="{x:Type local:LayoutControl}" TargetType="local:LayoutControl">
+
+        <Setter Property="DragDrop.AllowDrop" Value="True" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid
+                    x:Name="PART_Root"
+                    Margin="{TemplateBinding Margin}"
+                    Background="Transparent"
+                    ColumnDefinitions="Auto, *, Auto"
+                    DataContext="{TemplateBinding}"
+                    RowDefinitions="Auto, *, Auto">
+
+                    <Grid.Styles>
+
+                        <Style Selector=":is(Visual) controls|LayoutDropControl">
+                            <Setter Property="IsVisible" Value="False" />
+                        </Style>
+
+                        <Style Selector=":is(Visual).LayoutOver controls|LayoutDropControl">
+                            <Setter Property="IsVisible" Value="True" />
+                        </Style>
+
+                    </Grid.Styles>
+
+                    <controls:HideablesControl
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Classes="Horizontal Top"
+                        ItemsSource="{TemplateBinding TopHideables}" />
+
+                    <controls:HideablesControl
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Classes="Horizontal Bottom"
+                        ItemsSource="{TemplateBinding BottomHideables}" />
+
+                    <controls:HideablesControl
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Classes="Vertical Left"
+                        ItemsSource="{TemplateBinding LeftHideables}" />
+
+                    <controls:HideablesControl
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Classes="Vertical Right"
+                        ItemsSource="{TemplateBinding RightHideables}" />
+
+                    <controls:LayoutContentPresenter
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="5"
+                        Content="{Binding Content, Mode=TwoWay}" />
+
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+
+    </ControlTheme>
+
+</ResourceDictionary>

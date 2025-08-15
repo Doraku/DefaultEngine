@@ -1,7 +1,9 @@
 <Grid
     x:Class="DefaultApplication.DockingLayout.Internal.Controls.LayoutDropControl"
     xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:DefaultApplication.DockingLayout.Internal.Converters"
+    xmlns:local="using:DefaultApplication.DockingLayout.Internal.Controls">
 
     <Grid.Styles>
 
@@ -149,9 +151,24 @@
             DragDrop.DragLeave="OnDragLeave"
             DragDrop.DragOver="OnDragOver"
             DragDrop.Drop="OnDrop">
+
+            <Border.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding
+                        Converter="{x:Static converters:ILayoutContentConverters.IsStackable}"
+                        Path="Content"
+                        RelativeSource="{RelativeSource AncestorType={x:Type local:LayoutContentPresenter}}" />
+                    <Binding
+                        Converter="{x:Static ObjectConverters.IsNull}"
+                        Path="Content"
+                        RelativeSource="{RelativeSource AncestorType={x:Type local:LayoutContentPresenter}}" />
+                </MultiBinding>
+            </Border.IsVisible>
+
             <Viewbox>
                 <PathIcon Data="{DynamicResource DockingLayoutPlugin.DockFillIcon}" />
             </Viewbox>
+
         </Border>
 
     </DockPanel>

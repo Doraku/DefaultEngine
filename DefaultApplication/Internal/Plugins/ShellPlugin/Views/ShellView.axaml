@@ -68,7 +68,7 @@
 
         </Panel>
 
-        <layout:LayoutRoot
+        <layout:LayoutControl
             x:Name="MainContentHost"
             behaviors:ContentDialog.IsTarget="True"
             behaviors:ContentDialog.IsVisible="{Binding !Menus.IsEnabled, Mode=OneWayToSource}"

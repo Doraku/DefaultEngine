@@ -3,7 +3,7 @@
 namespace DefaultApplication.DockingLayout.Internal;
 
 internal sealed record LayoutOperation(
-    object Content,
+    ILayoutContent Content,
     Action RemoveAction)
 {
     public const string Id = "DockingLayoutPlugin.LayoutOperation";

@@ -8,39 +8,41 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
+using Avalonia.Styling;
 using Avalonia.VisualTree;
+using DefaultApplication.DockingLayout.Controls;
 
 namespace DefaultApplication.DockingLayout.Internal.Controls;
 
-internal sealed partial class HideableItemsControl : ItemsControl
+internal sealed partial class HideablesControl : Panel
 {
-    private readonly ConditionalWeakTable<object, Flyout> _flyouts;
+    public static readonly StyledProperty<IList<ILayoutContent>?> ItemsSourceProperty = AvaloniaProperty.Register<LayoutControl, IList<ILayoutContent>?>(nameof(ItemsSource), default);
 
-    public IList<object> Hideables { get; }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only")]
+    public IList<ILayoutContent>? ItemsSource
+    {
+        get => GetValue(ItemsSourceProperty);
+        set => SetValue(ItemsSourceProperty, value);
+    }
 
-    protected override Type StyleKeyOverride => typeof(ItemsControl);
+    private readonly ConditionalWeakTable<ILayoutContent, Flyout> _flyouts;
 
-    public HideableItemsControl()
+    public HideablesControl()
     {
         _flyouts = [];
 
-        Hideables = new ObservableCollection<object>
+        ItemsSource = new ObservableCollection<ILayoutContent>
         {
-            Guid.NewGuid().ToString(),
-            Guid.NewGuid().ToString()
+             new LayoutContent(LayoutOptions.Closable | LayoutOptions.Movable | LayoutOptions.Hideable, Guid.NewGuid().ToString()),
+             new LayoutContent(LayoutOptions.Closable | LayoutOptions.Movable | LayoutOptions.Hideable, Guid.NewGuid().ToString())
         };
-
-        foreach (object item in Hideables)
-        {
-            item.SetLayoutOptions(LayoutOptions.Closable | LayoutOptions.Hideable | LayoutOptions.Movable);
-        }
 
         InitializeComponent();
     }
 
     private void OnHideableClicked(object? sender, PointerPressedEventArgs e)
     {
-        Flyout Create(object content)
+        Flyout Create(ILayoutContent content)
         {
             Flyout flyout = new()
             {
@@ -50,9 +52,11 @@ internal sealed partial class HideableItemsControl : ItemsControl
                     Classes.Contains("Top") ? PlacementMode.Bottom
                     : Classes.Contains("Left") ? PlacementMode.Right
                     : Classes.Contains("Right") ? PlacementMode.Left
-                    : PlacementMode.Top
+                    : PlacementMode.Top,
+                FlyoutPresenterTheme = this.TryFindResource("HideableFlyout", ActualThemeVariant, out object? resource) && resource is ControlTheme theme ? theme : null
             };
 
+            flyout.FlyoutPresenterClasses.AddRange(Classes.Where(c => !c.StartsWith(':')));
             flyout.FlyoutPresenterClasses.Add("HideableFlyout");
 
             return flyout;
@@ -60,7 +64,7 @@ internal sealed partial class HideableItemsControl : ItemsControl
 
         if (sender is not Visual control
             || !e.GetCurrentPoint(control).Properties.IsLeftButtonPressed
-            || control.DataContext is not object content)
+            || control.DataContext is not ILayoutContent content)
         {
             return;
         }
@@ -76,7 +80,7 @@ internal sealed partial class HideableItemsControl : ItemsControl
 
         foreach (FlyoutBase openedFlyout in Parent
             ?.GetLogicalDescendants()
-            .OfType<HideableItemsControl>()
+            .OfType<HideablesControl>()
             .Select(FlyoutBase.GetAttachedFlyout)
             .Where(flyout => flyout?.IsOpen ?? false)
             .Select(flyout => flyout!) ?? [])

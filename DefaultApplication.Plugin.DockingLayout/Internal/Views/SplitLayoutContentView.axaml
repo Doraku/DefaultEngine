@@ -1,0 +1,11 @@
+<Panel
+    x:Class="DefaultApplication.DockingLayout.Internal.Views.SplitLayoutContentView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:DefaultApplication.DockingLayout.Internal.Controls">
+
+    <Grid x:Name="ItemsGrid" />
+
+    <controls:LayoutDropControl />
+
+</Panel>

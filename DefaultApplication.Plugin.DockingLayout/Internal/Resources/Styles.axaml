@@ -7,18 +7,11 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
 
+                <MergeResourceInclude Source="../../Controls/LayoutControl.axaml" />
                 <MergeResourceInclude Source="../Controls/LayoutContentPresenter.axaml" />
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>
-
-    <Style Selector="FlyoutPresenter ToggleButton#PART_HideButton">
-        <Setter Property="IsChecked" Value="True" />
-    </Style>
-
-    <Style Selector="Window.Dockable">
-        <Setter Property="ExtendClientAreaToDecorationsHint" Value="true" />
-    </Style>
 
 </Styles>

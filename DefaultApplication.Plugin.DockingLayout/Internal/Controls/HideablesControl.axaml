@@ -1,0 +1,181 @@
+<Panel
+    x:Class="DefaultApplication.DockingLayout.Internal.Controls.HideablesControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:DefaultApplication.DockingLayout.Controls"
+    xmlns:converters="using:DefaultApplication.DockingLayout.Internal.Converters"
+    xmlns:layout="using:DefaultApplication.DockingLayout"
+    xmlns:local="using:DefaultApplication.DockingLayout.Internal.Controls"
+    xmlns:system="using:System"
+    x:Name="PART_Root"
+    DataContext="{Binding $self}"
+    IsVisible="{Binding !!ItemsSource?.Count}">
+
+    <Panel.Resources>
+
+        <ControlTheme x:Key="HideableFlyout" TargetType="FlyoutPresenter">
+
+            <Setter Property="MaxHeight" Value="{Binding #PART_Root.Parent.Bounds.Height}" />
+
+            <Setter Property="MaxWidth" Value="{Binding #PART_Root.Parent.Bounds.Width}" />
+
+            <Setter Property="Height" Value="200" />
+            <Setter Property="Width" Value="200" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Panel>
+
+                        <Panel.Styles>
+
+                            <Style Selector="FlyoutPresenter.Vertical Rectangle#PART_ResizeRectangle">
+                                <Setter Property="Cursor" Value="SizeWestEast" />
+                            </Style>
+
+                            <Style Selector="FlyoutPresenter.Left Rectangle#PART_ResizeRectangle">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                            </Style>
+
+                            <Style Selector="FlyoutPresenter.Right Rectangle#PART_ResizeRectangle">
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                            </Style>
+
+                            <Style Selector="FlyoutPresenter.Horizontal Rectangle#PART_ResizeRectangle">
+                                <Setter Property="Cursor" Value="SizeNorthSouth" />
+                            </Style>
+
+                            <Style Selector="FlyoutPresenter.Top Rectangle#PART_ResizeRectangle">
+                                <Setter Property="VerticalAlignment" Value="Bottom" />
+                            </Style>
+
+                            <Style Selector="FlyoutPresenter.Bottom Rectangle#PART_ResizeRectangle">
+                                <Setter Property="VerticalAlignment" Value="Top" />
+                            </Style>
+
+                            <Style Selector="FlyoutPresenter.Left local|LayoutContentPresenter#PART_Presenter">
+                                <Setter Property="Margin" Value="0 0 2 0" />
+                            </Style>
+
+                            <Style Selector="FlyoutPresenter.Right local|LayoutContentPresenter#PART_Presenter">
+                                <Setter Property="Margin" Value="2 0 0 0" />
+                            </Style>
+
+                            <Style Selector="FlyoutPresenter.Top local|LayoutContentPresenter#PART_Presenter">
+                                <Setter Property="Margin" Value="0 0 0 2" />
+                            </Style>
+
+                            <Style Selector="FlyoutPresenter.Bottom local|LayoutContentPresenter#PART_Presenter">
+                                <Setter Property="Margin" Value="0 2 0 0" />
+                            </Style>
+
+                        </Panel.Styles>
+
+                        <local:LayoutContentPresenter x:Name="PART_Presenter" Content="{TemplateBinding Content}" />
+
+                        <Rectangle
+                            x:Name="PART_ResizeRectangle"
+                            MinWidth="3"
+                            MinHeight="3"
+                            Fill="Transparent"
+                            PointerPressed="OnFlyoutResize" />
+
+                    </Panel>
+                </ControlTemplate>
+            </Setter>
+
+            <Style Selector="^.Horizontal">
+
+                <Setter Property="Width" Value="{Binding #PART_Root.Bounds.Width}" />
+                <Setter Property="Margin" Value="5 0" />
+                <Setter Property="MaxHeight">
+                    <MultiBinding Converter="{x:Static converters:OperationConverters.SumDoubles}">
+                        <Binding Path="#PART_Root.Parent.Bounds.Height" />
+                        <Binding Converter="{x:Static converters:OperationConverters.NegateDouble}" Path="#PART_Root.Bounds.Height" />
+                        <Binding>
+                            <Binding.Source>
+                                <system:Double>2</system:Double>
+                            </Binding.Source>
+                        </Binding>
+                    </MultiBinding>
+                </Setter>
+
+            </Style>
+
+            <Style Selector="^.Vertical">
+
+                <Setter Property="Height" Value="{Binding #PART_Root.Bounds.Height}" />
+                <Setter Property="Margin" Value="0 5" />
+                <Setter Property="MaxWidth">
+                    <MultiBinding Converter="{x:Static converters:OperationConverters.SumDoubles}">
+                        <Binding Path="#PART_Root.Parent.Bounds.Width" />
+                        <Binding Converter="{x:Static converters:OperationConverters.NegateDouble}" Path="#PART_Root.Bounds.Width" />
+                        <Binding>
+                            <Binding.Source>
+                                <system:Double>2</system:Double>
+                            </Binding.Source>
+                        </Binding>
+                    </MultiBinding>
+                </Setter>
+
+            </Style>
+
+        </ControlTheme>
+
+    </Panel.Resources>
+
+    <Panel.Styles>
+
+        <Style Selector="local|HideablesControl.Vertical>LayoutTransformControl">
+            <Setter Property="LayoutTransform">
+                <RotateTransform Angle="90" CenterX="0.5" CenterY="0.5" />
+            </Setter>
+        </Style>
+
+    </Panel.Styles>
+
+    <LayoutTransformControl>
+        <ItemsControl ItemsSource="{Binding ItemsSource}">
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="layout:ILayoutContent">
+                    <Border
+                        x:Name="PART_HideableHeader"
+                        Margin="5,0"
+                        Background="Transparent"
+                        PointerPressed="OnHideableClicked">
+
+                        <Border.Styles>
+
+                            <Style Selector="Border#PART_HideableHeader">
+
+                                <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+                                <Setter Property="BorderThickness" Value="0 0 0 5" />
+                                <Setter Property="TextElement.Foreground" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+
+                                <Style Selector="^:pointerover">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}" />
+                                    <Setter Property="TextElement.Foreground" Value="{Binding $parent[TopLevel].Foreground}" />
+                                </Style>
+
+                            </Style>
+
+                            <Style Selector="local|HideablesControl.Top Border#PART_HideableHeader, local|HideablesControl.Right Border#PART_HideableHeader">
+                                <Setter Property="BorderThickness" Value="0 5 0 0" />
+                            </Style>
+
+                        </Border.Styles>
+
+                        <ContentPresenter Content="{Binding #PART_HideableHeader.DataContext.Content}" />
+
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+        </ItemsControl>
+    </LayoutTransformControl>
+</Panel>

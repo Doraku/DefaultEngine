@@ -15,4 +15,10 @@
     <ProjectReference Include="..\DefaultApplication.Api\DefaultApplication.Api.csproj" />
   </ItemGroup>
   
+  <ItemGroup>
+    <Compile Update="Internal\Controls\HideablesControl.axaml.cs">
+      <DependentUpon>HideablesControl.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
 </Project>
