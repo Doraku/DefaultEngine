@@ -1,4 +1,6 @@
-﻿namespace DefaultApplication.DockingLayout.Internal;
+﻿using Avalonia.DefaultLayout;
+
+namespace DefaultApplication.DefaultLayout.Internal;
 
 internal sealed class NoApplicationDockingLayoutService : IDockingLayoutService
 {

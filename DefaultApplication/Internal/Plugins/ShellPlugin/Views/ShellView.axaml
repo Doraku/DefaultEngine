@@ -4,7 +4,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="using:DefaultApplication.Controls.Behaviors"
-    xmlns:layout="using:DefaultApplication.DockingLayout.Controls"
+    xmlns:defaultlayout="using:Avalonia.DefaultLayout.Controls"
     xmlns:viewmodels="using:DefaultApplication.Internal.Plugins.ShellPlugin.ViewModels"
     xmlns:views="using:DefaultApplication.Internal.Plugins.ShellPlugin.Views"
     Margin="{Binding $parent[Window].OffScreenMargin}"
@@ -14,35 +14,23 @@
     <Border.Styles>
 
         <Style Selector=":is(InputElement).Blurable[(behaviors|ContentDialog.IsVisible)=False]">
-
             <Style.Animations>
-
                 <Animation FillMode="Forward" Duration="0:0:0.5">
-
                     <KeyFrame Cue="100%">
                         <Setter Property="Effect" Value="blur(0)" />
                     </KeyFrame>
-
                 </Animation>
-
             </Style.Animations>
-
         </Style>
 
         <Style Selector=":is(InputElement).Blurable[(behaviors|ContentDialog.IsVisible)=True]">
-
             <Style.Animations>
-
                 <Animation FillMode="Forward" Duration="0:0:0.5">
-
                     <KeyFrame Cue="100%">
                         <Setter Property="Effect" Value="blur(2)" />
                     </KeyFrame>
-
                 </Animation>
-
             </Style.Animations>
-
         </Style>
 
     </Border.Styles>
@@ -68,7 +56,7 @@
 
         </Panel>
 
-        <layout:LayoutControl
+        <defaultlayout:LayoutControl
             x:Name="MainContentHost"
             behaviors:ContentDialog.IsTarget="True"
             behaviors:ContentDialog.IsVisible="{Binding !Menus.IsEnabled, Mode=OneWayToSource}"

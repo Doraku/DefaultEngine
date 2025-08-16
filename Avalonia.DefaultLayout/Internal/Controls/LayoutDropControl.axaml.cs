@@ -1,13 +1,12 @@
 using System.Linq;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
+using Avalonia.DefaultLayout.Internal.Views;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.VisualTree;
-using DefaultApplication.DockingLayout.Internal.Views;
 
-namespace DefaultApplication.DockingLayout.Internal.Controls;
+namespace Avalonia.DefaultLayout.Internal.Controls;
 
 internal sealed partial class LayoutDropControl : Grid
 {
@@ -107,6 +106,16 @@ internal sealed partial class LayoutDropControl : Grid
             return;
         }
 
+        LayoutContentPresenter? parentPresenter = presenter.FindAncestorOfType<LayoutContentPresenter>();
+
+        operation.RemoveAction();
+
+        // in case the remove action remove the presenter from the layout
+        if (presenter.Parent is null && parentPresenter != null)
+        {
+            presenter = parentPresenter;
+        }
+
         ILayoutContent newContent;
 
         if (presenter.Content is null)
@@ -132,7 +141,5 @@ internal sealed partial class LayoutDropControl : Grid
         {
             presenter.Content = newContent;
         }
-
-        operation.RemoveAction();
     }
 }

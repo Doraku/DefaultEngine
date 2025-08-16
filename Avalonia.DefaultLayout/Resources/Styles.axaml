@@ -1,14 +1,14 @@
 <Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:DefaultApplication.DockingLayout.Internal.Controls">
+    xmlns:controls="using:Avalonia.DefaultLayout.Internal.Controls">
 
     <Styles.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
 
-                <MergeResourceInclude Source="../../Controls/LayoutControl.axaml" />
-                <MergeResourceInclude Source="../Controls/LayoutContentPresenter.axaml" />
+                <MergeResourceInclude Source="../Controls/LayoutControl.axaml" />
+                <MergeResourceInclude Source="../Internal/Controls/LayoutContentPresenter.axaml" />
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

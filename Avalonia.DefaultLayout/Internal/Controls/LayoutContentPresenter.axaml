@@ -1,0 +1,41 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:Avalonia.DefaultLayout.Internal.Converters"
+    xmlns:defaultlayout="using:Avalonia.DefaultLayout"
+    xmlns:local="using:Avalonia.DefaultLayout.Internal.Controls"
+    xmlns:views="using:Avalonia.DefaultLayout.Internal.Views"
+    x:ClassModifier="internal">
+
+    <ControlTheme x:Key="{x:Type local:LayoutContentPresenter}" TargetType="local:LayoutContentPresenter">
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Panel.DataTemplates>
+
+                        <DataTemplate DataType="defaultlayout:LayoutContent">
+                            <views:LayoutContentView />
+                        </DataTemplate>
+
+                        <DataTemplate DataType="defaultlayout:SplitLayoutContent">
+                            <views:SplitLayoutContentView />
+                        </DataTemplate>
+
+                        <DataTemplate DataType="defaultlayout:StackedLayoutContent">
+                            <views:StackedLayoutContentView />
+                        </DataTemplate>
+
+                    </Panel.DataTemplates>
+
+                    <ContentPresenter Content="{TemplateBinding Content, Mode=TwoWay}" />
+
+                    <local:LayoutDropControl />
+
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+
+    </ControlTheme>
+
+</ResourceDictionary>

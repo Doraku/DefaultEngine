@@ -1,9 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.DefaultLayout;
 using Avalonia.Threading;
 using DefaultApplication.DependencyInjection;
 
-namespace DefaultApplication.DockingLayout.Internal;
+namespace DefaultApplication.DefaultLayout.Internal;
 
 internal sealed class DockingLayoutService : IDockingLayoutService
 {

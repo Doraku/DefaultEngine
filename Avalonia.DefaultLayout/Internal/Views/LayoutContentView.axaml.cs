@@ -2,18 +2,16 @@ using System;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.DefaultLayout.Controls;
+using Avalonia.DefaultLayout.Internal.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
-using DefaultApplication.Controls.Metadata;
-using DefaultApplication.DockingLayout.Controls;
-using DefaultApplication.DockingLayout.Internal.Controls;
 
-namespace DefaultApplication.DockingLayout.Internal.Views;
+namespace Avalonia.DefaultLayout.Internal.Views;
 
-[DataTemplate<LayoutContent>]
 public sealed partial class LayoutContentView : Border
 {
     public LayoutContentView()

@@ -30,9 +30,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultApplication.Browser"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_DefaultApplication", "_DefaultApplication", "{3475B6FA-FE56-40D6-BBCD-154B9CD3049B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultApplication.Plugin.DockingLayout", "DefaultApplication.Plugin.DockingLayout\DefaultApplication.Plugin.DockingLayout.csproj", "{FD816EC5-F00E-4703-B053-606924251564}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultApplication.Plugin.DefaultLayout", "DefaultApplication.Plugin.DockingLayout\DefaultApplication.Plugin.DefaultLayout.csproj", "{FD816EC5-F00E-4703-B053-606924251564}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{9A97DCB1-011D-474A-82FF-A65AC151E371}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.DefaultLayout", "Avalonia.DefaultLayout\Avalonia.DefaultLayout.csproj", "{6E465BFC-A9F5-42E5-B8ED-9B61DB22246D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,6 +82,10 @@ Global
 		{FD816EC5-F00E-4703-B053-606924251564}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD816EC5-F00E-4703-B053-606924251564}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD816EC5-F00E-4703-B053-606924251564}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E465BFC-A9F5-42E5-B8ED-9B61DB22246D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E465BFC-A9F5-42E5-B8ED-9B61DB22246D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E465BFC-A9F5-42E5-B8ED-9B61DB22246D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E465BFC-A9F5-42E5-B8ED-9B61DB22246D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +100,7 @@ Global
 		{EB501521-257E-0549-CD7B-89C777A33E1C} = {3475B6FA-FE56-40D6-BBCD-154B9CD3049B}
 		{FD816EC5-F00E-4703-B053-606924251564} = {9A97DCB1-011D-474A-82FF-A65AC151E371}
 		{9A97DCB1-011D-474A-82FF-A65AC151E371} = {3475B6FA-FE56-40D6-BBCD-154B9CD3049B}
+		{6E465BFC-A9F5-42E5-B8ED-9B61DB22246D} = {9A97DCB1-011D-474A-82FF-A65AC151E371}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB9C8A4D-0B27-4A42-92AB-E8C6BF303EB9}

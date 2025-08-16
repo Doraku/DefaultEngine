@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using Avalonia.Controls;
 using Avalonia.Layout;
 
-namespace DefaultApplication.DockingLayout;
+namespace Avalonia.DefaultLayout;
 
 public interface ILayoutContent
 {

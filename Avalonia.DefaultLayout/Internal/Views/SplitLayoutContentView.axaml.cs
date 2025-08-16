@@ -1,15 +1,12 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.DefaultLayout.Internal.Controls;
 using Avalonia.Layout;
-using DefaultApplication.Controls.Metadata;
-using DefaultApplication.DockingLayout.Internal.Controls;
 
-namespace DefaultApplication.DockingLayout.Internal.Views;
+namespace Avalonia.DefaultLayout.Internal.Views;
 
-[DataTemplate<SplitLayoutContent>]
 public sealed partial class SplitLayoutContentView : Grid
 {
     public SplitLayoutContentView()

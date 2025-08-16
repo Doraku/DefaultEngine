@@ -1,8 +1,8 @@
 <ResourceDictionary
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:DefaultApplication.DockingLayout.Internal.Controls"
-    xmlns:local="using:DefaultApplication.DockingLayout.Controls">
+    xmlns:controls="using:Avalonia.DefaultLayout.Internal.Controls"
+    xmlns:local="using:Avalonia.DefaultLayout.Controls">
 
     <ControlTheme x:Key="{x:Type local:LayoutControl}" TargetType="local:LayoutControl">
 

@@ -1,5 +1,5 @@
 <UserControl
-    x:Class="DefaultApplication.DockingLayout.Internal.Views.StackedLayoutContentView"
+    x:Class="Avalonia.DefaultLayout.Internal.Views.StackedLayoutContentView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     Welcome to Avalonia!

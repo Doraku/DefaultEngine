@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DefaultApplication.DockingLayout;
+namespace Avalonia.DefaultLayout;
 
 [Flags]
 public enum LayoutOptions

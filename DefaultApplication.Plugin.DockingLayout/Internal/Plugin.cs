@@ -5,7 +5,7 @@ using Avalonia.Threading;
 using DefaultApplication.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DefaultApplication.DockingLayout.Internal;
+namespace DefaultApplication.DefaultLayout.Internal;
 
 internal sealed class Plugin : IServiceRegisterer
 {
@@ -20,8 +20,8 @@ internal sealed class Plugin : IServiceRegisterer
     {
         if (_application is { })
         {
-            Uri baseUri = new("avares://DefaultApplication.Plugin.DockingLayout");
-            Uri resourcesUri = new(baseUri, "Internal/Resources/");
+            Uri baseUri = new("avares://Avalonia.DefaultLayout");
+            Uri resourcesUri = new(baseUri, "Resources/");
 
             Dispatcher.UIThread.Invoke(() =>
             {

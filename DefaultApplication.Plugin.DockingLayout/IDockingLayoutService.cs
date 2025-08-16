@@ -1,4 +1,6 @@
-﻿namespace DefaultApplication.DockingLayout;
+﻿using Avalonia.DefaultLayout;
+
+namespace DefaultApplication.DefaultLayout;
 
 public interface IDockingLayoutService
 {

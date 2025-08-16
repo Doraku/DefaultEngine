@@ -1,9 +1,9 @@
 <Border
-    x:Class="DefaultApplication.DockingLayout.Internal.Views.LayoutContentView"
+    x:Class="Avalonia.DefaultLayout.Internal.Views.LayoutContentView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:DefaultApplication.DockingLayout.Internal.Controls"
-    xmlns:converters="using:DefaultApplication.DockingLayout.Internal.Converters"
+    xmlns:controls="using:Avalonia.DefaultLayout.Internal.Controls"
+    xmlns:converters="using:Avalonia.DefaultLayout.Internal.Converters"
     x:Name="PART_Root"
     Background="{Binding $parent[TopLevel].Background}"
     BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
@@ -51,11 +51,11 @@
         </Style>
 
         <Style Selector="Button#PART_HideButton">
-            <Setter Property="Content" Value="{DynamicResource DockingLayoutPlugin.PinIcon}" />
+            <Setter Property="Content" Value="{DynamicResource Avalonia.DefaultLayout.PinIcon}" />
         </Style>
 
         <Style Selector="controls|HideablesControl Button#PART_HideButton">
-            <Setter Property="Content" Value="{DynamicResource DockingLayoutPlugin.PinOffIcon}" />
+            <Setter Property="Content" Value="{DynamicResource Avalonia.DefaultLayout.PinOffIcon}" />
         </Style>
 
     </Border.Styles>
@@ -75,7 +75,7 @@
                 <Button
                     Classes="LayoutButton"
                     Click="OnClose"
-                    Content="{DynamicResource DockingLayoutPlugin.CloseIcon}"
+                    Content="{DynamicResource Avalonia.DefaultLayout.CloseIcon}"
                     IsVisible="{Binding Converter={x:Static converters:ILayoutContentConverters.IsClosable}}"
                     ToolTip.Tip="Close" />
 

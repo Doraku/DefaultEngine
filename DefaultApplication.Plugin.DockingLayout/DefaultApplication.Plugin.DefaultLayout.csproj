@@ -3,7 +3,7 @@
   <PropertyGroup>
     
     <TargetFramework>net9.0</TargetFramework>
-    <RootNamespace>DefaultApplication.DockingLayout</RootNamespace>
+    <RootNamespace>DefaultApplication.DefaultLayout</RootNamespace>
     
   </PropertyGroup>
 
@@ -12,16 +12,8 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\Avalonia.DefaultLayout\Avalonia.DefaultLayout.csproj" />
     <ProjectReference Include="..\DefaultApplication.Api\DefaultApplication.Api.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Compile Update="Internal\Controls\HideablesControl.axaml.cs">
-      <DependentUpon>HideablesControl.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Internal\Controls\LayoutDropControl.axaml.cs">
-      <DependentUpon>LayoutDropControl.axaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   
 </Project>

@@ -1,10 +1,9 @@
 using System;
 using System.Linq;
-using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.LogicalTree;
 
-namespace DefaultApplication.DockingLayout.Internal.Controls;
+namespace Avalonia.DefaultLayout.Internal.Controls;
 
 internal sealed class LayoutContentPresenter : TemplatedControl
 {
@@ -47,7 +46,13 @@ internal sealed class LayoutContentPresenter : TemplatedControl
             }
             else if (parent.Content is StackedLayoutContent stacked)
             {
-                return () => stacked.Remove(Content);
+                return () =>
+                {
+                    if (stacked.Remove(Content) && stacked.Count is 1)
+                    {
+                        parent.Content = stacked.FirstOrDefault();
+                    }
+                };
             }
         }
 

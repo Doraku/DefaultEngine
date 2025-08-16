@@ -1,9 +1,9 @@
 <Grid
-    x:Class="DefaultApplication.DockingLayout.Internal.Controls.LayoutDropControl"
+    x:Class="Avalonia.DefaultLayout.Internal.Controls.LayoutDropControl"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="using:DefaultApplication.DockingLayout.Internal.Converters"
-    xmlns:local="using:DefaultApplication.DockingLayout.Internal.Controls">
+    xmlns:converters="using:Avalonia.DefaultLayout.Internal.Converters"
+    xmlns:local="using:Avalonia.DefaultLayout.Internal.Controls">
 
     <Grid.Styles>
 
@@ -42,25 +42,25 @@
         HorizontalAlignment="Left"
         VerticalAlignment="Center"
         Classes="LayoutTarget"
-        Tag="{DynamicResource DockingLayoutPlugin.DockLeftIcon}" />
+        Tag="{DynamicResource Avalonia.DefaultLayout.DockLeftIcon}" />
 
     <ContentPresenter
         HorizontalAlignment="Right"
         VerticalAlignment="Center"
         Classes="LayoutTarget"
-        Tag="{DynamicResource DockingLayoutPlugin.DockRightIcon}" />
+        Tag="{DynamicResource Avalonia.DefaultLayout.DockRightIcon}" />
 
     <ContentPresenter
         HorizontalAlignment="Center"
         VerticalAlignment="Top"
         Classes="LayoutTarget"
-        Tag="{DynamicResource DockingLayoutPlugin.DockTopIcon}" />
+        Tag="{DynamicResource Avalonia.DefaultLayout.DockTopIcon}" />
 
     <ContentPresenter
         HorizontalAlignment="Center"
         VerticalAlignment="Bottom"
         Classes="LayoutTarget"
-        Tag="{DynamicResource DockingLayoutPlugin.DockBottomIcon}" />
+        Tag="{DynamicResource Avalonia.DefaultLayout.DockBottomIcon}" />
 
     <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 
@@ -69,30 +69,30 @@
             VerticalAlignment="Center"
             Classes="LayoutTarget"
             DockPanel.Dock="Left"
-            Tag="{DynamicResource DockingLayoutPlugin.DockLeftIcon}" />
+            Tag="{DynamicResource Avalonia.DefaultLayout.DockLeftIcon}" />
 
         <ContentPresenter
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             Classes="LayoutTarget"
             DockPanel.Dock="Right"
-            Tag="{DynamicResource DockingLayoutPlugin.DockRightIcon}" />
+            Tag="{DynamicResource Avalonia.DefaultLayout.DockRightIcon}" />
 
         <ContentPresenter
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
             Classes="LayoutTarget"
             DockPanel.Dock="Top"
-            Tag="{DynamicResource DockingLayoutPlugin.DockTopIcon}" />
+            Tag="{DynamicResource Avalonia.DefaultLayout.DockTopIcon}" />
 
         <ContentPresenter
             HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
             Classes="LayoutTarget"
             DockPanel.Dock="Bottom"
-            Tag="{DynamicResource DockingLayoutPlugin.DockBottomIcon}" />
+            Tag="{DynamicResource Avalonia.DefaultLayout.DockBottomIcon}" />
 
-        <ContentPresenter Classes="LayoutTarget" Tag="{DynamicResource DockingLayoutPlugin.DockFillIcon}">
+        <ContentPresenter Classes="LayoutTarget" Tag="{DynamicResource Avalonia.DefaultLayout.DockFillIcon}">
             <ContentPresenter.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.Or}">
 

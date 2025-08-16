@@ -10,9 +10,9 @@ using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
-using DefaultApplication.DockingLayout.Controls;
+using Avalonia.DefaultLayout.Controls;
 
-namespace DefaultApplication.DockingLayout.Internal.Controls;
+namespace Avalonia.DefaultLayout.Internal.Controls;
 
 internal sealed partial class HideablesControl : Panel
 {

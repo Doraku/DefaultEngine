@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Avalonia.Data.Converters;
 
-namespace DefaultApplication.DockingLayout.Internal.Converters;
+namespace Avalonia.DefaultLayout.Internal.Converters;
 
 internal static class OperationConverters
 {

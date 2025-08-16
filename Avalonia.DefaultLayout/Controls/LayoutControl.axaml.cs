@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 
-namespace DefaultApplication.DockingLayout.Controls;
+namespace Avalonia.DefaultLayout.Controls;
 
 public sealed class LayoutControl : TemplatedControl
 {
