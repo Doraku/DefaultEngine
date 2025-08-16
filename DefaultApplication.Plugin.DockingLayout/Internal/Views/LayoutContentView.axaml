@@ -1,12 +1,16 @@
-<Panel
+<Border
     x:Class="DefaultApplication.DockingLayout.Internal.Views.LayoutContentView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:DefaultApplication.DockingLayout.Internal.Controls"
     xmlns:converters="using:DefaultApplication.DockingLayout.Internal.Converters"
-    x:Name="PART_Root">
+    x:Name="PART_Root"
+    Background="{Binding $parent[TopLevel].Background}"
+    BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+    BorderThickness="1,0,1,1"
+    IsVisible="{Binding Converter={x:Static ObjectConverters.IsNotNull}}">
 
-    <Panel.Styles>
+    <Border.Styles>
 
         <Style Selector=":is(Button).LayoutButton">
 
@@ -42,7 +46,7 @@
             <Setter Property="Fill" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
         </Style>
 
-        <Style Selector="#PART_Root:focus-within>Border>DockPanel>StackPanel>Rectangle#PART_FocusWitness">
+        <Style Selector="#PART_Root:focus-within>DockPanel>StackPanel>Rectangle#PART_FocusWitness">
             <Setter Property="Fill" Value="{DynamicResource SystemAccentColor}" />
         </Style>
 
@@ -54,52 +58,44 @@
             <Setter Property="Content" Value="{DynamicResource DockingLayoutPlugin.PinOffIcon}" />
         </Style>
 
-    </Panel.Styles>
+    </Border.Styles>
 
-    <Border
-        Background="{Binding $parent[TopLevel].Background}"
-        BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
-        BorderThickness="1,0,1,1"
-        IsVisible="{Binding Converter={x:Static ObjectConverters.IsNotNull}}">
-        <DockPanel>
+    <DockPanel>
 
-            <StackPanel
-                Background="Transparent"
-                DockPanel.Dock="Top"
-                Orientation="Vertical"
-                PointerPressed="OnHeaderClicked">
+        <StackPanel
+            Background="Transparent"
+            DockPanel.Dock="Top"
+            Orientation="Vertical"
+            PointerPressed="OnHeaderClicked">
 
-                <Rectangle x:Name="PART_FocusWitness" Height="3" />
+            <Rectangle x:Name="PART_FocusWitness" Height="3" />
 
-                <DockPanel>
+            <DockPanel>
 
-                    <Button
-                        Classes="LayoutButton"
-                        Click="OnClose"
-                        Content="{DynamicResource DockingLayoutPlugin.CloseIcon}"
-                        IsVisible="{Binding Converter={x:Static converters:ILayoutContentConverters.IsClosable}}"
-                        ToolTip.Tip="Close" />
+                <Button
+                    Classes="LayoutButton"
+                    Click="OnClose"
+                    Content="{DynamicResource DockingLayoutPlugin.CloseIcon}"
+                    IsVisible="{Binding Converter={x:Static converters:ILayoutContentConverters.IsClosable}}"
+                    ToolTip.Tip="Close" />
 
-                    <Button
-                        x:Name="PART_HideButton"
-                        Classes="LayoutButton"
-                        Click="OnToggleHide"
-                        IsVisible="{Binding Converter={x:Static converters:ILayoutContentConverters.IsHideable}}"
-                        ToolTip.Tip="Auto Hide" />
+                <Button
+                    x:Name="PART_HideButton"
+                    Classes="LayoutButton"
+                    Click="OnToggleHide"
+                    IsVisible="{Binding Converter={x:Static converters:ILayoutContentConverters.IsHideable}}"
+                    ToolTip.Tip="Auto Hide" />
 
-                    <ContentPresenter HorizontalAlignment="Left" Content="kikoo" />
+                <ContentPresenter HorizontalAlignment="Left" Content="kikoo" />
 
-                </DockPanel>
+            </DockPanel>
 
-            </StackPanel>
+        </StackPanel>
 
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <ContentPresenter Content="{Binding #PART_Root.DataContext?.Content, Mode=TwoWay}" />
-            </ScrollViewer>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ContentPresenter Content="{Binding #PART_Root.DataContext?.Content, Mode=TwoWay}" />
+        </ScrollViewer>
 
-        </DockPanel>
-    </Border>
+    </DockPanel>
 
-    <controls:LayoutDropControl />
-
-</Panel>
+</Border>

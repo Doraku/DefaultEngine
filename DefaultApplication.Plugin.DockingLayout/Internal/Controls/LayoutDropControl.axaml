@@ -1,0 +1,115 @@
+<Grid
+    x:Class="DefaultApplication.DockingLayout.Internal.Controls.LayoutDropControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:DefaultApplication.DockingLayout.Internal.Converters"
+    xmlns:local="using:DefaultApplication.DockingLayout.Internal.Controls">
+
+    <Grid.Styles>
+
+        <Style Selector="ContentPresenter.LayoutTarget">
+            <Setter Property="Content">
+                <Template>
+                    <Border
+                        Width="40"
+                        Height="40"
+                        Margin="10"
+                        Padding="5"
+                        Background="{Binding $parent[TopLevel].Background}"
+                        BorderBrush="{DynamicResource SystemAccentColor}"
+                        BorderThickness="1"
+                        CornerRadius="5"
+                        DragDrop.AllowDrop="True">
+                        <Viewbox>
+                            <PathIcon Data="{Binding $parent[ContentPresenter].Tag}" Foreground="{DynamicResource SystemAccentColor}" />
+                        </Viewbox>
+                    </Border>
+                </Template>
+            </Setter>
+        </Style>
+
+    </Grid.Styles>
+
+    <Border
+        x:Name="LayoutTarget"
+        BorderBrush="{DynamicResource SystemAccentColor}"
+        BorderThickness="5"
+        IsVisible="False">
+        <Rectangle Fill="{DynamicResource SystemAccentColor}" Opacity="0.5" />
+    </Border>
+
+    <ContentPresenter
+        HorizontalAlignment="Left"
+        VerticalAlignment="Center"
+        Classes="LayoutTarget"
+        Tag="{DynamicResource DockingLayoutPlugin.DockLeftIcon}" />
+
+    <ContentPresenter
+        HorizontalAlignment="Right"
+        VerticalAlignment="Center"
+        Classes="LayoutTarget"
+        Tag="{DynamicResource DockingLayoutPlugin.DockRightIcon}" />
+
+    <ContentPresenter
+        HorizontalAlignment="Center"
+        VerticalAlignment="Top"
+        Classes="LayoutTarget"
+        Tag="{DynamicResource DockingLayoutPlugin.DockTopIcon}" />
+
+    <ContentPresenter
+        HorizontalAlignment="Center"
+        VerticalAlignment="Bottom"
+        Classes="LayoutTarget"
+        Tag="{DynamicResource DockingLayoutPlugin.DockBottomIcon}" />
+
+    <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+        <ContentPresenter
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Classes="LayoutTarget"
+            DockPanel.Dock="Left"
+            Tag="{DynamicResource DockingLayoutPlugin.DockLeftIcon}" />
+
+        <ContentPresenter
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Classes="LayoutTarget"
+            DockPanel.Dock="Right"
+            Tag="{DynamicResource DockingLayoutPlugin.DockRightIcon}" />
+
+        <ContentPresenter
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Classes="LayoutTarget"
+            DockPanel.Dock="Top"
+            Tag="{DynamicResource DockingLayoutPlugin.DockTopIcon}" />
+
+        <ContentPresenter
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Classes="LayoutTarget"
+            DockPanel.Dock="Bottom"
+            Tag="{DynamicResource DockingLayoutPlugin.DockBottomIcon}" />
+
+        <ContentPresenter Classes="LayoutTarget" Tag="{DynamicResource DockingLayoutPlugin.DockFillIcon}">
+            <ContentPresenter.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+
+                    <Binding
+                        Converter="{x:Static converters:ILayoutContentConverters.IsStackable}"
+                        Path="Content"
+                        RelativeSource="{RelativeSource AncestorType={x:Type local:LayoutContentPresenter}}" />
+
+                    <Binding
+                        Converter="{x:Static ObjectConverters.IsNull}"
+                        Path="Content"
+                        RelativeSource="{RelativeSource AncestorType={x:Type local:LayoutContentPresenter}}" />
+
+                </MultiBinding>
+            </ContentPresenter.IsVisible>
+        </ContentPresenter>
+
+    </DockPanel>
+
+</Grid>

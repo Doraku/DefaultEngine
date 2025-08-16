@@ -10,7 +10,7 @@ using DefaultApplication.DockingLayout.Internal.Controls;
 namespace DefaultApplication.DockingLayout.Internal.Views;
 
 [DataTemplate<SplitLayoutContent>]
-public partial class SplitLayoutContentView : Panel
+public sealed partial class SplitLayoutContentView : Grid
 {
     public SplitLayoutContentView()
     {
@@ -35,15 +35,15 @@ public partial class SplitLayoutContentView : Panel
             if (sender is SplitLayoutContent content
                 && e.PropertyName is nameof(SplitLayoutContent.Orientation))
             {
-                ItemsGrid.Children.Clear();
-                ItemsGrid.RowDefinitions.Clear();
-                ItemsGrid.ColumnDefinitions.Clear();
+                Children.Clear();
+                RowDefinitions.Clear();
+                ColumnDefinitions.Clear();
 
                 foreach (SplitLayoutItem item in content)
                 {
                     LayoutContentPresenter presenter = new();
 
-                    bool isFirst = ItemsGrid.Children.Count is 0;
+                    bool isFirst = Children.Count is 0;
 
                     GridSplitter? splitter = null;
                     if (!isFirst)
@@ -52,7 +52,7 @@ public partial class SplitLayoutContentView : Panel
                         {
                             ResizeBehavior = GridResizeBehavior.PreviousAndNext
                         };
-                        ItemsGrid.Children.Add(splitter);
+                        Children.Add(splitter);
                     }
 
                     switch (content.Orientation)
@@ -60,33 +60,33 @@ public partial class SplitLayoutContentView : Panel
                         case Orientation.Horizontal:
                             if (!isFirst)
                             {
-                                Grid.SetColumn(splitter!, ItemsGrid.ColumnDefinitions.Count);
-                                ItemsGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(5)));
+                                SetColumn(splitter!, ColumnDefinitions.Count);
+                                ColumnDefinitions.Add(new ColumnDefinition(new GridLength(5)));
                             }
 
-                            Grid.SetColumn(presenter, ItemsGrid.ColumnDefinitions.Count);
+                            SetColumn(presenter, ColumnDefinitions.Count);
                             ColumnDefinition column = new();
                             column.Bind(ColumnDefinition.WidthProperty, new Binding(nameof(item.Size), BindingMode.TwoWay) { Source = item });
-                            ItemsGrid.ColumnDefinitions.Add(column);
+                            ColumnDefinitions.Add(column);
                             break;
 
                         case Orientation.Vertical:
                             if (!isFirst)
                             {
-                                Grid.SetRow(splitter!, ItemsGrid.RowDefinitions.Count);
-                                ItemsGrid.RowDefinitions.Add(new RowDefinition(new GridLength(5)));
+                                SetRow(splitter!, RowDefinitions.Count);
+                                RowDefinitions.Add(new RowDefinition(new GridLength(5)));
                             }
 
-                            Grid.SetRow(presenter, ItemsGrid.RowDefinitions.Count);
+                            SetRow(presenter, RowDefinitions.Count);
                             RowDefinition row = new();
                             row.Bind(RowDefinition.HeightProperty, new Binding(nameof(item.Size), BindingMode.TwoWay) { Source = item });
-                            ItemsGrid.RowDefinitions.Add(row);
+                            RowDefinitions.Add(row);
                             break;
                     }
 
                     presenter.Bind(LayoutContentPresenter.ContentProperty, new Binding(nameof(item.Content), BindingMode.TwoWay) { Source = item });
 
-                    ItemsGrid.Children.Add(presenter);
+                    Children.Add(presenter);
                 }
             }
         }

@@ -9,7 +9,13 @@
 
         <Setter Property="Template">
             <ControlTemplate>
-                <ContentPresenter Content="{TemplateBinding Content, Mode=TwoWay}" />
+                <Panel>
+
+                    <ContentPresenter Content="{TemplateBinding Content, Mode=TwoWay}" />
+
+                    <local:LayoutDropControl />
+
+                </Panel>
             </ControlTemplate>
         </Setter>
 

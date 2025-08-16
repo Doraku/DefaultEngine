@@ -14,11 +14,33 @@ using DefaultApplication.DockingLayout.Internal.Controls;
 namespace DefaultApplication.DockingLayout.Internal.Views;
 
 [DataTemplate<LayoutContent>]
-public partial class LayoutContentView : Panel
+public sealed partial class LayoutContentView : Border
 {
     public LayoutContentView()
     {
         InitializeComponent();
+    }
+
+    public static ILayoutContent AddAsSplit(ILayoutContent parentContent, ILayoutContent newContent, Orientation orientation, bool insertFirst)
+    {
+        if (parentContent is not SplitLayoutContent split || split.Orientation != orientation)
+        {
+            split = new SplitLayoutContent(orientation)
+            {
+                new SplitLayoutItem(parentContent, GridLength.Star)
+            };
+        }
+
+        if (insertFirst)
+        {
+            split.Insert(0, new SplitLayoutItem(newContent, GridLength.Star));
+        }
+        else
+        {
+            split.Add(new SplitLayoutItem(newContent, GridLength.Star));
+        }
+
+        return split;
     }
 
     private Action GetRemoveAction()
@@ -35,7 +57,8 @@ public partial class LayoutContentView : Panel
     {
         void OnDragged(object? sender, PointerEventArgs e)
         {
-            if (sender is not InputElement control)
+            if (sender is not InputElement control
+                || this.FindLogicalAncestorOfType<LayoutContentPresenter>() is not LayoutContentPresenter presenter)
             {
                 return;
             }
@@ -45,7 +68,10 @@ public partial class LayoutContentView : Panel
 
             DataObject data = new();
 
-            data.Set(LayoutOperation.Id, new LayoutOperation((ILayoutContent)DataContext, GetRemoveAction()));
+            data.Set(LayoutOperation.Id, new LayoutOperation(
+                presenter,
+                (ILayoutContent)DataContext,
+                GetRemoveAction()));
 
             DragDrop.DoDragDrop(e, data, DragDropEffects.Move);
         }
@@ -109,26 +135,11 @@ public partial class LayoutContentView : Panel
                 _ => (Orientation.Vertical, false)
             };
 
-            if (root.Content is not SplitLayoutContent split || split.Orientation != orientation)
-            {
-                split = new SplitLayoutContent(orientation)
-                {
-                    new SplitLayoutItem(root.Content, GridLength.Star)
-                };
-            }
+            ILayoutContent newContent = AddAsSplit(root.Content, content, orientation, insertFirst);
 
-            if (insertFirst)
+            if (root.Content != newContent)
             {
-                split.Insert(0, new SplitLayoutItem(content, GridLength.Star));
-            }
-            else
-            {
-                split.Add(new SplitLayoutItem(content, GridLength.Star));
-            }
-
-            if (root.Content != split)
-            {
-                root.Content = split;
+                root.Content = newContent;
             }
         }
         else

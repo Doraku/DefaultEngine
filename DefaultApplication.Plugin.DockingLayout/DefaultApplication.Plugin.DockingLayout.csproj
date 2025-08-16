@@ -19,6 +19,9 @@
     <Compile Update="Internal\Controls\HideablesControl.axaml.cs">
       <DependentUpon>HideablesControl.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Internal\Controls\LayoutDropControl.axaml.cs">
+      <DependentUpon>LayoutDropControl.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   
 </Project>

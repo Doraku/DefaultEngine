@@ -33,7 +33,7 @@ internal sealed partial class HideablesControl : Panel
 
         ItemsSource = new ObservableCollection<ILayoutContent>
         {
-             new LayoutContent(LayoutOptions.Closable | LayoutOptions.Movable | LayoutOptions.Hideable, Guid.NewGuid().ToString()),
+             new LayoutContent(LayoutOptions.Closable | LayoutOptions.Movable | LayoutOptions.Hideable | LayoutOptions.Stackable, Guid.NewGuid().ToString()),
              new LayoutContent(LayoutOptions.Closable | LayoutOptions.Movable | LayoutOptions.Hideable, Guid.NewGuid().ToString())
         };
 
