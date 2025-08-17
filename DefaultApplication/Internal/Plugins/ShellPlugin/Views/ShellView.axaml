@@ -50,7 +50,7 @@
                     DockPanel.Dock="Left"
                     Source="avares://DefaultApplication.Core/Resources/Images/DefaultLogo.png" />
 
-                <ContentPresenter Content="{Binding $parent[views:ShellView].DataContext.Menus}" />
+                <ContentControl Content="{Binding Menus}" />
 
             </DockPanel>
 

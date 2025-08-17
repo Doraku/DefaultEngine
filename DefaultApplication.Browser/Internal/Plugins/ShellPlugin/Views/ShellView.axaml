@@ -54,7 +54,7 @@
                 Margin="0,0,200,0"
                 HorizontalAlignment="Left">
 
-                <ContentPresenter Content="{Binding $parent[views:ShellView].DataContext.Menus}" />
+                <ContentControl Content="{Binding Menus}" />
 
             </DockPanel>
 

@@ -93,7 +93,7 @@
         </StackPanel>
 
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <ContentPresenter Content="{Binding #PART_Root.DataContext?.Content, Mode=TwoWay}" />
+            <ContentControl Content="{Binding Content, Mode=TwoWay}" />
         </ScrollViewer>
 
     </DockPanel>

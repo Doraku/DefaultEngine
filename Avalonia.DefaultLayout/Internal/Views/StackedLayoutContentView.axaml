@@ -1,6 +1,19 @@
-<UserControl
+<TabControl
     x:Class="Avalonia.DefaultLayout.Internal.Views.StackedLayoutContentView"
     xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    Welcome to Avalonia!
-</UserControl>
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    ItemsSource="{Binding}">
+
+    <TabControl.ItemTemplate>
+        <DataTemplate>
+            <ContentControl Content="{Binding Content}" />
+        </DataTemplate>
+    </TabControl.ItemTemplate>
+
+    <TabControl.ContentTemplate>
+        <DataTemplate>
+            <ContentControl Content="{Binding Content}" />
+        </DataTemplate>
+    </TabControl.ContentTemplate>
+
+</TabControl>

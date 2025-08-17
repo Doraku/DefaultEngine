@@ -170,7 +170,7 @@
 
                         </Border.Styles>
 
-                        <ContentPresenter Content="{Binding #PART_HideableHeader.DataContext.Content}" />
+                        <ContentControl Content="{Binding Content}" />
 
                     </Border>
                 </DataTemplate>
