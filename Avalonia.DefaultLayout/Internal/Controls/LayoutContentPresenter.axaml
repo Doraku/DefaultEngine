@@ -11,7 +11,7 @@
 
         <Setter Property="Template">
             <ControlTemplate>
-                <Panel>
+                <Panel Background="Transparent">
                     <Panel.DataTemplates>
 
                         <DataTemplate DataType="defaultlayout:LayoutContent">
@@ -30,7 +30,7 @@
 
                     <ContentPresenter Content="{TemplateBinding Content, Mode=TwoWay}" />
 
-                    <local:LayoutDropControl />
+                    <local:LayoutDropControl x:Name="DropControl" />
 
                 </Panel>
             </ControlTemplate>

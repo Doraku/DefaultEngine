@@ -1,7 +1,6 @@
 <Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:Avalonia.DefaultLayout.Internal.Controls"
     xmlns:views="using:Avalonia.DefaultLayout.Internal.Views">
 
     <Styles.Resources>
@@ -14,13 +13,5 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>
-
-    <Style Selector="views|StackedLayoutContentView controls|LayoutDropControl">
-        <Setter Property="IsVisible" Value="False" />
-    </Style>
-
-    <Style Selector="FlyoutPresenter controls|LayoutDropControl">
-        <Setter Property="IsVisible" Value="False" />
-    </Style>
 
 </Styles>

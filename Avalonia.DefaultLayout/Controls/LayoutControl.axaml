@@ -23,7 +23,7 @@
                             <Setter Property="IsVisible" Value="False" />
                         </Style>
 
-                        <Style Selector=":is(Visual).LayoutOver controls|LayoutDropControl">
+                        <Style Selector=":is(Visual).LayoutOver controls|LayoutContentPresenter:pointerover>Panel>controls|LayoutDropControl">
                             <Setter Property="IsVisible" Value="True" />
                         </Style>
 

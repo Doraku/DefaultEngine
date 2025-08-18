@@ -4,9 +4,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:Avalonia.DefaultLayout.Controls"
     xmlns:converters="using:Avalonia.DefaultLayout.Internal.Converters"
-    xmlns:local="using:Avalonia.DefaultLayout.Internal.Controls">
+    xmlns:local="using:Avalonia.DefaultLayout.Internal.Controls"
+    xmlns:views="using:Avalonia.DefaultLayout.Internal.Views">
 
     <Panel.Styles>
+
+        <Style Selector="views|StackedLayoutContentView local|LayoutDropControl">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+
+        <Style Selector="FlyoutPresenter local|LayoutDropControl">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
 
         <Style Selector="ContentPresenter.LayoutTarget">
             <Setter Property="Content">
