@@ -113,6 +113,13 @@ public sealed class SplitLayoutContent : ObservableCollection<SplitLayoutItem>, 
         _orientation = orientation;
     }
 
+    protected override void InsertItem(int index, SplitLayoutItem item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+
+        base.InsertItem(index, item);
+    }
+
     #region INotifyPropertyChanged
 
     private void NotifyPropertyChanged(string? propertyName) => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
@@ -129,7 +136,19 @@ public sealed class SplitLayoutContent : ObservableCollection<SplitLayoutItem>, 
 
 public sealed class StackedLayoutContent : ObservableCollection<ILayoutContent>, ILayoutContent
 {
-    public LayoutOptions Options => LayoutOptions.None;
+    public LayoutOptions Options => LayoutOptions.Stackable;
 
     public object Content => this;
+
+    protected override void InsertItem(int index, ILayoutContent item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+
+        if (!item.Options.HasFlag(LayoutOptions.Stackable))
+        {
+            throw new ArgumentException("item is not stackable", nameof(item));
+        }
+
+        base.InsertItem(index, item);
+    }
 }

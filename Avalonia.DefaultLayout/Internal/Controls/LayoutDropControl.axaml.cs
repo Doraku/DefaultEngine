@@ -8,7 +8,7 @@ using Avalonia.VisualTree;
 
 namespace Avalonia.DefaultLayout.Internal.Controls;
 
-internal sealed partial class LayoutDropControl : Grid
+internal sealed partial class LayoutDropControl : Panel
 {
     public static readonly StyledProperty<bool> AllowStackingProperty = AvaloniaProperty.Register<LayoutDropControl, bool>(nameof(AllowStacking), false);
 
@@ -16,6 +16,22 @@ internal sealed partial class LayoutDropControl : Grid
     {
         get => GetValue(AllowStackingProperty);
         set => SetValue(AllowStackingProperty, value);
+    }
+
+    public static readonly StyledProperty<bool> InnerIsVisibleProperty = AvaloniaProperty.Register<LayoutDropControl, bool>(nameof(InnerIsVisible), true);
+
+    public bool InnerIsVisible
+    {
+        get => GetValue(InnerIsVisibleProperty);
+        set => SetValue(InnerIsVisibleProperty, value);
+    }
+
+    public static readonly StyledProperty<bool> OuterIsVisibleProperty = AvaloniaProperty.Register<LayoutDropControl, bool>(nameof(OuterIsVisible), true);
+
+    public bool OuterIsVisible
+    {
+        get => GetValue(OuterIsVisibleProperty);
+        set => SetValue(OuterIsVisibleProperty, value);
     }
 
     public LayoutDropControl()
@@ -28,18 +44,6 @@ internal sealed partial class LayoutDropControl : Grid
             target.AddHandler(DragDrop.DragLeaveEvent, OnTargetDragLeave);
             target.AddHandler(DragDrop.DragOverEvent, OnTargetDragOver);
             target.AddHandler(DragDrop.DropEvent, OnTargetDrop);
-        }
-    }
-
-    private void OnDragEnter(object? sender, DragEventArgs e)
-    {
-        if (e.Data.Get(LayoutOperation.Id) is not LayoutOperation operation)
-        {
-            return;
-        }
-
-        if (operation.Content.Options.HasFlag(LayoutOptions.Stackable))
-        {
         }
     }
 
@@ -91,14 +95,14 @@ internal sealed partial class LayoutDropControl : Grid
             return;
         }
 
-        (Orientation? orientation, bool insertFirst) = (control.HorizontalAlignment, control.VerticalAlignment) switch
+        (Orientation? orientation, int insertIndex) = (control.HorizontalAlignment, control.VerticalAlignment) switch
         {
-            (HorizontalAlignment.Center, VerticalAlignment.Center) => (null as Orientation?, false),
-            (_, VerticalAlignment.Top) => (Orientation.Vertical, true),
-            (_, VerticalAlignment.Bottom) => (Orientation.Vertical, false),
-            (HorizontalAlignment.Left, _) => (Orientation.Horizontal, true),
-            (HorizontalAlignment.Right, _) => (Orientation.Horizontal, false),
-            _ => (default, default)
+            (HorizontalAlignment.Center, VerticalAlignment.Center) => (null as Orientation?, -1),
+            (_, VerticalAlignment.Top) => (Orientation.Vertical, 0),
+            (_, VerticalAlignment.Bottom) => (Orientation.Vertical, -1),
+            (HorizontalAlignment.Left, _) => (Orientation.Horizontal, 0),
+            (HorizontalAlignment.Right, _) => (Orientation.Horizontal, -1),
+            _ => (default, -1)
         };
 
         if (orientation is null && presenter.Content is { } && !operation.Content.Options.HasFlag(LayoutOptions.Stackable))
@@ -110,10 +114,10 @@ internal sealed partial class LayoutDropControl : Grid
 
         operation.RemoveAction();
 
-        // in case the remove action remove the presenter from the layout
+        // in case the remove action remove the presenter from the layout look for the new presenter of current content
         if (presenter.Parent is null && parentPresenter != null)
         {
-            presenter = parentPresenter;
+            presenter = parentPresenter.GetSelfAndVisualDescendants().OfType<LayoutContentPresenter>().FirstOrDefault(child => child.Content == presenter.Content) ?? presenter;
         }
 
         ILayoutContent newContent;
@@ -134,7 +138,16 @@ internal sealed partial class LayoutDropControl : Grid
         }
         else
         {
-            newContent = LayoutContentView.AddAsSplit(presenter.Content, operation.Content, orientation.Value, insertFirst);
+            if (presenter.Content is not SplitLayoutContent
+                && presenter.FindAncestorOfType<LayoutContentPresenter>() is LayoutContentPresenter parent
+                && parent.Content is SplitLayoutContent split
+                && split.Orientation == orientation)
+            {
+                insertIndex = split.Select((item, index) => (Index: index, item.Content)).FirstOrDefault(item => item.Content == presenter.Content).Index;
+                presenter = parent;
+            }
+
+            newContent = LayoutContentView.AddAsSplit(presenter.Content, operation.Content, orientation.Value, insertIndex);
         }
 
         if (presenter.Content != newContent)

@@ -1,11 +1,12 @@
-<Grid
+<Panel
     x:Class="Avalonia.DefaultLayout.Internal.Controls.LayoutDropControl"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Avalonia.DefaultLayout.Controls"
     xmlns:converters="using:Avalonia.DefaultLayout.Internal.Converters"
     xmlns:local="using:Avalonia.DefaultLayout.Internal.Controls">
 
-    <Grid.Styles>
+    <Panel.Styles>
 
         <Style Selector="ContentPresenter.LayoutTarget">
             <Setter Property="Content">
@@ -28,7 +29,7 @@
             </Setter>
         </Style>
 
-    </Grid.Styles>
+    </Panel.Styles>
 
     <Border
         x:Name="LayoutTarget"
@@ -38,31 +39,57 @@
         <Rectangle Fill="{DynamicResource SystemAccentColor}" Opacity="0.5" />
     </Border>
 
-    <ContentPresenter
-        HorizontalAlignment="Left"
-        VerticalAlignment="Center"
-        Classes="LayoutTarget"
-        Tag="{DynamicResource Avalonia.DefaultLayout.DockLeftIcon}" />
+    <Panel>
 
-    <ContentPresenter
-        HorizontalAlignment="Right"
-        VerticalAlignment="Center"
-        Classes="LayoutTarget"
-        Tag="{DynamicResource Avalonia.DefaultLayout.DockRightIcon}" />
+        <Panel.IsVisible>
+            <MultiBinding Converter="{x:Static BoolConverters.Or}">
 
-    <ContentPresenter
+                <Binding
+                    Converter="{x:Static converters:ILayoutContentConverters.IsNotLayoutContentNorStackedLayoutContent}"
+                    Path="Content"
+                    RelativeSource="{RelativeSource AncestorType={x:Type local:LayoutContentPresenter}}" />
+
+                <MultiBinding Converter="{x:Static converters:ILayoutContentConverters.Equal}">
+
+                    <Binding Path="Content" RelativeSource="{RelativeSource AncestorType={x:Type local:LayoutContentPresenter}}" />
+
+                    <Binding Path="Content" RelativeSource="{RelativeSource AncestorType={x:Type controls:LayoutControl}}" />
+
+                </MultiBinding>
+
+            </MultiBinding>
+        </Panel.IsVisible>
+
+        <ContentPresenter
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Classes="LayoutTarget"
+            Tag="{DynamicResource Avalonia.DefaultLayout.DockLeftIcon}" />
+
+        <ContentPresenter
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Classes="LayoutTarget"
+            Tag="{DynamicResource Avalonia.DefaultLayout.DockRightIcon}" />
+
+        <ContentPresenter
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Classes="LayoutTarget"
+            Tag="{DynamicResource Avalonia.DefaultLayout.DockTopIcon}" />
+
+        <ContentPresenter
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Classes="LayoutTarget"
+            Tag="{DynamicResource Avalonia.DefaultLayout.DockBottomIcon}" />
+
+    </Panel>
+
+    <DockPanel
         HorizontalAlignment="Center"
-        VerticalAlignment="Top"
-        Classes="LayoutTarget"
-        Tag="{DynamicResource Avalonia.DefaultLayout.DockTopIcon}" />
-
-    <ContentPresenter
-        HorizontalAlignment="Center"
-        VerticalAlignment="Bottom"
-        Classes="LayoutTarget"
-        Tag="{DynamicResource Avalonia.DefaultLayout.DockBottomIcon}" />
-
-    <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        VerticalAlignment="Center"
+        IsVisible="{Binding Content, RelativeSource={RelativeSource AncestorType={x:Type local:LayoutContentPresenter}}, Converter={x:Static converters:ILayoutContentConverters.IsNotSplitLayoutContent}}">
 
         <ContentPresenter
             HorizontalAlignment="Left"
@@ -97,14 +124,20 @@
                 <MultiBinding Converter="{x:Static BoolConverters.Or}">
 
                     <Binding
-                        Converter="{x:Static converters:ILayoutContentConverters.IsStackable}"
-                        Path="Content"
-                        RelativeSource="{RelativeSource AncestorType={x:Type local:LayoutContentPresenter}}" />
-
-                    <Binding
                         Converter="{x:Static ObjectConverters.IsNull}"
                         Path="Content"
                         RelativeSource="{RelativeSource AncestorType={x:Type local:LayoutContentPresenter}}" />
+
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+
+                        <Binding
+                            Converter="{x:Static converters:ILayoutContentConverters.IsStackable}"
+                            Path="Content"
+                            RelativeSource="{RelativeSource AncestorType={x:Type local:LayoutContentPresenter}}" />
+
+                        <Binding Path="AllowStacking" RelativeSource="{RelativeSource AncestorType={x:Type local:LayoutDropControl}}" />
+
+                    </MultiBinding>
 
                 </MultiBinding>
             </ContentPresenter.IsVisible>
@@ -112,4 +145,4 @@
 
     </DockPanel>
 
-</Grid>
+</Panel>

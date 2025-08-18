@@ -1,8 +1,11 @@
 using System.Collections.Generic;
-using Avalonia;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.DefaultLayout.Internal;
+using Avalonia.DefaultLayout.Internal.Controls;
 using Avalonia.Input;
+using Avalonia.VisualTree;
 
 namespace Avalonia.DefaultLayout.Controls;
 
@@ -60,7 +63,17 @@ public sealed class LayoutControl : TemplatedControl
 
     private void OnDragEnter(object? sender, DragEventArgs e)
     {
+        if (e.Data.Get(LayoutOperation.Id) is not LayoutOperation operation)
+        {
+            return;
+        }
+
         Classes.Add("LayoutOver");
+
+        foreach (LayoutDropControl control in this.GetVisualDescendants().OfType<LayoutDropControl>())
+        {
+            control.AllowStacking = operation.Content.Options.HasFlag(LayoutOptions.Stackable);
+        }
     }
 
     private void OnDragLeave(object? sender, DragEventArgs e)

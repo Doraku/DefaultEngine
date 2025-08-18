@@ -19,7 +19,7 @@ public sealed partial class LayoutContentView : Border
         InitializeComponent();
     }
 
-    public static ILayoutContent AddAsSplit(ILayoutContent parentContent, ILayoutContent newContent, Orientation orientation, bool insertFirst)
+    public static ILayoutContent AddAsSplit(ILayoutContent parentContent, ILayoutContent newContent, Orientation orientation, int insertIndex)
     {
         if (parentContent is not SplitLayoutContent split || split.Orientation != orientation)
         {
@@ -29,9 +29,9 @@ public sealed partial class LayoutContentView : Border
             };
         }
 
-        if (insertFirst)
+        if (insertIndex >= 0)
         {
-            split.Insert(0, new SplitLayoutItem(newContent, GridLength.Star));
+            split.Insert(insertIndex, new SplitLayoutItem(newContent, GridLength.Star));
         }
         else
         {
@@ -124,16 +124,16 @@ public sealed partial class LayoutContentView : Border
                 return;
             }
 
-            (Orientation orientation, bool insertFirst) = (Grid.GetColumn(parent), Grid.GetRow(parent)) switch
+            (Orientation orientation, int insertIndex) = (Grid.GetColumn(parent), Grid.GetRow(parent)) switch
             {
-                (1, 0) => (Orientation.Vertical, true),
-                (0, 1) => (Orientation.Horizontal, true),
-                (1, 2) => (Orientation.Vertical, false),
-                (2, 1) => (Orientation.Horizontal, false),
-                _ => (Orientation.Vertical, false)
+                (1, 0) => (Orientation.Vertical, 0),
+                (0, 1) => (Orientation.Horizontal, 0),
+                (1, 2) => (Orientation.Vertical, -1),
+                (2, 1) => (Orientation.Horizontal, -1),
+                _ => (Orientation.Vertical, -1)
             };
 
-            ILayoutContent newContent = AddAsSplit(root.Content, content, orientation, insertFirst);
+            ILayoutContent newContent = AddAsSplit(root.Content, content, orientation, insertIndex);
 
             if (root.Content != newContent)
             {
