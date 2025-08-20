@@ -12,36 +12,6 @@
 
     <Border.Styles>
 
-        <Style Selector=":is(Button).LayoutButton">
-
-            <Setter Property="Foreground" Value="{Binding $parent[TopLevel].Foreground}" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="DockPanel.Dock" Value="Right" />
-            <Setter Property="Margin" Value="5 1 0 0" />
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Panel
-                        Width="18"
-                        Height="18"
-                        Background="{TemplateBinding Background}">
-                        <Viewbox Margin="4">
-                            <PathIcon Data="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" />
-                        </Viewbox>
-                    </Panel>
-                </ControlTemplate>
-            </Setter>
-
-            <Style Selector="^:pointerover, ^:pressed">
-
-                <Setter Property="RenderTransform" Value="none" />
-                <Setter Property="Foreground" Value="{Binding $parent[TopLevel].Background}" />
-                <Setter Property="Background" Value="{Binding $parent[TopLevel].Foreground}" />
-
-            </Style>
-
-        </Style>
-
         <Style Selector="Rectangle#PART_FocusWitness">
             <Setter Property="Fill" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
         </Style>
@@ -68,12 +38,12 @@
             Orientation="Vertical"
             PointerPressed="OnHeaderClicked">
 
-            <Rectangle x:Name="PART_FocusWitness" Height="3" />
+            <Rectangle x:Name="PART_FocusWitness" Height="2" />
 
             <DockPanel>
 
                 <Button
-                    Classes="LayoutButton"
+                    Classes="DefaultLayoutButton"
                     Click="OnClose"
                     Content="{DynamicResource Avalonia.DefaultLayout.CloseIcon}"
                     IsVisible="{Binding Converter={x:Static converters:ILayoutContentConverters.IsClosable}}"
@@ -81,7 +51,7 @@
 
                 <Button
                     x:Name="PART_HideButton"
-                    Classes="LayoutButton"
+                    Classes="DefaultLayoutButton"
                     Click="OnToggleHide"
                     IsVisible="{Binding Converter={x:Static converters:ILayoutContentConverters.IsHideable}}"
                     ToolTip.Tip="Auto Hide" />

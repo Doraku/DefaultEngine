@@ -14,4 +14,34 @@
         </ResourceDictionary>
     </Styles.Resources>
 
+    <Style Selector=":is(Button).DefaultLayoutButton">
+
+        <Setter Property="Foreground" Value="{Binding $parent[TopLevel].Foreground}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="DockPanel.Dock" Value="Right" />
+        <Setter Property="Margin" Value="5 1 0 0" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel
+                    Width="18"
+                    Height="18"
+                    Background="{TemplateBinding Background}">
+                    <Viewbox Margin="4">
+                        <PathIcon Data="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" />
+                    </Viewbox>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:pointerover, ^:pressed">
+
+            <Setter Property="RenderTransform" Value="none" />
+            <Setter Property="Foreground" Value="{Binding $parent[TopLevel].Background}" />
+            <Setter Property="Background" Value="{Binding $parent[TopLevel].Foreground}" />
+
+        </Style>
+
+    </Style>
+
 </Styles>

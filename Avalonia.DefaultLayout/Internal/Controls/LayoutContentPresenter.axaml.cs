@@ -52,16 +52,6 @@ internal sealed class LayoutContentPresenter : TemplatedControl
                         }
                     };
             }
-            else if (parent.Content is StackedLayoutContent stacked)
-            {
-                return () =>
-                {
-                    if (stacked.Remove(Content) && stacked.Count is 1)
-                    {
-                        parent.Content = stacked.FirstOrDefault();
-                    }
-                };
-            }
         }
 
         return static () => { };

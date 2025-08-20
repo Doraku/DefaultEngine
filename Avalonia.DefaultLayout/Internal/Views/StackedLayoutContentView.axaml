@@ -1,19 +1,122 @@
-<TabControl
+<DockPanel
     x:Class="Avalonia.DefaultLayout.Internal.Views.StackedLayoutContentView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    ItemsSource="{Binding}">
+    xmlns:converters="using:Avalonia.DefaultLayout.Internal.Converters"
+    xmlns:layout="using:Avalonia.DefaultLayout"
+    x:Name="PART_Root">
 
-    <TabControl.ItemTemplate>
-        <DataTemplate>
-            <ContentControl Content="{Binding Content}" />
-        </DataTemplate>
-    </TabControl.ItemTemplate>
+    <DockPanel.Styles>
 
-    <TabControl.ContentTemplate>
-        <DataTemplate>
-            <ContentControl Content="{Binding Content}" />
-        </DataTemplate>
-    </TabControl.ContentTemplate>
+        <Style Selector="#PART_Root>Border>DockPanel>Rectangle#PART_FocusWitness">
+            <Setter Property="Fill" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+        </Style>
 
-</TabControl>
+        <Style Selector="#PART_Root:focus-within>Border>DockPanel>Rectangle#PART_FocusWitness">
+            <Setter Property="Fill" Value="{DynamicResource SystemAccentColor}" />
+        </Style>
+
+        <Style Selector=":is(Button).DefaultLayoutButton">
+            <Setter Property="Opacity" Value="0" />
+        </Style>
+
+        <Style Selector="Border#PART_StackedHeader:pointerover :is(Button).DefaultLayoutButton">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+
+    </DockPanel.Styles>
+
+    <ListBox
+        x:Name="PART_ContentList"
+        Background="Transparent"
+        DockPanel.Dock="Top"
+        ItemsSource="{Binding}"
+        SelectionMode="AlwaysSelected">
+
+        <ListBox.Styles>
+
+            <Style Selector="ListBoxItem">
+
+                <Setter Property="Template">
+                    <ControlTemplate>
+                        <Border x:Name="PART_StackedHeader" PointerPressed="OnHeaderClicked">
+
+                            <Border.Background>
+                                <SolidColorBrush Opacity="0.25" Color="{DynamicResource SystemBaseMediumColor}" />
+                            </Border.Background>
+
+                            <Border.Styles>
+
+                                <Style Selector="Border#PART_StackedHeader">
+
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+                                    <Setter Property="BorderThickness" Value="0 0 0 0" />
+                                    <Setter Property="Margin" Value="1 2 1 0" />
+                                    <Setter Property="TextElement.Foreground" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+
+                                </Style>
+
+                                <Style Selector="Border#PART_StackedHeader:pointerover">
+                                    <Setter Property="TextElement.Foreground" Value="{Binding $parent[TopLevel].Foreground}" />
+                                </Style>
+
+                                <Style Selector="#PART_Root:focus-within Border#PART_StackedHeader">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}" />
+                                </Style>
+
+                            </Border.Styles>
+
+                            <DockPanel>
+
+                                <Button
+                                    Classes="DefaultLayoutButton"
+                                    Click="OnClose"
+                                    Content="{DynamicResource Avalonia.DefaultLayout.CloseIcon}"
+                                    IsVisible="{Binding Converter={x:Static converters:ILayoutContentConverters.IsClosable}}"
+                                    ToolTip.Tip="Close" />
+
+                                <ContentControl Content="{Binding Content}" />
+
+                            </DockPanel>
+
+                        </Border>
+                    </ControlTemplate>
+                </Setter>
+
+                <Style Selector="^:selected /template/ Border#PART_StackedHeader">
+                    <Setter Property="BorderThickness" Value="0 2 0 0" />
+                    <Setter Property="Margin" Value="1 0" />
+                    <Setter Property="TextElement.Foreground" Value="{Binding $parent[TopLevel].Foreground}" />
+                </Style>
+
+                <Style Selector="^:selected /template/ :is(Button).DefaultLayoutButton">
+                    <Setter Property="Opacity" Value="1" />
+                </Style>
+
+            </Style>
+
+        </ListBox.Styles>
+
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <WrapPanel />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+
+    </ListBox>
+
+    <Border BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}" BorderThickness="1,0,1,1">
+        <DockPanel>
+
+            <Rectangle
+                x:Name="PART_FocusWitness"
+                Height="2"
+                DockPanel.Dock="Top" />
+
+            <ContentPresenter Content="{Binding #PART_ContentList.SelectedItem?.Content}" />
+
+        </DockPanel>
+    </Border>
+
+</DockPanel>

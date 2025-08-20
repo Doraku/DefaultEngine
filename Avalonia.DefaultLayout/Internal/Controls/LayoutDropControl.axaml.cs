@@ -74,7 +74,7 @@ internal sealed partial class LayoutDropControl : Panel
         if (sender is not Layoutable control
             || this.FindAncestorOfType<LayoutContentPresenter>() is not LayoutContentPresenter presenter
             || e.Data.Get(LayoutOperation.Id) is not LayoutOperation operation
-            || operation.Presenter == presenter)
+            || (operation.Presenter == presenter && presenter.Content is not StackedLayoutContent))
         {
             return;
         }
@@ -127,7 +127,7 @@ internal sealed partial class LayoutDropControl : Panel
                 && parent.Content is SplitLayoutContent split
                 && split.Orientation == orientation)
             {
-                insertIndex = split.Select((item, index) => (Index: index, item.Content)).FirstOrDefault(item => item.Content == presenter.Content).Index;
+                insertIndex = split.Select((item, index) => (Index: index, item.Content)).FirstOrDefault(item => item.Content == presenter.Content).Index + (insertIndex < 0 ? 1 : 0);
                 presenter = parent;
             }
 
