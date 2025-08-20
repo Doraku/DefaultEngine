@@ -18,22 +18,6 @@ internal sealed partial class LayoutDropControl : Panel
         set => SetValue(AllowStackingProperty, value);
     }
 
-    public static readonly StyledProperty<bool> InnerIsVisibleProperty = AvaloniaProperty.Register<LayoutDropControl, bool>(nameof(InnerIsVisible), true);
-
-    public bool InnerIsVisible
-    {
-        get => GetValue(InnerIsVisibleProperty);
-        set => SetValue(InnerIsVisibleProperty, value);
-    }
-
-    public static readonly StyledProperty<bool> OuterIsVisibleProperty = AvaloniaProperty.Register<LayoutDropControl, bool>(nameof(OuterIsVisible), true);
-
-    public bool OuterIsVisible
-    {
-        get => GetValue(OuterIsVisibleProperty);
-        set => SetValue(OuterIsVisibleProperty, value);
-    }
-
     public LayoutDropControl()
     {
         InitializeComponent();

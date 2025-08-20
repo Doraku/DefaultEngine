@@ -15,6 +15,14 @@ internal sealed class LayoutContentPresenter : TemplatedControl
         set => SetValue(ContentProperty, value);
     }
 
+    public static readonly StyledProperty<bool> IsRootProperty = AvaloniaProperty.Register<LayoutContentPresenter, bool>(nameof(IsRoot), false);
+
+    public bool IsRoot
+    {
+        get => GetValue(IsRootProperty);
+        set => SetValue(IsRootProperty, value);
+    }
+
     public Action GetRemoveAction()
     {
         if (Content is { })

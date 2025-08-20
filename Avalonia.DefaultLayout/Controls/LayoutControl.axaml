@@ -57,7 +57,8 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Margin="5"
-                        Content="{Binding Content, Mode=TwoWay}" />
+                        Content="{Binding Content, Mode=TwoWay}"
+                        IsRoot="True" />
 
                 </Grid>
             </ControlTemplate>

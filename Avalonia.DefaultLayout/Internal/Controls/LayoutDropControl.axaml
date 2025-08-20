@@ -58,13 +58,7 @@
                     Path="Content"
                     RelativeSource="{RelativeSource AncestorType={x:Type local:LayoutContentPresenter}}" />
 
-                <MultiBinding Converter="{x:Static converters:ILayoutContentConverters.Equal}">
-
-                    <Binding Path="Content" RelativeSource="{RelativeSource AncestorType={x:Type local:LayoutContentPresenter}}" />
-
-                    <Binding Path="Content" RelativeSource="{RelativeSource AncestorType={x:Type controls:LayoutControl}}" />
-
-                </MultiBinding>
+                <Binding Path="IsRoot" RelativeSource="{RelativeSource AncestorType={x:Type local:LayoutContentPresenter}}" />
 
             </MultiBinding>
         </Panel.IsVisible>
