@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Avalonia.Data.Converters;
 
 namespace Avalonia.DefaultLayout.Internal.Converters;
@@ -20,4 +21,6 @@ internal static class ILayoutContentConverters
     public static FuncValueConverter<ILayoutContent, bool> IsNotLayoutContentNorStackedLayoutContent { get; } = new FuncValueConverter<ILayoutContent, bool>(content => content is not LayoutContent and not StackedLayoutContent);
 
     public static FuncMultiValueConverter<ILayoutContent, bool> Equal { get; } = new FuncMultiValueConverter<ILayoutContent, bool>(contents => contents.All(content => contents.FirstOrDefault() == content));
+
+    public static FuncValueConverter<object, object?> AsHeader { get; } = new FuncValueConverter<object, object?>(content => content is null ? content : Activator.CreateInstance(typeof(LayoutHeaderContent<>).MakeGenericType(content.GetType()), content));
 }

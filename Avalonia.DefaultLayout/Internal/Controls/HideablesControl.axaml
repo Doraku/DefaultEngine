@@ -170,7 +170,7 @@
 
                         </Border.Styles>
 
-                        <ContentControl Content="{Binding Content}" />
+                        <ContentControl Content="{Binding Content, Converter={x:Static converters:ILayoutContentConverters.AsHeader}}" />
 
                     </Border>
                 </DataTemplate>

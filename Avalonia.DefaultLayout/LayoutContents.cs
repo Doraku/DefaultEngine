@@ -14,6 +14,11 @@ public interface ILayoutContent
     object Content { get; }
 }
 
+public sealed record LayoutHeaderContent<T>(T Content)
+{
+    public override string ToString() => Content?.ToString() ?? typeof(T).ToString();
+}
+
 public sealed class LayoutContent : ILayoutContent, INotifyPropertyChanged
 {
     private LayoutOptions _options;

@@ -76,7 +76,7 @@
                                     IsVisible="{Binding Converter={x:Static converters:ILayoutContentConverters.IsClosable}}"
                                     ToolTip.Tip="Close" />
 
-                                <ContentControl Content="{Binding Content}" />
+                                <ContentControl Content="{Binding Content, Converter={x:Static converters:ILayoutContentConverters.AsHeader}}" />
 
                             </DockPanel>
 

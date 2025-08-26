@@ -56,7 +56,7 @@
                     IsVisible="{Binding Converter={x:Static converters:ILayoutContentConverters.IsHideable}}"
                     ToolTip.Tip="Auto Hide" />
 
-                <ContentPresenter HorizontalAlignment="Left" Content="kikoo" />
+                <ContentPresenter HorizontalAlignment="Left" Content="{Binding Content, , Converter={x:Static converters:ILayoutContentConverters.AsHeader}}" />
 
             </DockPanel>
 
