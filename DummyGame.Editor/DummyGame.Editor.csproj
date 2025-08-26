@@ -15,9 +15,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Avalonia.DefaultLayout\Avalonia.DefaultLayout.csproj" />
     <ProjectReference Include="..\DefaultApplication.Core\DefaultApplication.Core.csproj" />
-    <ProjectReference Include="..\DefaultApplication.Plugin.DefaultUnDo\DefaultApplication.Plugin.DefaultUnDo.csproj" />
-    <ProjectReference Include="..\DefaultApplication.Plugin.DockingLayout\DefaultApplication.Plugin.DefaultLayout.csproj" />
-    <ProjectReference Include="..\DefaultApplication.Plugin.Messenger\DefaultApplication.Plugin.Messenger.csproj" />
     <ProjectReference Include="..\DefaultApplication\DefaultApplication.csproj" />
     <ProjectReference Include="..\DefaultEngine.Editor\DefaultEngine.Editor.csproj" />
   </ItemGroup>

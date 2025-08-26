@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultApplication.Browser"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_DefaultApplication", "_DefaultApplication", "{3475B6FA-FE56-40D6-BBCD-154B9CD3049B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultApplication.Plugin.DefaultLayout", "DefaultApplication.Plugin.DockingLayout\DefaultApplication.Plugin.DefaultLayout.csproj", "{FD816EC5-F00E-4703-B053-606924251564}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultApplication.Plugin.DefaultLayout", "DefaultApplication.Plugin.DefaultLayout\DefaultApplication.Plugin.DefaultLayout.csproj", "{FD816EC5-F00E-4703-B053-606924251564}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{9A97DCB1-011D-474A-82FF-A65AC151E371}"
 EndProject

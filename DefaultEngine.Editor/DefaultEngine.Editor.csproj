@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DefaultApplication.Plugin.DefaultUnDo\DefaultApplication.Plugin.DefaultUnDo.csproj" />
+    <ProjectReference Include="..\DefaultApplication.Plugin.Messenger\DefaultApplication.Plugin.Messenger.csproj" />
     <ProjectReference Include="..\DefaultApplication\DefaultApplication.csproj" />
     <ProjectReference Include="..\DefaultEngine.Editor.Api\DefaultEngine.Editor.Api.csproj" />
   </ItemGroup>
