@@ -1,36 +1,60 @@
-﻿using Avalonia;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.DefaultLayout;
+using Avalonia.DefaultLayout.Controls;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using DefaultApplication.DependencyInjection;
 
 namespace DefaultApplication.DefaultLayout.Internal;
 
 internal sealed class DockingLayoutService : IDockingLayoutService
 {
-    public DockingLayoutService(IDelayed<TopLevel> mainTopLevel)
-    { }
+    private readonly Task<LayoutControl> _root;
 
-    public void Show<T>(T content, LayoutOptions dockableType)
+    public DockingLayoutService(IDelayed<TopLevel> mainTopLevel)
     {
+        _root = mainTopLevel.Task.ContinueWith(
+            async task =>
+            {
+                TopLevel topLevel = await task.ConfigureAwait(true);
+
+                return topLevel.FindDescendantOfType<LayoutControl>() ?? throw new InvalidOperationException("No LayoutControl detected");
+            },
+            CancellationToken.None,
+            TaskContinuationOptions.ExecuteSynchronously,
+            TaskScheduler.Default).Unwrap();
+    }
+
+    public async Task<ILayoutContent> ShowAsync<T>(LayoutOptions options, T content)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+
         if (!Dispatcher.UIThread.CheckAccess())
         {
-            Dispatcher.UIThread.Invoke(() => Show(content, dockableType));
+            return await Dispatcher.UIThread.InvokeAsync(() => ShowAsync(options, content)).ConfigureAwait(false);
+        }
 
+        LayoutControl root = await _root.ConfigureAwait(true);
+        ILayoutContent layoutContent = new LayoutContent(options, content);
+
+        root.Content = layoutContent;
+
+        return layoutContent;
+    }
+
+    public async Task CloseAsync(ILayoutContent content)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            await Dispatcher.UIThread.InvokeAsync(() => CloseAsync(content)).ConfigureAwait(false);
             return;
         }
 
-        Window window = new()
-        {
-            Content = content
-        };
-
-#if DEBUG
-        window.AttachDevTools();
-#endif
-
-        window.Classes.Add("Dockable");
-
-        window.Show();
+        LayoutControl root = await _root.ConfigureAwait(true);
     }
 }

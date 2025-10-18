@@ -1,8 +1,11 @@
-﻿using Avalonia.DefaultLayout;
+﻿using System.Threading.Tasks;
+using Avalonia.DefaultLayout;
 
 namespace DefaultApplication.DefaultLayout;
 
 public interface IDockingLayoutService
 {
-    void Show<T>(T content, LayoutOptions dockableType);
+    Task<ILayoutContent> ShowAsync<T>(LayoutOptions options, T content);
+
+    Task CloseAsync(ILayoutContent content);
 }
