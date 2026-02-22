@@ -64,14 +64,13 @@ public sealed partial class LayoutContentView : Border
             control.PointerReleased -= OnDropped;
             control.PointerMoved -= OnDragged;
 
-            DataObject data = new();
-
-            data.Set(LayoutOperation.Id, new LayoutOperation(
-                presenter,
-                (ILayoutContent)DataContext,
-                GetRemoveAction()));
-
-            DragDrop.DoDragDrop(e, data, DragDropEffects.Move);
+            DragDrop.DoDragDropAsync(
+                e,
+                IDataTransfer.Create(new LayoutOperation(
+                    presenter,
+                    (ILayoutContent)DataContext,
+                    GetRemoveAction())),
+                DragDropEffects.Move);
         }
 
         void OnDropped(object? sender, PointerReleasedEventArgs e)

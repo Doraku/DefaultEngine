@@ -136,12 +136,10 @@ internal sealed class MenuService : IMenuService, INotifyPropertyChanged
 
     private readonly List<MenuItem> _menus;
 
-    private bool _isEnabled;
-
     public bool IsEnabled
     {
-        get => _isEnabled;
-        set => SetProperty(ref _isEnabled, value);
+        get;
+        set => SetProperty(ref field, value);
     }
 
     public IReadOnlyCollection<IMenuService.IMenuCommand> Commands => _menus;

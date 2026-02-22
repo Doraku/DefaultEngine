@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <Nullable>enable</Nullable>
-    <AvaloniaVersion>11.3.7</AvaloniaVersion>
+    <AvaloniaVersion>11.3.12</AvaloniaVersion>
 
     <UseArtifactsOutput>true</UseArtifactsOutput>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DefaultCSharp" Version="1.0.5" PrivateAssets="all" />
+    <PackageReference Include="DefaultCSharp" Version="14.0.1" PrivateAssets="all" />
+    <PackageReference Include="Polyfill" Version="9.9.0" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>

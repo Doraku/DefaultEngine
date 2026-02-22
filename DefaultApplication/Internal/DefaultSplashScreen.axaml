@@ -7,7 +7,7 @@
     PointerPressed="OnClicked"
     SizeToContent="WidthAndHeight"
     SystemDecorations="None"
-    Topmost="True"
+    Topmost="True" 
     WindowStartupLocation="CenterScreen">
 
     <DockPanel>

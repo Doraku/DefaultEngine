@@ -63,7 +63,7 @@ public sealed class LayoutControl : TemplatedControl
 
     private void OnDragEnter(object? sender, DragEventArgs e)
     {
-        if (e.Data.Get(LayoutOperation.Id) is not LayoutOperation operation)
+        if (!e.DataTransfer.TryGet(out LayoutOperation? operation))
         {
             return;
         }

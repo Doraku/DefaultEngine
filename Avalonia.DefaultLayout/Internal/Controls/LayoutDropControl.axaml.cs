@@ -58,7 +58,7 @@ internal sealed partial class LayoutDropControl : Panel
 
     private void OnTargetDragOver(object? sender, DragEventArgs e)
     {
-        e.DragEffects = e.Data.Contains(LayoutOperation.Id) ? DragDropEffects.Move : DragDropEffects.None;
+        e.DragEffects = e.DataTransfer.TryGet<LayoutOperation>(out _) ? DragDropEffects.Move : DragDropEffects.None;
         e.Handled = true;
     }
 
@@ -73,7 +73,7 @@ internal sealed partial class LayoutDropControl : Panel
 
         if (sender is not Layoutable control
             || this.FindAncestorOfType<LayoutContentPresenter>() is not LayoutContentPresenter presenter
-            || e.Data.Get(LayoutOperation.Id) is not LayoutOperation operation
+            || !e.DataTransfer.TryGet(out LayoutOperation? operation)
             || (operation.Presenter == presenter && presenter.Content is not StackedLayoutContent))
         {
             return;

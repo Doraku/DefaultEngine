@@ -156,6 +156,7 @@ public abstract class BaseRuner : IDisposable
 
     protected abstract TopLevel CreateMainTopLevel(Application application, CancellationTokenSource shutdownTokenSource);
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2025:Do not pass 'IDisposable' instances into unawaited tasks", Justification = "it is awaited...")]
     public async Task RunAsync(string[] args)
     {
         ILogger logger = CreateLogger();

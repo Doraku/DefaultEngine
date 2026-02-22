@@ -10,7 +10,6 @@ namespace DefaultApplication.Controls.Templates;
 public sealed class DataTemplateInclude : IDataTemplate
 {
     private readonly Uri? _baseUri;
-    private DataTemplates? _loaded;
     private bool _isLoading;
 
     public Uri? Source { get; set; }
@@ -19,14 +18,14 @@ public sealed class DataTemplateInclude : IDataTemplate
     {
         get
         {
-            if (_loaded is null && Source is { })
+            if (field is null && Source is { })
             {
                 _isLoading = true;
-                _loaded = (DataTemplates)AvaloniaXamlLoader.Load(Source, _baseUri);
+                field = (DataTemplates)AvaloniaXamlLoader.Load(Source, _baseUri);
                 _isLoading = false;
             }
 
-            return _loaded;
+            return field;
         }
     }
 

@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/.solution items/">
+    <File Path="Directory.Build.props" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="DummyGame.Editor/DummyGame.Editor.csproj" />
+  </Folder>
+  <Folder Name="/_DefaultApplication/">
+    <Project Path="DefaultApplication.Api/DefaultApplication.Api.csproj" />
+    <Project Path="DefaultApplication.Browser/DefaultApplication.Browser.csproj" />
+    <Project Path="DefaultApplication.Core/DefaultApplication.Core.csproj" />
+    <Project Path="DefaultApplication/DefaultApplication.csproj" />
+  </Folder>
+  <Folder Name="/_DefaultApplication/Plugins/">
+    <Project Path="Avalonia.DefaultLayout/Avalonia.DefaultLayout.csproj" />
+    <Project Path="DefaultApplication.Plugin.DefaultLayout/DefaultApplication.Plugin.DefaultLayout.csproj" />
+    <Project Path="DefaultApplication.Plugin.DefaultUnDo/DefaultApplication.Plugin.DefaultUnDo.csproj" />
+    <Project Path="DefaultApplication.Plugin.Messenger/DefaultApplication.Plugin.Messenger.csproj" />
+  </Folder>
+  <Project Path="DefaultEngine.Editor.Api/DefaultEngine.Editor.Api.csproj" />
+  <Project Path="DefaultEngine.Editor/DefaultEngine.Editor.csproj" />
+</Solution>

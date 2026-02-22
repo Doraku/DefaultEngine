@@ -48,14 +48,13 @@ public sealed partial class StackedLayoutContentView : DockPanel
             control.PointerReleased -= OnDropped;
             control.PointerMoved -= OnDragged;
 
-            DataObject data = new();
-
-            data.Set(LayoutOperation.Id, new LayoutOperation(
-                presenter,
-                content,
-                GetRemoveAction(sender)));
-
-            DragDrop.DoDragDrop(e, data, DragDropEffects.Move);
+            DragDrop.DoDragDropAsync(
+                e,
+                IDataTransfer.Create(new LayoutOperation(
+                    presenter,
+                    content,
+                    GetRemoveAction(sender))),
+                DragDropEffects.Move);
         }
 
         void OnDropped(object? sender, PointerReleasedEventArgs e)
