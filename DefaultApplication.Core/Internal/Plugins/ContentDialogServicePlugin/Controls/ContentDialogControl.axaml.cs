@@ -127,9 +127,9 @@ internal sealed partial class ContentDialogControl : Panel, IContentDialogServic
             }
         }
 
-        if (!Dispatcher.UIThread.CheckAccess())
+        if (!Dispatcher.CheckAccess())
         {
-            return await Dispatcher.UIThread.InvokeAsync(() => ShowAsync(content, cancellationToken)).ConfigureAwait(false);
+            return await Dispatcher.InvokeAsync(() => ShowAsync(content, cancellationToken)).ConfigureAwait(false);
         }
 
         TopLevel topLevel = await _mainTopLevel.ConfigureAwait(true);

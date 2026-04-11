@@ -143,7 +143,7 @@ internal sealed class MonoGameControl : Control, IDisposable
         }
         finally
         {
-            Dispatcher.UIThread.Post(InvalidateVisual, DispatcherPriority.Render);
+            Dispatcher.Post(InvalidateVisual, DispatcherPriority.Render);
         }
     }
 
@@ -204,7 +204,7 @@ internal sealed class MonoGameControl : Control, IDisposable
         CaptureFrame(device, _bitmap);
 
         context.DrawImage(_bitmap, new Rect(_bitmap.Size), Bounds);
-        Dispatcher.UIThread.Post(InvalidateVisual, DispatcherPriority.Render);
+        Dispatcher.Post(InvalidateVisual, DispatcherPriority.Render);
     }
 
     public void Dispose() => _bitmap?.Dispose();

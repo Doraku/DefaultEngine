@@ -1,5 +1,4 @@
 ﻿using Avalonia;
-using Avalonia.Threading;
 using DefaultApplication.Internal.Plugins.ContentDialogServicePlugin.Controls;
 using DefaultApplication.Internal.Plugins.ContentDialogServicePlugin.Services;
 using DefaultApplication.Plugins;
@@ -23,7 +22,7 @@ internal sealed class Plugin : IServiceRegisterer
         if (_application is { })
         {
             services.TryAddSingleton<ContentDialogControl>();
-            services.TryAddSingleton<IContentDialogService>(provider => Dispatcher.UIThread.Invoke(provider.GetRequiredService<ContentDialogControl>));
+            services.TryAddSingleton<IContentDialogService>(provider => _application.Dispatcher.Invoke(provider.GetRequiredService<ContentDialogControl>));
         }
         else
         {

@@ -1,7 +1,6 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.Markup.Xaml.Styling;
-using Avalonia.Threading;
 using DefaultApplication.Internal.Plugins.ShellPlugin.ViewModels;
 using DefaultApplication.Plugins;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +24,7 @@ internal sealed class Plugin : IServiceRegisterer
             Uri baseUri = new("avares://DefaultApplication");
             Uri resourcesUri = new(baseUri, "/Internal/Plugins/ShellPlugin/Resources/");
 
-            Dispatcher.UIThread.Invoke(() => _application.Styles.Add(new StyleInclude(baseUri) { Source = new Uri(resourcesUri, "Styles.axaml") }));
+            _application.Dispatcher.Invoke(() => _application.Styles.Add(new StyleInclude(baseUri) { Source = new Uri(resourcesUri, "Styles.axaml") }));
         }
 
         services.TryAddSingleton<ShellViewModel>();

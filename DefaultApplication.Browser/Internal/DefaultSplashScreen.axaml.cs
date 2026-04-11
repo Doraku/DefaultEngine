@@ -22,7 +22,7 @@ internal sealed partial class DefaultSplashScreen : DockPanel, ISplashScreen
     public async Task ReportAsync(string message)
     {
         LogMessage(_logger, message);
-        await Dispatcher.UIThread.InvokeAsync(() => InformationsTextBlock.Text = message);
+        await Dispatcher.InvokeAsync(() => InformationsTextBlock.Text = message);
     }
 
     public void Dispose()

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using Avalonia;
 using Avalonia.Markup.Xaml.Styling;
-using Avalonia.Threading;
 using DefaultApplication.Internal.Plugins.SettingsPlugin.Controls.Templates;
 using DefaultApplication.Internal.Plugins.SettingsPlugin.ViewModels;
 using DefaultApplication.Plugins;
@@ -51,7 +50,7 @@ internal sealed class Plugin : IPlugin
         Uri baseUri = new("avares://DefaultApplication.Core");
         Uri resourcesUri = new(baseUri, "Internal/Plugins/SettingsPlugin/Resources/");
 
-        Dispatcher.UIThread.Invoke(() => application.Resources.MergedDictionaries.Add(new ResourceInclude(baseUri) { Source = new Uri(resourcesUri, "Resources.axaml") }));
+        application.Dispatcher.Invoke(() => application.Resources.MergedDictionaries.Add(new ResourceInclude(baseUri) { Source = new Uri(resourcesUri, "Resources.axaml") }));
 
         application.DataTemplates.AddRange(settings.Select(part => new SettingsTemplate(part.GetType())));
     }

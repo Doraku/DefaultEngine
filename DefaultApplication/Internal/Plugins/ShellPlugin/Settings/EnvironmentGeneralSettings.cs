@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Styling;
-using Avalonia.Threading;
 using DefaultApplication.ComponentModel;
 using DefaultApplication.Settings;
 using Microsoft.Extensions.Logging;
@@ -36,7 +35,7 @@ internal sealed class EnvironmentGeneralSettings : BaseJsonSettings
             _theme = value;
             if (_application is { })
             {
-                Dispatcher.UIThread.Invoke(() => _application.RequestedThemeVariant = value);
+                _application.Dispatcher.Invoke(() => _application.RequestedThemeVariant = value);
             }
         }
     }

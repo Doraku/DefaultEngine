@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
-using Avalonia.Threading;
 using DefaultApplication.DependencyInjection;
 using DefaultApplication.Services;
 
@@ -18,7 +17,7 @@ internal sealed class NotificationService : INotificationService
         {
             TopLevel topLevel = await mainTopLevel.ConfigureAwait(false);
 
-            return await Dispatcher.UIThread.InvokeAsync(() => new WindowNotificationManager(topLevel) { Position = NotificationPosition.BottomRight });
+            return await topLevel.Dispatcher.InvokeAsync(() => new WindowNotificationManager(topLevel) { Position = NotificationPosition.BottomRight });
         });
     }
 
@@ -36,13 +35,13 @@ internal sealed class NotificationService : INotificationService
     {
         WindowNotificationManager manager = await _manager.ConfigureAwait(false);
 
-        await Dispatcher.UIThread.InvokeAsync(() => manager.Show(content, AsAvalonia(notificationType), expiration));
+        await manager.Dispatcher.InvokeAsync(() => manager.Show(content, AsAvalonia(notificationType), expiration));
     }
 
     public async Task CloseAllAsync()
     {
         WindowNotificationManager manager = await _manager.ConfigureAwait(false);
 
-        await Dispatcher.UIThread.InvokeAsync(manager.CloseAll);
+        await manager.Dispatcher.InvokeAsync(manager.CloseAll);
     }
 }

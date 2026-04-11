@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.DefaultLayout;
 using Avalonia.DefaultLayout.Controls;
-using Avalonia.Threading;
 using Avalonia.VisualTree;
 using DefaultApplication.DependencyInjection;
 
@@ -32,12 +31,13 @@ internal sealed class DockingLayoutService : IDockingLayoutService
     {
         ArgumentNullException.ThrowIfNull(content);
 
-        if (!Dispatcher.UIThread.CheckAccess())
+        LayoutControl root = await _root.ConfigureAwait(true);
+
+        if (!root.Dispatcher.CheckAccess())
         {
-            return await Dispatcher.UIThread.InvokeAsync(() => ShowAsync(options, content)).ConfigureAwait(false);
+            return await root.Dispatcher.InvokeAsync(() => ShowAsync(options, content)).ConfigureAwait(false);
         }
 
-        LayoutControl root = await _root.ConfigureAwait(true);
         ILayoutContent layoutContent = new LayoutContent(options, content);
 
         root.Content = layoutContent;
@@ -49,12 +49,13 @@ internal sealed class DockingLayoutService : IDockingLayoutService
     {
         ArgumentNullException.ThrowIfNull(content);
 
-        if (!Dispatcher.UIThread.CheckAccess())
+        LayoutControl root = await _root.ConfigureAwait(true);
+
+        if (!root.Dispatcher.CheckAccess())
         {
-            await Dispatcher.UIThread.InvokeAsync(() => CloseAsync(content)).ConfigureAwait(false);
+            await root.Dispatcher.InvokeAsync(() => CloseAsync(content)).ConfigureAwait(false);
             return;
         }
 
-        LayoutControl root = await _root.ConfigureAwait(true);
     }
 }

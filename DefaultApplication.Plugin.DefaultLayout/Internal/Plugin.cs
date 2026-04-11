@@ -1,7 +1,6 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.Markup.Xaml.Styling;
-using Avalonia.Threading;
 using DefaultApplication.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,7 +22,7 @@ internal sealed class Plugin : IServiceRegisterer
             Uri baseUri = new("avares://Avalonia.DefaultLayout");
             Uri resourcesUri = new(baseUri, "Resources/");
 
-            Dispatcher.UIThread.Invoke(() =>
+            _application.Dispatcher.Invoke(() =>
             {
                 _application.Styles.Add(new StyleInclude(baseUri) { Source = new Uri(resourcesUri, "Styles.axaml") });
 
