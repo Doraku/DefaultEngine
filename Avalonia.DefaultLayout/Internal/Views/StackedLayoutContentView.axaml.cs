@@ -36,7 +36,7 @@ public sealed partial class StackedLayoutContentView : DockPanel
 
     private void OnHeaderClicked(object? sender, PointerPressedEventArgs e)
     {
-        void OnDragged(object? sender, PointerEventArgs e)
+        void OnDragged(object? sender, PointerEventArgs _)
         {
             if (sender is not InputElement control
                 || control.DataContext is not ILayoutContent content

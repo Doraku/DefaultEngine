@@ -5,8 +5,6 @@
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>DefaultApplication</RootNamespace>
     
-    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-
   </PropertyGroup>
 
   <ItemGroup>

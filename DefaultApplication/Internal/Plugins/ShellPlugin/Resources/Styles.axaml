@@ -1,0 +1,15 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:views="using:Avalonia.DefaultLayout.Internal.Views">
+
+    <Style Selector="Window.DefaultShell WindowDrawnDecorations /template/ Panel#PART_TitleTextPanel > TextBlock">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="Window.DefaultShell WindowDrawnDecorations /template/ Button#PART_FullScreenButton">
+        <Setter Property="IsVisible" Value="False" />
+        <Setter Property="Width" Value="0" />
+    </Style>
+
+</Styles>

@@ -63,7 +63,7 @@ public sealed partial class SplitLayoutContentView : Grid
 
                             SetColumn(presenter, ColumnDefinitions.Count);
                             ColumnDefinition column = new();
-                            column.Bind(ColumnDefinition.WidthProperty, new Binding(nameof(item.Size), BindingMode.TwoWay) { Source = item });
+                            column.Bind(ColumnDefinition.WidthProperty, new Binding(nameof(item.Size)) { Mode = BindingMode.TwoWay, Source = item });
                             ColumnDefinitions.Add(column);
                             break;
 
@@ -76,12 +76,12 @@ public sealed partial class SplitLayoutContentView : Grid
 
                             SetRow(presenter, RowDefinitions.Count);
                             RowDefinition row = new();
-                            row.Bind(RowDefinition.HeightProperty, new Binding(nameof(item.Size), BindingMode.TwoWay) { Source = item });
+                            row.Bind(RowDefinition.HeightProperty, new Binding(nameof(item.Size)) { Mode = BindingMode.TwoWay, Source = item });
                             RowDefinitions.Add(row);
                             break;
                     }
 
-                    presenter.Bind(LayoutContentPresenter.ContentProperty, new Binding(nameof(item.Content), BindingMode.TwoWay) { Source = item });
+                    presenter.Bind(LayoutContentPresenter.ContentProperty, new Binding(nameof(item.Content)) { Mode = BindingMode.TwoWay, Source = item });
 
                     Children.Add(presenter);
                 }

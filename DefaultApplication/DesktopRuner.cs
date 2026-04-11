@@ -83,14 +83,12 @@ public class DesktopRuner : BaseRuner
             ExtendClientAreaToDecorationsHint = true,
             Icon = new WindowIcon(iconStream),
             Title = "Default Application",
-            WindowState = WindowState.Maximized
+            WindowState = WindowState.Maximized,
         };
 
-        window.Closed += (_, _) => shutdownTokenSource.Cancel();
+        window.Classes.Add("DefaultShell");
 
-#if DEBUG
-        window.AttachDevTools();
-#endif
+        window.Closed += (_, _) => shutdownTokenSource.Cancel();
 
         return window;
     }

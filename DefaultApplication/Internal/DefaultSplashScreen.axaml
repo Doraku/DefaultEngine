@@ -6,8 +6,8 @@
     Icon="avares://DefaultApplication.Core/Resources/Images/DefaultLogo.png"
     PointerPressed="OnClicked"
     SizeToContent="WidthAndHeight"
-    SystemDecorations="None"
-    Topmost="True" 
+    Topmost="True"
+    WindowDecorations="None"
     WindowStartupLocation="CenterScreen">
 
     <DockPanel>

@@ -12,10 +12,12 @@
     <Project Path="DefaultApplication/DefaultApplication.csproj" />
   </Folder>
   <Folder Name="/_DefaultApplication/Plugins/">
-    <Project Path="Avalonia.DefaultLayout/Avalonia.DefaultLayout.csproj" />
     <Project Path="DefaultApplication.Plugin.DefaultLayout/DefaultApplication.Plugin.DefaultLayout.csproj" />
     <Project Path="DefaultApplication.Plugin.DefaultUnDo/DefaultApplication.Plugin.DefaultUnDo.csproj" />
     <Project Path="DefaultApplication.Plugin.Messenger/DefaultApplication.Plugin.Messenger.csproj" />
+  </Folder>
+  <Folder Name="/_Libs/">
+    <Project Path="Avalonia.DefaultLayout/Avalonia.DefaultLayout.csproj" />
   </Folder>
   <Project Path="DefaultEngine.Editor.Api/DefaultEngine.Editor.Api.csproj" />
   <Project Path="DefaultEngine.Editor/DefaultEngine.Editor.csproj" />

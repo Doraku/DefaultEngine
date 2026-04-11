@@ -6,10 +6,6 @@
     <RootNamespace>DefaultApplication.DefaultLayout</RootNamespace>
     
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" Condition="'$(Configuration)' == 'Debug'" />
-  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Avalonia.DefaultLayout\Avalonia.DefaultLayout.csproj" />

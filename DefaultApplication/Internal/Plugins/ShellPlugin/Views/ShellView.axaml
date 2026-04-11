@@ -1,6 +1,5 @@
 <Border
     x:Class="DefaultApplication.Internal.Plugins.ShellPlugin.Views.ShellView"
-    x:DataType="viewmodels:ShellViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="using:DefaultApplication.Controls.Behaviors"
@@ -8,6 +7,7 @@
     xmlns:viewmodels="using:DefaultApplication.Internal.Plugins.ShellPlugin.ViewModels"
     xmlns:views="using:DefaultApplication.Internal.Plugins.ShellPlugin.Views"
     Margin="{Binding $parent[Window].OffScreenMargin}"
+    x:DataType="viewmodels:ShellViewModel"
     BorderBrush="{DynamicResource SystemAccentColor}"
     BorderThickness="1">
 
@@ -50,7 +50,7 @@
                     DockPanel.Dock="Left"
                     Source="avares://DefaultApplication.Core/Resources/Images/DefaultLogo.png" />
 
-                <ContentControl Content="{Binding Menus}" />
+                <ContentControl Content="{Binding Menus}" WindowDecorationProperties.ElementRole="User" />
 
             </DockPanel>
 

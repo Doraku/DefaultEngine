@@ -53,7 +53,7 @@ public sealed partial class LayoutContentView : Border
 
     private void OnHeaderClicked(object? sender, PointerPressedEventArgs e)
     {
-        void OnDragged(object? sender, PointerEventArgs e)
+        void OnDragged(object? sender, PointerEventArgs _)
         {
             if (sender is not InputElement control
                 || this.FindLogicalAncestorOfType<LayoutContentPresenter>() is not LayoutContentPresenter presenter)

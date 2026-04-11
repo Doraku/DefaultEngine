@@ -59,20 +59,10 @@ internal sealed partial class ContentDialogControl : Panel, IContentDialogServic
             if (sender is Layoutable layoutable)
             {
                 Thickness margin = layoutable.Margin;
-                double widthOffset = 0;
-                double heightOffset = 0;
-
-                if (sender is Window window && window.ExtendClientAreaToDecorationsHint)
-                {
-                    margin -= new Thickness(window.OffScreenMargin.Left / 2, window.OffScreenMargin.Top / 2, 0, 0);
-
-                    widthOffset = window.OffScreenMargin.Left + window.OffScreenMargin.Right;
-                    heightOffset = window.OffScreenMargin.Top + window.OffScreenMargin.Bottom;
-                }
 
                 Margin = new Thickness(layoutable.Bounds.Left - margin.Left, layoutable.Bounds.Top - margin.Top, 0, 0);
-                MaxWidth = layoutable.Bounds.Width - widthOffset;
-                MaxHeight = layoutable.Bounds.Height - heightOffset;
+                MaxWidth = layoutable.Bounds.Width;
+                MaxHeight = layoutable.Bounds.Height;
             }
         }
 
@@ -94,7 +84,7 @@ internal sealed partial class ContentDialogControl : Panel, IContentDialogServic
             InstallOnTopLevel(topLevel);
         }
 
-        if (topLevel.FindDescendantOfType<VisualLayerManager>()?.AdornerLayer is AdornerLayer adorner)
+        if (AdornerLayer.GetAdornerLayer(topLevel) is AdornerLayer adorner)
         {
             _target = topLevel.GetVisualDescendants().OfType<Layoutable>().FirstOrDefault(ContentDialog.GetIsTarget) ?? topLevel;
             _target.LayoutUpdated += OnTargetLayoutUpdated;

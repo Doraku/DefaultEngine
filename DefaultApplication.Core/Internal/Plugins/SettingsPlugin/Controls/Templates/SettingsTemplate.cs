@@ -15,7 +15,7 @@ namespace DefaultApplication.Internal.Plugins.SettingsPlugin.Controls.Templates;
 
 internal sealed class SettingsTemplate : IDataTemplate
 {
-    private static readonly Dictionary<Type, Func<IBinding, Control>> _factories = new()
+    private static readonly Dictionary<Type, Func<BindingBase, Control>> _factories = new()
     {
         [typeof(string)] = binding => new TextBox { [!TextBox.TextProperty] = binding },
         [typeof(bool)] = binding => new CheckBox { [!ToggleButton.IsCheckedProperty] = binding },
@@ -33,7 +33,7 @@ internal sealed class SettingsTemplate : IDataTemplate
     };
 
     private readonly Type _settingsType;
-    private readonly List<(string Name, string? Description, IBinding ValueBinding, Func<IBinding, Control> ControlFactory)> _members;
+    private readonly List<(string Name, string? Description, BindingBase ValueBinding, Func<BindingBase, Control> ControlFactory)> _members;
 
     public SettingsTemplate(Type settingsType)
     {
@@ -52,7 +52,7 @@ internal sealed class SettingsTemplate : IDataTemplate
             {
                 MethodInfo? itemsSourceGetter = _settingsType.GetProperty(itemsSourceMember, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public)?.GetGetMethod();
 
-                Func<IBinding, Control>? factory = itemsSourceGetter?.IsStatic switch
+                Func<BindingBase, Control>? factory = itemsSourceGetter?.IsStatic switch
                 {
                     true => binding => new ComboBox
                     {
@@ -72,14 +72,14 @@ internal sealed class SettingsTemplate : IDataTemplate
                     _members.Add((name, information?.Description, valueBinding, factory));
                 }
             }
-            else if (_factories.TryGetValue(property.PropertyType, out Func<IBinding, Control>? factory))
+            else if (_factories.TryGetValue(property.PropertyType, out Func<BindingBase, Control>? factory))
             {
                 _members.Add((name, information?.Description, valueBinding, factory));
             }
         }
     }
 
-    private static NumericUpDown CreateNumericUpDown(decimal minimum, decimal maximum, NumberStyles parsingNumberStyle, IBinding valueBinding)
+    private static NumericUpDown CreateNumericUpDown(decimal minimum, decimal maximum, NumberStyles parsingNumberStyle, BindingBase valueBinding)
         => new()
         {
             ShowButtonSpinner = false,
@@ -100,7 +100,7 @@ internal sealed class SettingsTemplate : IDataTemplate
         grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto) { SharedSizeGroup = "SettingsHeaders" });
         grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
 
-        foreach ((string name, string? description, IBinding valueBinding, Func<IBinding, Control> controlFactory) in _members)
+        foreach ((string name, string? description, BindingBase valueBinding, Func<BindingBase, Control> controlFactory) in _members)
         {
             grid.Children.Add(new SelectableTextBlock
             {
