@@ -14,11 +14,11 @@ using Microsoft.Extensions.Logging;
 
 namespace DefaultApplication;
 
-public abstract class BaseRuner : IDisposable
+public abstract class BaseRunner : IDisposable
 {
     private readonly List<IDisposable> _disposables;
 
-    protected BaseRuner()
+    protected BaseRunner()
     {
         _disposables = [];
     }

@@ -11,6 +11,12 @@
     <Compile Include="..\DefaultApplication.Plugin.DefaultUnDo\AssemblyInfo.cs" Visible="false" />
     <Compile Include="..\DefaultApplication.Plugin.Messenger\AssemblyInfo.cs" Visible="false" />
   </ItemGroup>
+
+
+  <ItemGroup Condition="$(DefineConstants.Contains(DEBUG))">
+    <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.1" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Avalonia.DefaultLayout\Avalonia.DefaultLayout.csproj" />

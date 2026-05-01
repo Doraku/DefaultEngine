@@ -16,7 +16,7 @@ using Serilog.Extensions.Logging;
 
 namespace DefaultApplication;
 
-public class DesktopRuner : BaseRuner
+public class DesktopRunner : BaseRunner
 {
     protected override Microsoft.Extensions.Logging.ILogger CreateLogger()
     {

@@ -23,11 +23,11 @@ internal sealed class BrowserApplication : Application
     public void RequestShutdown() => ShutdownRequested?.Invoke();
 }
 
-internal sealed class BrowserRuner : BaseRuner
+internal sealed class BrowserRunner : BaseRunner
 {
     private static async Task Main(string[] args)
     {
-        using BrowserRuner runner = new();
+        using BrowserRunner runner = new();
 
         await runner.RunAsync(args).ConfigureAwait(false);
     }
