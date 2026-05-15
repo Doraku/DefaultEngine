@@ -2,33 +2,70 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.DefaultLayout;
 using DefaultApplication;
 using DefaultApplication.DefaultLayout;
 using DefaultApplication.Services;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DummyGame.Editor;
 
-internal sealed class Pouet : ICommandMenu
+internal sealed class GameTest : IAsyncCommandMenu
 {
+    private sealed class DummyGame : Game
+    {
+        private readonly GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+
+        public DummyGame()
+        {
+            _graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+        }
+
+        protected override void LoadContent()
+        {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            // Your game logic here
+            base.Update(gameTime);
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            // Your drawing code here
+
+            base.Draw(gameTime);
+        }
+    }
+
     private readonly IDockingLayoutService _service;
 
-    public Pouet(IDockingLayoutService service)
+    public GameTest(IDockingLayoutService service)
     {
         _service = service;
     }
 
     public IReadOnlyList<string> Path { get; } = ["Test", "pouet"];
 
-    public void Execute()
-    { }
+    public Task ExecuteAsync()
+    {
+        return _service.ShowAsync(LayoutOptions.Closable | LayoutOptions.Movable | LayoutOptions.Stackable, new DummyGame());
+    }
 }
 
-internal sealed class Pouet2 : IAsyncCommandMenu
+internal sealed class NotificationTest : IAsyncCommandMenu
 {
     private readonly IWorkerService _service;
     private readonly INotificationService _notification;
 
-    public Pouet2(IWorkerService service, INotificationService notification)
+    public NotificationTest(IWorkerService service, INotificationService notification)
     {
         _service = service;
         _notification = notification;

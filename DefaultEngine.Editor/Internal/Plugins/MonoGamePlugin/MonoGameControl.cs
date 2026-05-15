@@ -9,12 +9,14 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using DefaultApplication.Controls.Metadata;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DefaultEngine.Editor.Internal.Plugins.MonoGamePlugin;
 
+[DataTemplate<Game>]
 internal sealed class MonoGameControl : Control, IDisposable
 {
     public static readonly DirectProperty<MonoGameControl, Game?> GameProperty =
@@ -43,6 +45,13 @@ internal sealed class MonoGameControl : Control, IDisposable
     private WriteableBitmap? _bitmap;
     private bool _isInitialized;
     private Game? _game;
+
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        Game = DataContext as Game;
+
+        base.OnDataContextChanged(e);
+    }
 
     public Game? Game
     {
@@ -207,5 +216,9 @@ internal sealed class MonoGameControl : Control, IDisposable
         Dispatcher.Post(InvalidateVisual, DispatcherPriority.Render);
     }
 
-    public void Dispose() => _bitmap?.Dispose();
+    public void Dispose()
+    {
+        _bitmap?.Dispose();
+        _bitmap = null;
+    }
 }

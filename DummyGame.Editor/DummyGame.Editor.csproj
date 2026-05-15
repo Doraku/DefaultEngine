@@ -10,6 +10,7 @@
   <ItemGroup>
     <Compile Include="..\DefaultApplication.Plugin.DefaultUnDo\AssemblyInfo.cs" Visible="false" />
     <Compile Include="..\DefaultApplication.Plugin.Messenger\AssemblyInfo.cs" Visible="false" />
+    <Compile Include="..\DefaultEngine.Editor\AssemblyInfo.cs" Visible="false" />
   </ItemGroup>
 
 

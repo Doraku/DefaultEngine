@@ -40,7 +40,34 @@ internal sealed class DockingLayoutService : IDockingLayoutService
 
         ILayoutContent layoutContent = new LayoutContent(options, content);
 
-        root.Content = layoutContent;
+        if (root.Content is null)
+        {
+            root.Content = layoutContent;
+        }
+        else if (options.HasFlag(LayoutOptions.Stackable) && root.Content is StackedLayoutContent stack)
+        {
+            stack.Add(layoutContent);
+        }
+        else if (options.HasFlag(LayoutOptions.Stackable) && root.Content.Options.HasFlag(LayoutOptions.Stackable))
+        {
+            root.Content = new StackedLayoutContent
+            {
+                root.Content,
+                layoutContent
+            };
+        }
+        else if (root.Content is SplitLayoutContent split)
+        {
+            split.Add(new SplitLayoutItem(layoutContent, GridLength.Star));
+        }
+        else
+        {
+            root.Content = new SplitLayoutContent(Avalonia.Layout.Orientation.Horizontal)
+            {
+                new SplitLayoutItem(root.Content, GridLength.Star),
+                new SplitLayoutItem(layoutContent, GridLength.Star)
+            };
+        }
 
         return layoutContent;
     }
@@ -56,6 +83,5 @@ internal sealed class DockingLayoutService : IDockingLayoutService
             await root.Dispatcher.InvokeAsync(() => CloseAsync(content)).ConfigureAwait(false);
             return;
         }
-
     }
 }

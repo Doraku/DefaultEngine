@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="AssemblyInfo.cs">
+      <PackagePath>contentFiles\cs\net10.0\DefaultApplication.Plugin.DefaultUnDo\</PackagePath>
+      <Pack>true</Pack>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DefaultApplication.Plugin.DefaultUnDo\DefaultApplication.Plugin.DefaultUnDo.csproj" />
     <ProjectReference Include="..\DefaultApplication.Plugin.Messenger\DefaultApplication.Plugin.Messenger.csproj" />
     <ProjectReference Include="..\DefaultApplication\DefaultApplication.csproj" />
