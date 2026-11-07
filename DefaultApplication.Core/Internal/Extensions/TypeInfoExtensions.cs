@@ -6,7 +6,7 @@ namespace System.Reflection;
 internal static class TypeInfoExtensions
 {
     public static IEnumerable<TypeInfo> GetInstanciableImplementation<T>(this IEnumerable<TypeInfo> types)
-        => types.Where(type => !type.IsInterface && !type.IsAbstract && type.IsAssignableTo<T>() && type.GetConstructors().Length != 0);
+        => types.Where(type => !type.IsInterface && !type.IsAbstract && type.IsAssignableTo(typeof(T)) && type.GetConstructors().Length != 0);
 
     public static IEnumerable<(TypeInfo, TAttribute)> GetTypesWithAttribute<TAttribute>(this IEnumerable<TypeInfo> types)
         where TAttribute : Attribute
