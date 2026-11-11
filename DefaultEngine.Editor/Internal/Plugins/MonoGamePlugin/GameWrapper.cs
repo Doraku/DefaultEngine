@@ -2,7 +2,7 @@
 
 namespace DefaultEngine.Editor.Internal.Plugins.MonoGamePlugin;
 
-internal sealed class GameWrapper : Game
+internal sealed class GameWrapper
 {
     public Game? Game { get; set; }
 

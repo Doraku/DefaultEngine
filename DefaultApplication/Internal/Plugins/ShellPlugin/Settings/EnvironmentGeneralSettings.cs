@@ -1,4 +1,6 @@
-﻿using Avalonia;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Styling;
 using DefaultApplication.ComponentModel;
 using DefaultApplication.Settings;
@@ -40,9 +42,9 @@ internal sealed class EnvironmentGeneralSettings : BaseJsonSettings
         }
     }
 
-    public override void Read()
+    public override async Task ReadAsync(CancellationToken cancellationToken)
     {
-        Save? save = Deserialize<Save?>(Logger, _filePath);
+        Save? save = await DeserializeAsync<Save?>(Logger, _filePath, cancellationToken).ConfigureAwait(false);
 
         Theme = (save?.Theme ?? "Light") switch
         {
@@ -51,5 +53,8 @@ internal sealed class EnvironmentGeneralSettings : BaseJsonSettings
         };
     }
 
-    public override void Write() => Serialize(Logger, _filePath, new Save(Theme == ThemeVariant.Dark ? "Dark" : "Light"));
+    public override async Task WriteAsync(CancellationToken cancellationToken)
+    {
+        await SerializeAsync(Logger, _filePath, new Save(Theme == ThemeVariant.Dark ? "Dark" : "Light"), cancellationToken).ConfigureAwait(false);
+    }
 }

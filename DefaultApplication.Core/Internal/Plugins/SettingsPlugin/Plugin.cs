@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Markup.Xaml.Styling;
 using DefaultApplication.Internal.Plugins.SettingsPlugin.Controls.Templates;
@@ -35,12 +37,11 @@ internal sealed class Plugin : IPlugin
         }
     }
 
+    private readonly ISettings[] _settings;
+
     public Plugin(IEnumerable<ISettings> settings, Application? application = null)
     {
-        foreach (ISettings setting in settings)
-        {
-            setting.Read();
-        }
+        _settings = [.. settings];
 
         if (application is null)
         {
@@ -53,5 +54,13 @@ internal sealed class Plugin : IPlugin
         application.Dispatcher.Invoke(() => application.Resources.MergedDictionaries.Add(new ResourceInclude(baseUri) { Source = new Uri(resourcesUri, "Resources.axaml") }));
 
         application.DataTemplates.AddRange(settings.Select(part => new SettingsTemplate(part.GetType())));
+    }
+
+    public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        foreach (ISettings setting in _settings)
+        {
+            await setting.ReadAsync(cancellationToken).ConfigureAwait(false);
+        }
     }
 }

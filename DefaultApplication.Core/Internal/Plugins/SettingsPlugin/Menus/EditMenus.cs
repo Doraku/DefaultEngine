@@ -18,7 +18,8 @@ internal sealed class EditMenus : IMenu
 
 internal sealed class SettingsMenu : IAsyncCommandMenu
 {
-    private readonly IContentDialogService _contentDialogService;
+    private readonly IContentDialogService _dialog;
+    private readonly IWorkerService _worker;
     private readonly IServiceProvider _provider;
 
     public int Order => int.MaxValue;
@@ -27,9 +28,10 @@ internal sealed class SettingsMenu : IAsyncCommandMenu
 
     public object? Icon { get; } = new StaticResourceExtension("SettingsPlugin.SettingsIcon");
 
-    public SettingsMenu(IContentDialogService contentDialogService, IServiceProvider provider)
+    public SettingsMenu(IContentDialogService dialog, IWorkerService worker, IServiceProvider provider)
     {
-        _contentDialogService = contentDialogService;
+        _dialog = dialog;
+        _worker = worker;
         _provider = provider;
     }
 
@@ -39,19 +41,27 @@ internal sealed class SettingsMenu : IAsyncCommandMenu
 
         using IServiceScope scope = _provider.CreateScope();
 
-        if (await _contentDialogService.ShowAsync(scope.ServiceProvider.GetRequiredService<SettingsViewModel>()).ConfigureAwait(false) != IContentDialogService.DialogResult.Primary)
+        if (await _dialog.ShowAsync(scope.ServiceProvider.GetRequiredService<SettingsViewModel>()).ConfigureAwait(false) != IContentDialogService.DialogResult.Primary)
         {
-            foreach (ISettings settings in _provider.GetRequiredService<IEnumerable<ISettings>>())
+            await _worker.ExecuteAsync(async operation =>
             {
-                settings.Read();
-            }
+                operation.Header = "Reloading settings...";
+                foreach (ISettings settings in _provider.GetRequiredService<IEnumerable<ISettings>>())
+                {
+                    await settings.ReadAsync(operation.CancellationToken).ConfigureAwait(false);
+                }
+            }).ConfigureAwait(false);
         }
         else
         {
-            foreach (ISettings settings in _provider.GetRequiredService<IEnumerable<ISettings>>())
+            await _worker.ExecuteAsync(async operation =>
             {
-                settings.Write();
-            }
+                operation.Header = "Saving settings...";
+                foreach (ISettings settings in _provider.GetRequiredService<IEnumerable<ISettings>>())
+                {
+                    await settings.WriteAsync(operation.CancellationToken).ConfigureAwait(false);
+                }
+            }).ConfigureAwait(false);
         }
     }
 }

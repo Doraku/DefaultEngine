@@ -30,71 +30,66 @@ public enum ResizeMethod
 /// <summary>
 /// Used to render independent from the screen's size
 /// </summary>
-public class ResolutionRenderer
+public sealed class ResolutionRenderer : IDisposable
 {
     /// <summary>
     /// The resolution that will be rendered on
     /// </summary>
-    public Point VirtualResolution { get { return _virtualResolution; } set { _virtualResolution = value; _needsUpdate = true; } }
-    private Point _virtualResolution;
+    public Point VirtualResolution { get; set { field = value; _needsUpdate = true; } }
 
     /// <summary>
     /// The actual screen-size
     /// </summary>
-    public Point ScreenResolution { get { return _screenResolution; } set { _screenResolution = value; _needsUpdate = true; } }
-    private Point _screenResolution;
+    public Point ScreenResolution { get; set { field = value; _needsUpdate = true; } }
 
     /// <summary>
     /// Method to be used when resizing the image
     /// Default: Stretch
     /// </summary>
-    public ResizeMethod Method { get { return _method; } set { _method = value; _needsUpdate = true; } }
-    private ResizeMethod _method;
+    public ResizeMethod Method { get; set { field = value; _needsUpdate = true; } }
 
     private Vector2 _scale;
     private Vector2 _methodScale;
 
-    private GraphicsDevice _device;
-    private RenderTarget2D _target;
-    private SpriteBatch _batch;
+    private readonly GraphicsDevice _device;
+    private readonly SpriteBatch _batch;
+    private RenderTarget2D? _target;
 
-    private RenderTargetBinding[] _prevTargets;
+    private RenderTargetBinding[]? _prevTargets;
 
     private bool _needsUpdate;
 
-    public Color DefaultColor { get; set; } = Color.Fuchsia;
+    public Color DefaultColor { get; set; } = Color.CornflowerBlue;
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="virtualResolution"></param>
     public ResolutionRenderer(Point virtualResolution, GraphicsDevice device)
     {
         _device = device;
 
-        _virtualResolution = virtualResolution;
-        _screenResolution.X = _device.Viewport.Width;
-        _screenResolution.Y = _device.Viewport.Height;
+        VirtualResolution = virtualResolution;
+        ScreenResolution = _device.Viewport.Bounds.Size;
 
-        _method = ResizeMethod.Stretch;
+        Method = ResizeMethod.Stretch;
 
         _batch = new SpriteBatch(_device);
-
-        _needsUpdate = false;
     }
 
     private void Update()
     {
+        if (!_needsUpdate && ScreenResolution == _device.Viewport.Bounds.Size)
+        {
+            return;
+        }
+
         _needsUpdate = false;
 
+        ScreenResolution = _device.Viewport.Bounds.Size;
         _scale = ScreenResolution.ToVector2() / VirtualResolution.ToVector2();
 
-        try
-        { _target?.Dispose(); }
-        catch (Exception) { /* ignore */ }
-        _target = new RenderTarget2D(_device, _virtualResolution.X, _virtualResolution.Y);
+        _target?.Dispose();
 
-        switch (_method)
+        _target = new RenderTarget2D(_device, VirtualResolution.X, VirtualResolution.Y);
+
+        switch (Method)
         {
             case ResizeMethod.Stretch:
                 _methodScale = _scale;
@@ -118,8 +113,7 @@ public class ResolutionRenderer
     /// </summary>
     public void Begin()
     {
-        if (_needsUpdate)
-            Update();
+        Update();
 
         _prevTargets = _device.GetRenderTargets();
         _device.SetRenderTarget(_target);
@@ -140,5 +134,11 @@ public class ResolutionRenderer
         _batch.Begin();
         _batch.Draw(_target, pos, null, Color.White, 0, origin, _methodScale, SpriteEffects.None, 0);
         _batch.End();
+    }
+
+    public void Dispose()
+    {
+        _batch.Dispose();
+        _target?.Dispose();
     }
 }

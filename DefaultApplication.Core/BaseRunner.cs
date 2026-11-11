@@ -14,13 +14,13 @@ using Microsoft.Extensions.Logging;
 
 namespace DefaultApplication;
 
-public abstract class BaseRunner : IDisposable
+public abstract class BaseRunner : IAsyncDisposable
 {
-    private readonly List<IDisposable> _disposables;
+    private readonly List<object> _resources;
 
     protected BaseRunner()
     {
-        _disposables = [];
+        _resources = [];
     }
 
     private async Task<IServiceProvider> CreateServiceRegisterersAsync(Application? application)
@@ -45,10 +45,7 @@ public abstract class BaseRunner : IDisposable
 
         IServiceProvider provider = BuildServiceProvider(services);
 
-        if (provider is IDisposable disposable)
-        {
-            _disposables.Add(disposable);
-        }
+        _resources.Add(provider);
 
         return provider;
     }
@@ -75,15 +72,12 @@ public abstract class BaseRunner : IDisposable
 
         IServiceProvider provider = BuildServiceProvider(services);
 
-        if (provider is IDisposable disposable)
-        {
-            _disposables.Add(disposable);
-        }
+        _resources.Add(provider);
 
         return (provider, delayedMainTopLevel);
     }
 
-    private async Task InitializeAsync(ILogger logger, Application? application, CancellationTokenSource? shutdownTokenSource)
+    private async Task InitializeAsync(ILogger logger, Application? application, CancellationTokenSource shutdownTokenSource)
     {
         try
         {
@@ -103,7 +97,7 @@ public abstract class BaseRunner : IDisposable
                 await splashScreen.ReportAsync("creating plugins").ConfigureAwait(true);
 
                 plugins = await Task.Run(() => services.GetService<IEnumerable<IPlugin>>()).ConfigureAwait(true) ?? [];
-                pluginsTask = Task.WhenAll(plugins.Select(plugin => plugin.StartAsync()));
+                pluginsTask = Task.WhenAll(plugins.Select(plugin => plugin.StartAsync(shutdownTokenSource.Token)));
 
                 if (application is { } && delayedMainTopLevel is { } && shutdownTokenSource is { })
                 {
@@ -196,7 +190,7 @@ public abstract class BaseRunner : IDisposable
     private bool _disposedValue;
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types")]
-    protected virtual void Dispose(bool disposing)
+    protected virtual async ValueTask AsyncDispose(bool disposing)
     {
         if (!_disposedValue)
         {
@@ -206,13 +200,20 @@ public abstract class BaseRunner : IDisposable
             {
                 List<Exception> innerExceptions = [];
 
-                _disposables.Reverse();
+                _resources.Reverse();
 
-                foreach (IDisposable disposable in _disposables)
+                foreach (object resource in _resources)
                 {
                     try
                     {
-                        disposable.Dispose();
+                        if (resource is IAsyncDisposable asyncDisposable)
+                        {
+                            await asyncDisposable.DisposeAsync().ConfigureAwait(false);
+                        }
+                        else if (resource is IDisposable disposable)
+                        {
+                            disposable.Dispose();
+                        }
                     }
                     catch (Exception exception)
                     {
@@ -228,9 +229,9 @@ public abstract class BaseRunner : IDisposable
         }
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
-        Dispose(disposing: true);
+        await AsyncDispose(disposing: true).ConfigureAwait(false);
         GC.SuppressFinalize(this);
     }
 

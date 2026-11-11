@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace DefaultApplication.Settings;
 
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1063:Implement IDisposable Correctly")]
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types")]
-public abstract class BaseJsonSettings : ISettings, IDisposable
+public abstract class BaseJsonSettings : ISettings, IAsyncDisposable
 {
     private static readonly JsonSerializerOptions _jsonOptions;
 
@@ -41,7 +42,7 @@ public abstract class BaseJsonSettings : ISettings, IDisposable
 
     private static void LogSerializationException(ILogger logger, Exception? exception) => _logSerializationException(logger, exception);
 
-    protected static T? Deserialize<T>(ILogger logger, string jsonPath)
+    protected static async Task<T?> DeserializeAsync<T>(ILogger logger, string jsonPath, CancellationToken cancellationToken)
     {
         if (!File.Exists(jsonPath))
         {
@@ -50,8 +51,12 @@ public abstract class BaseJsonSettings : ISettings, IDisposable
 
         try
         {
-            using Stream stream = File.OpenRead(jsonPath);
-            return JsonSerializer.Deserialize<T>(stream, _jsonOptions);
+            Stream stream = File.OpenRead(jsonPath);
+
+            await using (stream.ConfigureAwait(false))
+            {
+                return await JsonSerializer.DeserializeAsync<T>(stream, _jsonOptions, cancellationToken).ConfigureAwait(false);
+            }
         }
         catch (Exception exception)
         {
@@ -60,29 +65,40 @@ public abstract class BaseJsonSettings : ISettings, IDisposable
         }
     }
 
-    protected static void Serialize<T>(ILogger logger, string jsonPath, T data)
+    protected static async Task SerializeAsync<T>(ILogger logger, string jsonPath, T data, CancellationToken cancellationToken)
     {
+        string tempPath = System.IO.Path.GetTempFileName();
+
         try
         {
-            using Stream stream = File.Open(jsonPath, FileMode.OpenOrCreate);
+            Stream stream = File.Create(tempPath);
+            await using (stream.ConfigureAwait(false))
+            {
+                await JsonSerializer.SerializeAsync(stream, data, _jsonOptions, cancellationToken).ConfigureAwait(false);
+            }
 
-            JsonSerializer.Serialize(stream, data, _jsonOptions);
-
-            stream.SetLength(stream.Position);
+            File.Move(tempPath, jsonPath, true);
         }
         catch (Exception exception)
         {
             LogSerializationException(logger, exception);
         }
+        finally
+        {
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
     }
 
-    public abstract void Read();
+    public abstract Task ReadAsync(CancellationToken cancellationToken);
 
-    public abstract void Write();
+    public abstract Task WriteAsync(CancellationToken cancellationToken);
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
-        Write();
+        await WriteAsync(CancellationToken.None).ConfigureAwait(false);
         GC.SuppressFinalize(this);
     }
 }

@@ -1,4 +1,6 @@
-﻿using DefaultApplication.Settings;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using DefaultApplication.Settings;
 using Microsoft.Extensions.Logging;
 
 namespace DummyGame.Editor;
@@ -25,9 +27,9 @@ internal sealed class DummySettings : BaseJsonSettings
 
     public string? Value4 { get; set; }
 
-    public override void Read()
+    public override async Task ReadAsync(CancellationToken cancellationToken)
     {
-        Save? save = Deserialize<Save?>(Logger, _filePath);
+        Save? save = await DeserializeAsync<Save?>(Logger, _filePath, cancellationToken).ConfigureAwait(false);
 
         Value1 = save?.Value1 ?? "kikoo";
         Value2 = save?.Value2 ?? true;
@@ -35,9 +37,12 @@ internal sealed class DummySettings : BaseJsonSettings
         Value4 = save?.Value4 ?? "ohyeah";
     }
 
-    public override void Write() => Serialize(Logger, _filePath, new Save(
-        Value1,
-        Value2,
-        Value3,
-        Value4));
+    public override async Task WriteAsync(CancellationToken cancellationToken)
+    {
+        await SerializeAsync(Logger, _filePath, new Save(
+            Value1,
+            Value2,
+            Value3,
+            Value4), cancellationToken).ConfigureAwait(false);
+    }
 }

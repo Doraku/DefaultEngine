@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace DefaultApplication.Plugins;
 
 public interface IPlugin
 {
-    Task StartAsync() => Task.CompletedTask;
+    Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 }

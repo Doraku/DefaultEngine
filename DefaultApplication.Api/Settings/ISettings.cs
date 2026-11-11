@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DefaultApplication.Settings;
 
@@ -6,7 +8,7 @@ public interface ISettings
 {
     IReadOnlyList<string> Path { get; }
 
-    void Read();
+    Task ReadAsync(CancellationToken cancellationToken);
 
-    void Write();
+    Task WriteAsync(CancellationToken cancellationToken);
 }

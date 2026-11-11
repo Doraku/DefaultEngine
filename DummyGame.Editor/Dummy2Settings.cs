@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DefaultApplication.ComponentModel;
 using DefaultApplication.Settings;
 
@@ -29,7 +31,7 @@ internal sealed class Dummy2Settings : ISettings
 
     public float ValueFloat { get; set; }
 
-    public void Read() { }
+    public Task ReadAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-    public void Write() { }
+    public Task WriteAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 }

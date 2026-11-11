@@ -6,6 +6,7 @@ using Avalonia.DefaultLayout;
 using DefaultApplication;
 using DefaultApplication.DefaultLayout;
 using DefaultApplication.Services;
+using DefaultEngine.Editor.Internal.Plugins.MonoGamePlugin;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,32 +17,77 @@ internal sealed class GameTest : IAsyncCommandMenu
     private sealed class DummyGame : Game
     {
         private readonly GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private ResolutionRenderer? _resolutionRenderer;
+        private SpriteBatch? _spriteBatch;
+
+        private Texture2D? _texture;
+        private Vector2 _position;
+        private Vector2 _velocity;
 
         public DummyGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            _position = new Vector2(500, 500);
+            _velocity = new Vector2(1000, 500);
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            _resolutionRenderer = new ResolutionRenderer(new Microsoft.Xna.Framework.Point(1920, 1080), _graphics.GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _texture = new Texture2D(_graphics.GraphicsDevice, 1, 1);
+            _texture.SetData<byte>([255, 255, 255, 255]);
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
         protected override void Update(GameTime gameTime)
         {
             // Your game logic here
             base.Update(gameTime);
+
+            _position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (_position.X is >= 1920 or <= 0)
+            {
+                _velocity *= new Vector2(-1, 1);
+            }
+
+            if (_position.Y is >= 1080 or <= 0)
+            {
+                _velocity *= new Vector2(1, -1);
+            }
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // Your drawing code here
+            _resolutionRenderer?.Begin();
 
             base.Draw(gameTime);
+
+            _spriteBatch?.Begin();
+
+            _spriteBatch?.Draw(_texture, new Rectangle(_position.ToPoint(), new Microsoft.Xna.Framework.Point(100, 100)), Color.Red);
+
+            _spriteBatch?.End();
+
+            _resolutionRenderer?.End();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _resolutionRenderer?.Dispose();
+            _graphics.Dispose();
+            _spriteBatch?.Dispose();
+            _texture?.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 
@@ -118,7 +164,7 @@ internal sealed class Program
 
     private static async Task Main(string[] args)
     {
-        using DesktopRunner runner =
+        await using DesktopRunner runner =
 #if DEBUG
             new DebugRunner();
 #else
