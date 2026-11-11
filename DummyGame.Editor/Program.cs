@@ -164,13 +164,16 @@ internal sealed class Program
 
     private static async Task Main(string[] args)
     {
-        await using DesktopRunner runner =
+        DesktopRunner runner =
 #if DEBUG
             new DebugRunner();
 #else
             new();
 #endif
 
-        await runner.RunAsync(args).ConfigureAwait(false);
+        await using (runner.ConfigureAwait(false))
+        {
+            await runner.RunAsync(args).ConfigureAwait(false);
+        }
     }
 }
